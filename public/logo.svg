@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="119.911" height="54.822" viewBox="0 0 119.911 54.822">
+  <g id="Groupe_13" data-name="Groupe 13" transform="translate(-732.599 -450.098)">
+    <g id="Groupe_11" data-name="Groupe 11" transform="translate(712.262 451.885)">
+      <path id="Tracé_5" data-name="Tracé 5" d="M1243.583,3796.914v51.229h-3.83v-51.229Z" transform="translate(-1161.312 -3796.914)" fill="#d5be87"/>
+      <path id="Tracé_11" data-name="Tracé 11" d="M1243.616,3795.127v54.822l-3.864-1.805v-51.229Z" transform="translate(-1154.312 -3796.914)" fill="#d5be87"/>
+      <rect id="Rectangle_38" data-name="Rectangle 38" width="46.458" height="2.6" transform="translate(93.79 6.355)" fill="#fff"/>
+      <rect id="Rectangle_41" data-name="Rectangle 41" width="46.458" height="2.6" transform="translate(93.79 41.546)" fill="#fff"/>
+      <rect id="Rectangle_39" data-name="Rectangle 39" width="46.458" height="2.6" transform="translate(20.337 6.355)" fill="#fff"/>
+      <rect id="Rectangle_40" data-name="Rectangle 40" width="46.458" height="2.6" transform="translate(20.337 41.632)" fill="#fff"/>
+      <text id="S" transform="translate(34.066 37.115)" fill="#fff" font-size="33" font-family="Poppins-Light, Poppins" font-weight="300"><tspan x="0" y="0">S</tspan></text>
+      <text id="T" transform="translate(103.367 37.115)" fill="#fff" font-size="33" font-family="Poppins-Light, Poppins" font-weight="300"><tspan x="0" y="0">T</tspan></text>
+      <path id="Tracé_12" data-name="Tracé 12" d="M1239.753,3795.127v54.822l3.864-1.805v-51.229Z" transform="translate(-1168.345 -3796.914)" fill="#d5be87"/>
+    </g>
+  </g>
+</svg>
