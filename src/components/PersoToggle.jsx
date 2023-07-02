@@ -1,7 +1,7 @@
 import { ToggleButton } from "@mui/material";
 import { styled } from "@mui/system";
 
-const PersonnalToggle = styled(ToggleButton)((theme) => ({
+const PersonnalToggle = styled(ToggleButton)(() => ({
   backgroundColor: 'none', // Remplacez par la couleur souhaitée
   color: '#fff',
   border: "none",

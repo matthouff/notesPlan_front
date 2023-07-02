@@ -1,8 +1,8 @@
 import { Box, Divider, styled, TextField } from "@mui/material";
 import { useState } from "react";
+import '../../style.css'
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
-import '../style.css'
 import PropTypes from 'prop-types';
 import { useEffect } from "react";
 
@@ -50,22 +50,24 @@ const toolbarStyle = {
   borderBottom: '1px solid #ddd',
 };
 
-Note.prototype = {
+Note.propTypes = {
   note: PropTypes.object,
   newTitle: PropTypes.func,
 }
 
 function Note({ note, newTitle }) {
-  const [content, setContent] = useState('');
-  const [title, setTitle] = useState('');
+  const [content, setContent] = useState("");
+  const [title, setTitle] = useState("");
 
 
   const handleEditorChange = (value) => {
     setContent(value);
   };
   const handleTitleChange = (event, value) => {
-    setTitle(value);
-    newTitle(value);
+    if (note) {
+      setTitle(value);
+      newTitle(value);
+    }
   };
 
   useEffect(() => {
@@ -73,6 +75,7 @@ function Note({ note, newTitle }) {
     setTitle(note?.no_libelle)
   }, [note])
 
+  console.log(title);
 
   return (
     <Box position="relative" paddingTop={5}>
@@ -81,7 +84,7 @@ function Note({ note, newTitle }) {
         name="no_message"
         value={title}
         onChange={handleTitleChange}
-        placeholder="title"
+        placeholder="Title"
       />
       <Box>
         <Divider />

@@ -1,14 +1,14 @@
-import { Box, ToggleButtonGroup, Typography } from "@mui/material";
+import { Box, ToggleButtonGroup } from "@mui/material";
 import PropTypes from 'prop-types';
 import PersonnalToggle from "../../../components/PersoToggle";
 
-ListRepertoireGroupe.prototype = {
+ListRepertoireNote.propTypes = {
   data: PropTypes.array,
   actualRepertoire: PropTypes.string,
   repertoireSelected: PropTypes.func,
 };
 
-function ListRepertoireGroupe({ data, actualRepertoire, repertoireSelected }) {
+function ListRepertoireNote({ data, actualRepertoire, repertoireSelected }) {
 
   return (
     <Box border="1px solid #fffb" borderLeft="none" height="100%">
@@ -32,4 +32,4 @@ function ListRepertoireGroupe({ data, actualRepertoire, repertoireSelected }) {
   )
 }
 
-export default ListRepertoireGroupe;
+export default ListRepertoireNote;

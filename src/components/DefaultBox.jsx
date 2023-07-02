@@ -1,11 +1,15 @@
 import { Box, Stack } from "@mui/material";
 import { Link } from 'react-router-dom';
-// import { ReactComponent as Logo } from '../assets/logo.svg';
 import background from '../assets/paysageDesktop.jpg';
+import PropTypes from 'prop-types';
+
+DefaultBox.propTypes = {
+  persoStyle: PropTypes.object,
+  dark: PropTypes.bool,
+  children: PropTypes.array,
+};
 
 function DefaultBox({ persoStyle, dark, children }) {
-
-  console.log(background);
 
   return (
     <Box className="test" sx={{
@@ -25,7 +29,7 @@ function DefaultBox({ persoStyle, dark, children }) {
           position="absolute"
           width="100%"
         >
-          <Link to="/"></Link>
+          <Link to="/"><img src="../../public/logo.svg" /></Link>
           <Stack flexDirection="row" gap={5} position="absolute" right={100}>
             <Link style={{ color: "#fff", textDecoration: "none" }} to="/notes">Mes notes</Link>
             <Link style={{ color: "#fff", textDecoration: "none" }} to="/taches">Mes tâches</Link>

@@ -1,4 +1,4 @@
-.ql-container.ql-snow {
+.quill  .ql-container.ql-snow {
   font-family: Arial, sans-serif;
   font-size: 16px;
   color: #fff;
@@ -6,7 +6,11 @@
   height: 100%;
 }
 
-.ql-container.ql-snow img {
+.quill  .ql-container.ql-snow .ql-editor::before{
+  color: #fffd;
+}
+
+div.ql-container.ql-snow img {
   max-width: 50%;
 }
 
