@@ -1,23 +1,17 @@
-import useEntityCrud from "../../hooks/useEntityCrud";
 import DefaultBox from "../../components/DefaultBox";
-import GroupeNotes from "./components/notes";
-import ListRepertoireNote from "./components/ListRepertoireNote";
+import GroupeNotes from "./components";
 import { useState } from "react";
+import RepertoireList from "../../components/RepertoireList";
 
 function Notes() {
   const [repertoireSelected, setRepertoireSelected] = useState()
-
-  const { data: repertoires } = useEntityCrud({
-    entity: "repertoires_notes",
-    createdData: ""
-  })
 
   console.log(repertoireSelected);
 
   return (
     <DefaultBox persoStyle={{ pt: 20, display: "flex", flexDirection: "row", gap: 5 }} dark>
-      <ListRepertoireNote data={repertoires} actualRepertoire={repertoireSelected} setRepertoireSelected={setRepertoireSelected} />
-      {repertoires &&
+      <RepertoireList actualRepertoire={repertoireSelected} setRepertoireSelected={setRepertoireSelected} />
+      {repertoireSelected &&
         <GroupeNotes repertoireSelected={repertoireSelected} />
       }
     </DefaultBox>

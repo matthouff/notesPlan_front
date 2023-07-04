@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useState } from "react";
-import useEntityCrud from "../../../../hooks/useEntityCrud.js";
+import useEntityCrud from "../../../hooks/useEntityCrud.js";
 
 GroupeNotes.propTypes = {
   repertoireSelected: PropTypes.string,

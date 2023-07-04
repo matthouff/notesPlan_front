@@ -1,6 +1,6 @@
 import { Box, Divider, styled, TextField } from "@mui/material";
 import { useState } from "react";
-import '../../style.css'
+import '../style.css'
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';

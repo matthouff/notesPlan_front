@@ -1,31 +1,35 @@
-import axios from 'axios'
-import { useEffect } from 'react';
-import { useQuery } from 'react-query';
+import axios from 'axios';
+import { useQuery, useQueryClient } from 'react-query';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/',
-    headers: {
-        'content-type': 'application/json',
-    },
+  baseURL: 'http://localhost:3000/',
+  headers: {
+    'content-type': 'application/json',
+  },
 });
 
-function useEntityCrud({entity, enabled, createdData}){
+function useEntityCrud({ entity, enabled }) {
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if(createdData){
-      instance.post(entity, createdData);
-    }
-}, [createdData, entity])
+  const createdData = async (x) => {
+    await instance.post(entity, x);
+    queryClient.invalidateQueries(entity);
+  };
 
-  // "entity" du useQuery sert de clé pour distinguer les différents appels et que les données ne sent  pas écrasés par le dernier appel
-    const { data = [], error, isLoading } = useQuery(entity, async () => {
-        const response = await instance.get(entity);
-        return response.data;
-    }, {
-      enabled: enabled, // Conditionne l'exécution de la requête
-    });
-    
-    return {data, error, isLoading};
+  const deletedData = async (entityId) => {
+    const url = entity + "/" + entityId;
+    await instance.delete(url);
+    queryClient.invalidateQueries(entity);
+  };
+
+  const { data = [], error, isLoading } = useQuery(entity, async () => {
+    const response = await instance.get(entity);
+    return response.data;
+  }, {
+    enabled: enabled,
+  });
+
+  return { data, error, isLoading, createdData, deletedData };
 }
 
 export default useEntityCrud;

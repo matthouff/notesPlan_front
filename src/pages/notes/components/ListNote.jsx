@@ -1,6 +1,6 @@
 import { Box, ToggleButtonGroup, Typography } from "@mui/material";
 import PropTypes from 'prop-types';
-import PersonnalToggle from "../../../../components/PersoToggle.jsx";
+import PersonnalToggle from "../../../components/PersoToggle.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
