@@ -1,34 +1,40 @@
-import { Box, ToggleButtonGroup } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
+import { Plus } from "lucide-react";
 import PropTypes from 'prop-types';
-import PersonnalToggle from "../../../components/PersoToggle";
+import { useEffect, useState } from "react";
+import RepertoireList from "../../../components/RepertoireList";
 
 ListRepertoireNote.propTypes = {
   data: PropTypes.array,
   actualRepertoire: PropTypes.string,
-  repertoireSelected: PropTypes.func,
+  setRepertoireSelected: PropTypes.func,
 };
 
-function ListRepertoireNote({ data, actualRepertoire, repertoireSelected }) {
+function ListRepertoireNote({ data, actualRepertoire, setRepertoireSelected }) {
+  const [open, setOpen] = useState(false)
 
+  useEffect(() => {
+    if (data) {
+      setRepertoireSelected(data[0]?.id)
+    }
+  }, [data, setRepertoireSelected])
+
+  const selectedRepertoire = (x) => {
+    if (x !== null) {
+      setRepertoireSelected(x);
+    }
+  }
   return (
-    <Box border="1px solid #fffb" borderLeft="none" height="100%">
-      <ToggleButtonGroup
-        color="secondary"
-        value={actualRepertoire}
-        exclusive
-        onChange={repertoireSelected}
-        aria-label="text Repertoire"
-        sx={{ display: "flex", flexDirection: "column" }}
-      >
-        {data?.map((repertoire, index) => {
-          return (
-            <PersonnalToggle sx={index < data.length - 1 && { borderBottom: "1px solid #fffb" }} key={repertoire.id} value={repertoire.id} aria-label="left aligned">
-              {repertoire.re_libelle}
-            </PersonnalToggle>
-          )
-        })}
-      </ToggleButtonGroup>
-    </Box >
+    <Stack gap={10} width={data ? "20%" : "100%"}>
+      <Typography variant="h1" fontWeight="bold" color="primary" fontSize={70}>Notes</Typography>
+      <Stack sx={!data && { width: "20%", textAlign: "center", marginX: "auto" }} gap={1}>
+        <Typography variant="h6" color="primary">Repertoires</Typography>
+        <RepertoireList repertoireSelected={(e, x) => selectedRepertoire(x)} actualRepertoire={actualRepertoire} data={data} open={open} />
+        <Button onClick={() => setOpen(true)}>
+          <Plus />
+        </Button>
+      </Stack>
+    </Stack>
   )
 }
 
