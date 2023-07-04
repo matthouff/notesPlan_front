@@ -10,7 +10,7 @@ GroupeNotes.propTypes = {
 };
 
 function GroupeNotes({ repertoireSelected }) {
-  const [noteSelected, setNoteSelected] = useState()
+  const [noteSelected, setNoteSelected] = useState(null)
 
   const { data: notes } = useEntityCrud({
     entity: `notes/repertoire/${repertoireSelected}`,
@@ -29,7 +29,6 @@ function GroupeNotes({ repertoireSelected }) {
     }
   }
 
-
   return (
     <>
       <Stack Stack width="22%" >
@@ -41,7 +40,7 @@ function GroupeNotes({ repertoireSelected }) {
       </Stack >
       <Stack width="58%" height="100%">
         {
-          notes && <Note note={noteSelected ?? notes[0]} />
+          notes[0] && <Note note={noteSelected ?? notes[0]} />
         }
       </Stack>
     </>

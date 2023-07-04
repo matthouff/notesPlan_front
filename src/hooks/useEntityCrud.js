@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 const instance = axios.create({
@@ -15,10 +15,10 @@ function useEntityCrud({entity, enabled, createdData}){
     if(createdData){
       instance.post(entity, createdData);
     }
-}, [createdData])
+}, [createdData, entity])
 
   // "entity" du useQuery sert de clé pour distinguer les différents appels et que les données ne sent  pas écrasés par le dernier appel
-    const { data, error, isLoading } = useQuery(entity, async () => {
+    const { data = [], error, isLoading } = useQuery(entity, async () => {
         const response = await instance.get(entity);
         return response.data;
     }, {
