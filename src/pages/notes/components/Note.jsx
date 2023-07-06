@@ -75,8 +75,6 @@ function Note({ note, newTitle }) {
     setTitle(note?.no_libelle)
   }, [note])
 
-  console.log(title);
-
   return (
     <Box position="relative" paddingTop={5}>
       <PersoTextField

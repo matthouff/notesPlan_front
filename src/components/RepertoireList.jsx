@@ -2,10 +2,12 @@ import { Box, Button, FormControl, Stack, TextField, ToggleButtonGroup, Typograp
 import PersonnalToggle from "./PersoToggle";
 import PropTypes from 'prop-types';
 import { useEffect, useRef, useState } from "react";
-import { Plus, Check, Trash } from "lucide-react";
+import { Plus, Check, MoreVertical } from "lucide-react";
 import useEntityCrud from "../hooks/useEntityCrud";
 import useUser from "../hooks/useUser";
 import { useMutation, useQueryClient } from "react-query";
+import "../components/style.css"
+import PersonnalPopover from "./PersonnalPopover";
 
 RepertoireList.propTypes = {
   setRepertoireSelected: PropTypes.func,
@@ -17,6 +19,7 @@ function RepertoireList({ setRepertoireSelected, actualRepertoire }) {
   const buttonRef = useRef(null);
   const sendButtonRef = useRef(null);
   const [open, setOpen] = useState(false)
+  const [openOption, setOpenOption] = useState(false)
   const [libelle, setLibelle] = useState('');
   const { userId } = useUser();
 
@@ -59,7 +62,6 @@ function RepertoireList({ setRepertoireSelected, actualRepertoire }) {
 
   const selectedRepertoire = (x) => {
     if (x !== null) {
-      console.log(x);
       setRepertoireSelected(x);
     }
   }
@@ -89,13 +91,13 @@ function RepertoireList({ setRepertoireSelected, actualRepertoire }) {
             aria-label="text Repertoire"
             sx={{ display: "flex", flexDirection: "column" }}
           >
-            {repertoires?.map((repertoire, index) => {
+            {repertoires?.sort((a, b) => new Date(a.createdat).getTime() - new Date(b.createdat).getTime()).map((repertoire, index) => {
               return (
                 <PersonnalToggle sx={index < repertoires.length - 1 && { borderBottom: "1px solid #fffb" }} key={repertoire?.id} value={repertoire?.id} aria-label="left aligned">
                   {repertoire.re_libelle}
 
-                  <Button onClick={() => deletedData(repertoire?.id)} sx={{ position: "absolute", right: 10, minWidth: 4 }}>
-                    <Trash width={20} />
+                  <Button onClick={(e) => setOpenOption({ open: true, anchor: e.currentTarget, selected: repertoire })} sx={{ position: "absolute", right: 10, minWidth: 4 }}>
+                    <MoreVertical width={20} />
                   </Button>
                 </PersonnalToggle>
               )
@@ -129,8 +131,13 @@ function RepertoireList({ setRepertoireSelected, actualRepertoire }) {
           <Plus />
         </Button>
       </Stack >
+      {
+        openOption &&
+        <PersonnalPopover open={openOption.open} anchorEl={openOption.anchor} setOpenOption={setOpenOption} selected={openOption.selected} deletedData={deletedData} />
+      }
     </Stack >
   )
 }
 
 export default RepertoireList;
+

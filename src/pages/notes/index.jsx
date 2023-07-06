@@ -6,8 +6,6 @@ import RepertoireList from "../../components/RepertoireList";
 function Notes() {
   const [repertoireSelected, setRepertoireSelected] = useState()
 
-  console.log(repertoireSelected);
-
   return (
     <DefaultBox persoStyle={{ pt: 20, display: "flex", flexDirection: "row", gap: 5 }} dark>
       <RepertoireList actualRepertoire={repertoireSelected} setRepertoireSelected={setRepertoireSelected} />
