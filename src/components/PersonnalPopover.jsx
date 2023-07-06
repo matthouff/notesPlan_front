@@ -9,14 +9,20 @@ PersonnalPopover.propTypes = {
   open: PropTypes.bool,
   setOpenOption: PropTypes.func,
   deletedData: PropTypes.func,
+  editOpen: PropTypes.func,
 }
 
-function PersonnalPopover({ anchorEl, open, setOpenOption, selected, deletedData }) {
+function PersonnalPopover({ anchorEl, open, setOpenOption, selected, deletedData, editOpen }) {
   const [openModal, setOpenModal] = useState();
 
   const onDelete = () => {
     setOpenOption({ open: false, anchor: null })
     deletedData(selected.id)
+  }
+
+  const eOpen = () => {
+    setOpenOption({ open: false, anchor: null, selected: selected })
+    editOpen(true)
   }
 
   return (
@@ -35,7 +41,7 @@ function PersonnalPopover({ anchorEl, open, setOpenOption, selected, deletedData
       }}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: "center", gap: 1 }}>
-        <Button variant="contained" color="primary" sx={{ borderRadius: "100%", maxWidth: "35px", height: "35px", minWidth: "inherit", p: 1 }}>
+        <Button onClick={eOpen} variant="contained" color="primary" sx={{ borderRadius: "100%", maxWidth: "35px", height: "35px", minWidth: "inherit", p: 1 }}>
           <Edit />
         </Button>
         <Button onClick={() => setOpenModal(true)} variant="contained" color="error" sx={{ borderRadius: "100%", maxWidth: "35px", height: "35px", minWidth: "inherit", p: 1 }}>

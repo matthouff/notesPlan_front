@@ -15,6 +15,12 @@ function useEntityCrud({ entity, enabled }) {
     await instance.post(entity, x);
     queryClient.invalidateQueries(entity);
   };
+  
+  const editData = async (entityId, x) => {
+    const url = entity + "/" + entityId;
+    await instance.patch(url, x);
+    queryClient.invalidateQueries(entity);
+  };
 
   const deletedData = async (entityId) => {
     const url = entity + "/" + entityId;
@@ -29,7 +35,7 @@ function useEntityCrud({ entity, enabled }) {
     enabled: enabled,
   });
 
-  return { data, error, isLoading, createdData, deletedData };
+  return { data, error, isLoading, createdData, deletedData, editData };
 }
 
 export default useEntityCrud;
