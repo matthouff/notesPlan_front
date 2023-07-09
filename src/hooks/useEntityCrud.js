@@ -16,8 +16,8 @@ function useEntityCrud({ entity, enabled }) {
     queryClient.invalidateQueries(entity);
   };
   
-  const editData = async (entityId, x) => {
-    const url = entity + "/" + entityId;
+  const editData = async (x) => {
+    const url = entity + "/" + x.id;
     await instance.patch(url, x);
     queryClient.invalidateQueries(entity);
   };

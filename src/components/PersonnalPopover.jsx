@@ -18,6 +18,7 @@ function PersonnalPopover({ anchorEl, open, setOpenOption, selected, deletedData
   const onDelete = () => {
     setOpenOption({ open: false, anchor: null })
     deletedData(selected.id)
+    setOpenModal(false)
   }
 
   const eOpen = () => {
