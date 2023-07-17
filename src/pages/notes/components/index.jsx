@@ -1,4 +1,4 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import PropTypes from "prop-types";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
@@ -12,8 +12,14 @@ GroupeNotes.propTypes = {
 function GroupeNotes({ repertoireSelected }) {
   const [noteSelected, setNoteSelected] = useState(null);
 
-  const { data: notes } = useEntityCrud({
-    entity: `notes/repertoire-notes/${repertoireSelected}`,
+  const {
+    data: notes,
+    createdData,
+    deletedData,
+  } = useEntityCrud({
+    entity: `notes`,
+    complement: `repertoire-notes`,
+    id: repertoireSelected,
     enabled: !!repertoireSelected, // Permet d'attendre que l'id soit présent pour envoyer la requête
   });
 
@@ -32,18 +38,13 @@ function GroupeNotes({ repertoireSelected }) {
   return (
     <>
       <Stack Stack width="22%">
-        <Stack flexDirection="row" justifyContent="space-between">
-          <Typography variant="h6" color="primary">
-            Notes
-          </Typography>
-          <Button color="primary" mb={1}>
-            Ajouter +
-          </Button>
-        </Stack>
         <ListNote
           data={notes}
           actualNote={noteSelected}
           noteSelected={(e, x) => selectedNote(x)}
+          repertoireSelected={repertoireSelected}
+          createdData={createdData}
+          deletedData={deletedData}
         />
       </Stack>
       <Box width="58%" height="100%">

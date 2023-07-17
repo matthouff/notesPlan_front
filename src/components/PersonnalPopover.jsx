@@ -1,16 +1,9 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  Popover,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Popover } from "@mui/material";
 import { Trash, Edit } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { PersoButton } from "./styledComponent/PersonnalButtonEdit";
+import DeleteDialog from "./DeleteDialog";
 
 PersonnalPopover.propTypes = {
   anchorEl: PropTypes.object,
@@ -86,26 +79,13 @@ function PersonnalPopover({
         </PersoButton>
       </Box>
       {openModal && (
-        <Dialog onClose={() => setOpenModal(false)} open={open}>
-          <DialogTitle color="error">Supprimer le répertoire ?</DialogTitle>
-          <Stack paddingBottom={2} alignItems="center" gap={3}>
-            <Typography variant="body2" fontWeight="bold">
-              ({selected?.libelle})
-            </Typography>
-            <Stack flexDirection="row" gap={2}>
-              <Button onClick={() => setOpenModal(false)} variant="contained">
-                Annuler
-              </Button>
-              <Button
-                onClick={() => onDelete()}
-                variant="contained"
-                color="error"
-              >
-                Supprimer
-              </Button>
-            </Stack>
-          </Stack>
-        </Dialog>
+        <DeleteDialog
+          open={open}
+          selected={selected}
+          setOpenModal={setOpenModal}
+          onDelete={onDelete}
+          title="supprimer le répertoire ?"
+        />
       )}
     </Popover>
   );

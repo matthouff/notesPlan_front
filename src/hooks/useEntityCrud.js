@@ -8,8 +8,9 @@ const instance = axios.create({
   },
 });
 
-function useEntityCrud({ entity, enabled }) {
+function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
+  const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
 
   const createdData = async (x) => {
     await instance.post(entity, x);
@@ -28,8 +29,8 @@ function useEntityCrud({ entity, enabled }) {
     queryClient.invalidateQueries(entity);
   };
 
-  const { data = [], error, isLoading } = useQuery(entity, async () => {
-    const response = await instance.get(entity);
+  const { data = [], error, isLoading } = useQuery(fullEntity, async () => {
+    const response = await instance.get(fullEntity);
     return response.data;
   }, {
     enabled: enabled,

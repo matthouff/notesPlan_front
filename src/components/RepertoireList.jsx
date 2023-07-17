@@ -117,7 +117,7 @@ function RepertoireList({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    mutate({ id_user: userId, libelle: libelle });
+    mutate({ userId: userId, libelle: libelle });
     setOpen(false);
     setLibelle(null);
   };
