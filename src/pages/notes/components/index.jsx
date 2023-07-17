@@ -1,5 +1,5 @@
-import { Button, Stack, Typography } from "@mui/material";
-import PropTypes from 'prop-types';
+import { Box, Button, Stack, Typography } from "@mui/material";
+import PropTypes from "prop-types";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useState } from "react";
@@ -10,41 +10,47 @@ GroupeNotes.propTypes = {
 };
 
 function GroupeNotes({ repertoireSelected }) {
-  const [noteSelected, setNoteSelected] = useState(null)
+  const [noteSelected, setNoteSelected] = useState(null);
 
   const { data: notes } = useEntityCrud({
-    entity: `notes/repertoire/${repertoireSelected}`,
-    enabled: !!repertoireSelected // Permet d'attendre que l'id soit présent pour envoyer la requête
-  })
+    entity: `notes/repertoire-notes/${repertoireSelected}`,
+    enabled: !!repertoireSelected, // Permet d'attendre que l'id soit présent pour envoyer la requête
+  });
 
   useEffect(() => {
     if (notes) {
-      selectedNote(notes[0])
+      selectedNote(notes[0]);
     }
-  }, [notes])
+  }, [notes]);
 
   const selectedNote = (x) => {
     if (x !== null) {
       setNoteSelected(x);
     }
-  }
+  };
 
   return (
     <>
-      <Stack Stack width="22%" >
+      <Stack Stack width="22%">
         <Stack flexDirection="row" justifyContent="space-between">
-          <Typography variant="h6" color="primary">Notes</Typography>
-          <Button color="primary" mb={1}>Ajouter +</Button>
+          <Typography variant="h6" color="primary">
+            Notes
+          </Typography>
+          <Button color="primary" mb={1}>
+            Ajouter +
+          </Button>
         </Stack>
-        <ListNote data={notes} actualNote={noteSelected} noteSelected={(e, x) => selectedNote(x)} />
-      </Stack >
-      <Stack width="58%" height="100%">
-        {
-          notes[0] && <Note note={noteSelected ?? notes[0]} />
-        }
+        <ListNote
+          data={notes}
+          actualNote={noteSelected}
+          noteSelected={(e, x) => selectedNote(x)}
+        />
       </Stack>
+      <Box width="58%" height="100%">
+        {notes[0] && <Note note={noteSelected ?? notes[0]} />}
+      </Box>
     </>
-  )
+  );
 }
 
 export default GroupeNotes;

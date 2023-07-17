@@ -1,19 +1,18 @@
 import { Box, ToggleButtonGroup, Typography } from "@mui/material";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import PersonnalToggle from "../../../components/PersoToggle.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
-  actualNote: PropTypes.string,
+  actualNote: PropTypes.object,
   noteSelected: PropTypes.func.isRequired,
 };
 
 function ListNote({ data, actualNote, noteSelected }) {
-
   return (
     <Box borderRight="1px solid #fffb" bgcolor="#ffffff26" height="100%">
-      {
-        data?.length > 0 ? <ToggleButtonGroup
+      {data?.length > 0 ? (
+        <ToggleButtonGroup
           color="secondary"
           value={actualNote ?? data[0]}
           exclusive
@@ -23,16 +22,26 @@ function ListNote({ data, actualNote, noteSelected }) {
         >
           {data?.map((note, index) => {
             return (
-              <PersonnalToggle sx={index < data.length - 1 && { borderBottom: "1px solid #fffb" }} key={note?.id} value={note} aria-label="left aligned">
-                {note?.no_libelle}
+              <PersonnalToggle
+                sx={
+                  index < data.length - 1 && { borderBottom: "1px solid #fffb" }
+                }
+                key={note?.id}
+                value={note}
+                aria-label="left aligned"
+              >
+                {note?.libelle}
               </PersonnalToggle>
-            )
+            );
           })}
         </ToggleButtonGroup>
-          : <Typography textAlign="center" marginTop={5} color="primary">Aucune notes</Typography>
-      }
-    </Box >
-  )
+      ) : (
+        <Typography textAlign="center" marginTop={5} color="primary">
+          Aucune notes
+        </Typography>
+      )}
+    </Box>
+  );
 }
 
 export default ListNote;

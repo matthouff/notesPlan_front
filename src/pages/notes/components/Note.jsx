@@ -1,64 +1,63 @@
 import { Box, Divider, styled, TextField } from "@mui/material";
 import { useState } from "react";
-import '../style.css'
+import "../style.css";
 import ReactQuill from "react-quill";
-import 'react-quill/dist/quill.snow.css';
-import PropTypes from 'prop-types';
+import "react-quill/dist/quill.snow.css";
+import PropTypes from "prop-types";
 import { useEffect } from "react";
 
 const PersoTextField = styled(TextField)({
-  '& .MuiOutlinedInput-root': {
-    '& input': {
+  "& .MuiOutlinedInput-root": {
+    "& input": {
       fontSize: 30,
       padding: "10px 15px",
-      color: "#fff"
+      color: "#fff",
     },
-    '& fieldset': {
-      borderColor: '#fffc',
+    "& fieldset": {
+      borderColor: "#fffc",
       border: "none",
       borderBottom: "1px solid #fff8",
       borderRadius: 0,
     },
-    '&:hover fieldset': {
-      borderColor: '#fff8',
+    "&:hover fieldset": {
+      borderColor: "#fff8",
     },
-    '&.Mui-focused fieldset': {
-      borderColor: '#fff8',
+    "&.Mui-focused fieldset": {
+      borderColor: "#fff8",
     },
   },
 });
 
 const toolbarOptions = [
-  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  [{ 'color': [] }, { 'background': [] }],
-  ['link', 'image', 'video'],
-  ['blockquote', 'code-block'],
-  [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-  [{ 'align': [] }],
-  ['clean']
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  ["bold", "italic", "underline", "strike"],
+  [{ color: [] }, { background: [] }],
+  ["link", "image", "video"],
+  ["blockquote", "code-block"],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ align: [] }],
+  ["clean"],
 ];
 
 const editorStyle = {
-  fontFamily: 'Arial, sans-serif',
-  fontSize: '16px',
-  color: '#fff',
+  fontFamily: "Arial, sans-serif",
+  fontSize: "16px",
+  color: "#fff",
 };
 
 const toolbarStyle = {
-  backgroundColor: '#f5f5f5',
-  borderBottom: '1px solid #ddd',
+  backgroundColor: "#f5f5f5",
+  borderBottom: "1px solid #ddd",
 };
 
 Note.propTypes = {
   note: PropTypes.object,
   newTitle: PropTypes.func,
-}
+};
 
 function Note({ note, newTitle }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
-
 
   const handleEditorChange = (value) => {
     setContent(value);
@@ -71,15 +70,15 @@ function Note({ note, newTitle }) {
   };
 
   useEffect(() => {
-    setContent(note?.no_message)
-    setTitle(note?.no_libelle)
-  }, [note])
+    setContent(note?.message);
+    setTitle(note?.libelle);
+  }, [note]);
 
   return (
-    <Box position="relative" paddingTop={5}>
+    <Box position="relative" paddingTop={5} height="100%">
       <PersoTextField
         fullWidth
-        name="no_message"
+        name="message"
         value={title}
         onChange={handleTitleChange}
         placeholder="Title"
@@ -93,12 +92,12 @@ function Note({ note, newTitle }) {
           toolbarStyle={toolbarStyle}
           placeholder="Entrez votre note ici..."
           modules={{
-            toolbar: toolbarOptions
+            toolbar: toolbarOptions,
           }}
         />
       </Box>
     </Box>
-  )
+  );
 }
 
 export default Note;

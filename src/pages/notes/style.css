@@ -37,7 +37,7 @@ div.ql-container.ql-snow img {
   border-top: 1px solid #fff8;
 }
 
-.ql-snow .ql-stroke {
+div .ql-snow .ql-stroke {
   stroke: #fffc;
 }
 
@@ -49,6 +49,6 @@ div.ql-container.ql-snow img {
   stroke: #fffc;
 }
 
-.ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
+div .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
   fill: #fffc;
 }
