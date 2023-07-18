@@ -17,9 +17,11 @@ import DeleteDialog from "../../../components/DeleteDialog.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
-  actualNote: PropTypes.object,
-  noteSelected: PropTypes.func.isRequired,
   repertoireId: PropTypes.string,
+  actualNote: PropTypes.object,
+  open: PropTypes.bool,
+  newNote: PropTypes.func,
+  noteSelected: PropTypes.func.isRequired,
   createdData: PropTypes.func,
   deletedData: PropTypes.func,
 };
@@ -31,12 +33,13 @@ function ListNote({
   repertoireId,
   createdData,
   deletedData,
+  open,
+  newNote,
 }) {
   const [libelle, setLibelle] = useState(null);
   const sendButtonRef = useRef(null);
   const textFieldRef = useRef(null);
-  const [openModal, setOpenModal] = useState();
-  const [open, setOpen] = useState(false);
+  const [openModal, newNoteModal] = useState();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation(createdData, {
@@ -47,9 +50,14 @@ function ListNote({
     },
   });
 
+  const addNote = () => {
+    newNote(true);
+    noteSelected(null);
+  };
+
   const onDelete = () => {
     deletedData(actualNote.id);
-    setOpenModal(false);
+    newNoteModal(false);
   };
 
   const handleChange = (event) => {
@@ -60,7 +68,7 @@ function ListNote({
     e.preventDefault();
 
     mutate({ repertoireId: repertoireId, libelle: libelle });
-    setOpen(false);
+    newNote(false);
     setLibelle(null);
   };
 
@@ -70,7 +78,13 @@ function ListNote({
         <Typography variant="h6" color="primary">
           Notes
         </Typography>
-        <Button color="primary" mb={1} onClick={() => setOpen(true)}>
+        <Button
+          color="primary"
+          mb={1}
+          onClick={() => {
+            addNote();
+          }}
+        >
           Ajouter +
         </Button>
       </Stack>
@@ -100,7 +114,7 @@ function ListNote({
                   {note?.libelle}
                   <IconButton
                     color="error"
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => newNoteModal(true)}
                     sx={{ position: "absolute", right: 10, minWidth: 4 }}
                   >
                     <Trash width={20} />
@@ -152,7 +166,7 @@ function ListNote({
           <DeleteDialog
             open
             selected={actualNote}
-            setOpenModal={setOpenModal}
+            newNoteModal={newNoteModal}
             onDelete={onDelete}
             title="supprimer la note ?"
           />

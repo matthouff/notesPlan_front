@@ -11,6 +11,7 @@ GroupeNotes.propTypes = {
 
 function GroupeNotes({ repertoireSelected }) {
   const [noteSelected, setNoteSelected] = useState(null);
+  const [open, setOpen] = useState(false);
 
   const {
     data: notes,
@@ -35,6 +36,7 @@ function GroupeNotes({ repertoireSelected }) {
     }
   };
 
+  console.log(notes);
   return (
     <>
       <Stack Stack width="22%">
@@ -45,6 +47,8 @@ function GroupeNotes({ repertoireSelected }) {
           repertoireSelected={repertoireSelected}
           createdData={createdData}
           deletedData={deletedData}
+          open={open}
+          newNote={setOpen}
         />
       </Stack>
       <Box width="58%" height="100%">

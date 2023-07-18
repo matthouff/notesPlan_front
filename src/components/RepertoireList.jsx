@@ -147,79 +147,80 @@ function RepertoireList({
             aria-label="text Repertoire"
             sx={{ display: "flex", flexDirection: "column" }}
           >
-            {repertoires
-              ?.sort(
-                (a, b) =>
-                  new Date(a.createdat).getTime() -
-                  new Date(b.createdat).getTime()
-              )
-              .map((repertoire, index) => {
-                return editOpen &&
-                  repertoire?.id === openOption?.selected?.id ? (
-                  <Stack
-                    key={repertoire.id}
-                    Stack
-                    flexDirection="row"
-                    position="relative"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
-                    <form
-                      style={{ display: "flex", alignItems: "center" }}
-                      onSubmit={handleEditSubmit}
+            {repertoires &&
+              repertoires
+                ?.sort(
+                  (a, b) =>
+                    new Date(a.createdat).getTime() -
+                    new Date(b.createdat).getTime()
+                )
+                .map((repertoire, index) => {
+                  return editOpen &&
+                    repertoire?.id === openOption?.selected?.id ? (
+                    <Stack
+                      key={repertoire.id}
+                      Stack
+                      flexDirection="row"
+                      position="relative"
+                      alignItems="center"
+                      justifyContent="center"
                     >
-                      <FormControl fullWidth>
-                        <TextField
-                          inputRef={textFieldEditRef}
-                          name="libelle"
-                          value={libelle ?? openOption?.selected?.libelle}
-                          onChange={handleChange}
-                          InputProps={{
-                            style: { color: "#fff", paddingRight: 40 },
-                          }}
-                          fullWidth
-                          color="secondary"
-                        />
-                      </FormControl>
+                      <form
+                        style={{ display: "flex", alignItems: "center" }}
+                        onSubmit={handleEditSubmit}
+                      >
+                        <FormControl fullWidth>
+                          <TextField
+                            inputRef={textFieldEditRef}
+                            name="libelle"
+                            value={libelle ?? openOption?.selected?.libelle}
+                            onChange={handleChange}
+                            InputProps={{
+                              style: { color: "#fff", paddingRight: 40 },
+                            }}
+                            fullWidth
+                            color="secondary"
+                          />
+                        </FormControl>
+                        <IconButton
+                          color="primary"
+                          ref={sendButtonRef}
+                          type="submit"
+                          sx={{ position: "absolute", minWidth: 4, right: 10 }}
+                        >
+                          <Check />
+                        </IconButton>
+                      </form>
+                    </Stack>
+                  ) : (
+                    <PersonnalToggle
+                      sx={
+                        index < repertoires.length - 1 && {
+                          borderBottom: "1px solid #fffb",
+                        }
+                      }
+                      key={repertoire?.id}
+                      value={repertoire?.id}
+                      aria-label="left aligned"
+                    >
+                      {repertoire.libelle}
+
                       <IconButton
                         color="primary"
-                        ref={sendButtonRef}
-                        type="submit"
-                        sx={{ position: "absolute", minWidth: 4, right: 10 }}
+                        onClick={(e) =>
+                          setOpenOption({
+                            open: true,
+                            anchor: e.currentTarget,
+                            selected: repertoire,
+                          })
+                        }
+                        sx={{ position: "absolute", right: 10, minWidth: 4 }}
                       >
-                        <Check />
+                        <MoreVertical width={20} />
                       </IconButton>
-                    </form>
-                  </Stack>
-                ) : (
-                  <PersonnalToggle
-                    sx={
-                      index < repertoires.length - 1 && {
-                        borderBottom: "1px solid #fffb",
-                      }
-                    }
-                    key={repertoire?.id}
-                    value={repertoire?.id}
-                    aria-label="left aligned"
-                  >
-                    {repertoire.libelle}
-
-                    <IconButton
-                      color="primary"
-                      onClick={(e) =>
-                        setOpenOption({
-                          open: true,
-                          anchor: e.currentTarget,
-                          selected: repertoire,
-                        })
-                      }
-                      sx={{ position: "absolute", right: 10, minWidth: 4 }}
-                    >
-                      <MoreVertical width={20} />
-                    </IconButton>
-                  </PersonnalToggle>
-                );
-              })}
+                    </PersonnalToggle>
+                  );
+                })}
           </ToggleButtonGroup>
           {open && (
             <Stack
