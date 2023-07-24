@@ -52,10 +52,11 @@ const toolbarStyle = {
 
 Note.propTypes = {
   note: PropTypes.object,
+  editOpen: PropTypes.bool,
   newTitle: PropTypes.func,
 };
 
-function Note({ note, newTitle }) {
+function Note({ note, newTitle, editOpen }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
 
@@ -70,9 +71,9 @@ function Note({ note, newTitle }) {
   };
 
   useEffect(() => {
-    setContent(note?.message);
-    setTitle(note?.libelle);
-  }, [note]);
+    setContent(!editOpen ? note?.message : "");
+    setTitle(!editOpen ? note?.libelle : "");
+  }, [note, editOpen]);
 
   return (
     <Box position="relative" paddingTop={5} height="100%">

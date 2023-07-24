@@ -17,7 +17,7 @@ import DeleteDialog from "../../../components/DeleteDialog.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
-  repertoireId: PropTypes.string,
+  repertoireSelected: PropTypes.string,
   actualNote: PropTypes.object,
   open: PropTypes.bool,
   newNote: PropTypes.func,
@@ -30,7 +30,7 @@ function ListNote({
   data,
   actualNote,
   noteSelected,
-  repertoireId,
+  repertoireSelected,
   createdData,
   deletedData,
   open,
@@ -64,12 +64,16 @@ function ListNote({
     setLibelle(event.target.value);
   };
 
+  console.log(repertoireSelected);
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    mutate({ repertoireId: repertoireId, libelle: libelle });
+    console.log(repertoireSelected);
+
+    mutate({ repertoireId: repertoireSelected, libelle: libelle });
     newNote(false);
     setLibelle(null);
+    noteSelected(data[data.length - 1])
   };
 
   return (
