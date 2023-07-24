@@ -29,7 +29,7 @@ function DefaultBox({ persoStyle, dark, children }) {
           position="absolute"
           width="100%"
         >
-          <Link to="/"><img src="../../public/logo.svg" /></Link>
+          <Link to="/"><img src="../../logo.svg" /></Link>
           <Stack flexDirection="row" gap={5} position="absolute" right={100}>
             <Link style={{ color: "#fff", textDecoration: "none" }} to="/notes">Mes notes</Link>
             <Link style={{ color: "#fff", textDecoration: "none" }} to="/taches">Mes tâches</Link>

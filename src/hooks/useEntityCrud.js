@@ -14,19 +14,19 @@ function useEntityCrud({ entity, complement, id, enabled }) {
 
   const createdData = async (x) => {
     await instance.post(entity, x);
-    queryClient.invalidateQueries(entity);
+    queryClient.invalidateQueries({entity});
   };
   
   const editData = async (x) => {
     const url = entity + "/" + x.id;
     await instance.patch(url, x);
-    queryClient.invalidateQueries(entity);
+    queryClient.invalidateQueries({entity});
   };
 
   const deletedData = async (entityId) => {
     const url = entity + "/" + entityId;
     await instance.delete(url);
-    queryClient.invalidateQueries(entity);
+    queryClient.invalidateQueries({entity});
   };
 
   const { data = [], error, isLoading } = useQuery(fullEntity, async () => {
