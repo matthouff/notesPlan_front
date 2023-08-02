@@ -1,9 +1,9 @@
 import { Box, Stack } from "@mui/material";
-import PropTypes from "prop-types";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useRef, useState } from "react";
 import useEntityCrud from "../../../hooks/useEntityCrud.js";
+import PropTypes from "prop-types";
 
 GroupeNotes.propTypes = {
   repertoireSelected: PropTypes.string,
