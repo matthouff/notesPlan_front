@@ -1,24 +1,24 @@
 import {
   Box,
   Button,
-  FormControl,
   IconButton,
   Stack,
-  TextField,
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import PropTypes from "prop-types";
 import PersonnalToggle from "../../../components/PersoToggle.jsx";
-import { Check, Trash } from "lucide-react";
-import { useMutation, useQueryClient } from "react-query";
-import { useRef, useState } from "react";
+import { Trash } from "lucide-react";
+import { useState } from "react";
 import DeleteDialog from "../../../components/DeleteDialog.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
   repertoireSelected: PropTypes.string,
   actualNote: PropTypes.object,
+  addButtonRef: PropTypes.object,
+  textFieldEditRef: PropTypes.object,
+  textFieldRef: PropTypes.func,
   open: PropTypes.bool,
   newNote: PropTypes.func,
   noteSelected: PropTypes.func.isRequired,
@@ -30,25 +30,13 @@ function ListNote({
   data,
   actualNote,
   noteSelected,
-  repertoireSelected,
-  createdData,
   deletedData,
   open,
   newNote,
+  textFieldEditRef,
+  addButtonRef
 }) {
-  const [libelle, setLibelle] = useState(null);
-  const sendButtonRef = useRef(null);
-  const textFieldRef = useRef(null);
-  const [openModal, newNoteModal] = useState();
-
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation(createdData, {
-    onSuccess: () => {
-      // Mettre à jour la liste des répertoires après la création d'un nouvel élément
-      noteSelected();
-      queryClient.invalidateQueries("notes");
-    },
-  });
+  const [openModal, setOpenModal] = useState();
 
   const addNote = () => {
     newNote(true);
@@ -57,23 +45,13 @@ function ListNote({
 
   const onDelete = () => {
     deletedData(actualNote.id);
-    newNoteModal(false);
+    setOpenModal(false);
   };
 
-  const handleChange = (event) => {
-    setLibelle(event.target.value);
-  };
-
-  console.log(repertoireSelected);
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    console.log(repertoireSelected);
-
-    mutate({ repertoireId: repertoireSelected, libelle: libelle });
-    newNote(false);
-    setLibelle(null);
-    noteSelected(data[data.length - 1])
+  const handleNoteSelected = (e, newNote) => {
+    if (newNote !== null) {
+      noteSelected(newNote);
+    }
   };
 
   return (
@@ -83,6 +61,7 @@ function ListNote({
           Notes
         </Typography>
         <Button
+          ref={addButtonRef}
           color="primary"
           mb={1}
           onClick={() => {
@@ -98,13 +77,14 @@ function ListNote({
             color="secondary"
             value={actualNote ?? data[0]}
             exclusive
-            onChange={noteSelected}
+            onChange={handleNoteSelected}
             aria-label="text note"
             sx={{ display: "flex", flexDirection: "column" }}
           >
             {data?.map((note, index) => {
               return (
                 <PersonnalToggle
+                  ref={textFieldEditRef}
                   className="trashNote"
                   sx={
                     index < data.length - 1 && {
@@ -118,7 +98,7 @@ function ListNote({
                   {note?.libelle}
                   <IconButton
                     color="error"
-                    onClick={() => newNoteModal(true)}
+                    onClick={() => setOpenModal(true)}
                     sx={{ position: "absolute", right: 10, minWidth: 4 }}
                   >
                     <Trash width={20} />
@@ -139,38 +119,18 @@ function ListNote({
             alignItems="center"
             justifyContent="center"
           >
-            <form
-              style={{ display: "flex", alignItems: "center" }}
-              onSubmit={handleSubmit}
+            <Typography
+              border="1px solid red"
             >
-              <FormControl fullWidth>
-                <TextField
-                  inputRef={textFieldRef}
-                  name="libelle"
-                  onChange={handleChange}
-                  InputProps={{
-                    style: { color: "#fff", paddingRight: 40 },
-                  }}
-                  fullWidth
-                  color="secondary"
-                />
-              </FormControl>
-              <IconButton
-                ref={sendButtonRef}
-                color="primary"
-                type="submit"
-                sx={{ position: "absolute", minWidth: 4, right: 10 }}
-              >
-                <Check />
-              </IconButton>
-            </form>
+
+            </Typography>
           </Stack>
         )}
         {openModal && (
           <DeleteDialog
             open
             selected={actualNote}
-            newNoteModal={newNoteModal}
+            setOpenModal={setOpenModal}
             onDelete={onDelete}
             title="supprimer la note ?"
           />

@@ -24,7 +24,7 @@ function PersonnalPopover({
   editOpen,
   editRef,
 }) {
-  const [openModal, setOpenModal] = useState();
+  const [openModal, setOpenModal] = useState(false);
 
   const onDelete = () => {
     setOpenOption({ open: false, anchor: null });

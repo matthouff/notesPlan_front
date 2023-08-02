@@ -13,6 +13,7 @@ function Notes() {
     entity: "repertoires_notes",
     complement: "user",
     id: userId,
+    enabled: !!userId
   });
 
   return (

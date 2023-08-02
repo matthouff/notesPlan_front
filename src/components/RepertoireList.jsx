@@ -122,8 +122,6 @@ function RepertoireList({
     setLibelle(null);
   };
 
-  console.log(libelle);
-
   return (
     <Stack gap={10} width={repertoires ? "20%" : "100%"}>
       <Typography variant="h1" fontWeight="bold" color="primary" fontSize={70}>

@@ -2,7 +2,7 @@ import { Box, Stack } from "@mui/material";
 import PropTypes from "prop-types";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useEntityCrud from "../../../hooks/useEntityCrud.js";
 
 GroupeNotes.propTypes = {
@@ -12,15 +12,18 @@ GroupeNotes.propTypes = {
 function GroupeNotes({ repertoireSelected }) {
   const [noteSelected, setNoteSelected] = useState(null);
   const [open, setOpen] = useState(false);
-  // const textFieldRef = useRef(null);
-  // const textFieldEditRef = useRef(null);
-  // const sendButtonRef = useRef(null);
-  // const editRef = useRef(null);
+  const textFielTitledRef = useRef(null);
+  const textFieldEditRef = useRef(null);
+  const textFieldRef = useRef(null);
+  const addButtonRef = useRef(null);
+  let editRef = useRef(null);
+
 
   const {
     data: notes,
     createdData,
     deletedData,
+    editData,
   } = useEntityCrud({
     entity: `notes`,
     complement: `repertoire-notes`,
@@ -32,50 +35,65 @@ function GroupeNotes({ repertoireSelected }) {
     if (notes) {
       setNoteSelected(notes[0]);
     }
-    // if (open) {
-    //   textFieldRef.current.focus();
-    // }
-    // if (editOpen) {
-    //   textFieldEditRef.current.focus();
-    // }
-    // document.addEventListener("click", handleClickOutside);
-    // document.addEventListener("click", handleClickOutsideEdit);
-    // return () => {
-    //   document.removeEventListener("click", handleClickOutside);
-    //   document.removeEventListener("click", handleClickOutsideEdit);
-    // };
-  }, [notes]);
+    if (open) {
+      textFielTitledRef?.current?.focus();
+    }
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [notes, open]);
 
-  // const handleClickOutsideEdit = (event) => {
-  //   if (
-  //     textFieldEditRef?.current &&
-  //     !textFieldEditRef?.current?.contains(event.target) &&
-  //     sendButtonRef.current &&
-  //     !sendButtonRef.current.contains(event.target) &&
-  //     !editRef?.current?.contains(event.target)
-  //   ) {
-  //     setOpenOption(false);
-  //     setEditOpen(false);
-  //   }
-  // };
+  const handleClickOutside = (event) => {
+    if (
+      textFielTitledRef?.current &&
+      !textFielTitledRef?.current?.contains(event.target) &&
+      textFieldEditRef?.current &&
+      !textFieldEditRef?.current?.contains(event.target) &&
+      addButtonRef.current &&
+      !addButtonRef.current.contains(event.target) &&
+      !editRef?.current?.contains(event.target)
+    ) {
+      setOpen(false);
+    }
+  };
 
-  console.log(repertoireSelected);
+  const newNote = (x) => {
+    if (x) {
+      createdData(x)
+    } else {
+      //editData(x)
+    }
+    setNoteSelected({ ...noteSelected, x })
+  }
+
   return (
     <>
       <Stack Stack width="22%">
         <ListNote
           data={notes}
           actualNote={noteSelected}
-          noteSelected={(e, x) => setNoteSelected(x)}
+          noteSelected={setNoteSelected}
           repertoireSelected={repertoireSelected}
           createdData={createdData}
           deletedData={deletedData}
           open={open}
           newNote={setOpen}
+          addButtonRef={addButtonRef}
+          textFieldEditRef={textFieldEditRef}
+          textFieldRef={textFieldRef}
         />
       </Stack>
       <Box width="58%" height="100%">
-        {notes[0] && <Note note={noteSelected ?? notes[0]} editOpen={open} />}
+        {(notes[0] || open) &&
+          <Note
+            editData={editData}
+            repertoireSelected={repertoireSelected}
+            note={open ? null : noteSelected ?? notes[0]}
+            editOpen={open}
+            titleRef={textFielTitledRef}
+            newNote={newNote} />
+        }
       </Box>
     </>
   );

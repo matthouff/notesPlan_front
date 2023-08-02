@@ -1,7 +1,22 @@
+import axios from "axios";
+import { useQuery } from "react-query";
+
+const instance = axios.create({
+  baseURL: 'http://localhost:3000/',
+  headers: {
+    'content-type': 'application/json',
+  },
+});
+
 function useUser(){
-  const userId = "ba878fef-244a-40d3-a0e0-102621088d28"
-  // 6176aeb3-2eeb-4094-8afa-fb37daff2a25
-// ba878fef-244a-40d3-a0e0-102621088d28
+  const { data = [] } = useQuery("users", async () => {
+    const response = await instance.get("users");
+    return response.data;
+  }, {
+    enabled: true,
+  });
+
+  const userId = data.filter(x => x.nom == "Zita").map(x => x.id)[0]
 
   return {userId}
 }
