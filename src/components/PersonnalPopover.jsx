@@ -1,4 +1,4 @@
-import { Box, Popover } from "@mui/material";
+import { Box, Button, Popover } from "@mui/material";
 import { Trash, Edit } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -24,7 +24,7 @@ function PersonnalPopover({
   editOpen,
   editRef,
 }) {
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState();
 
   const onDelete = () => {
     setOpenOption({ open: false, anchor: null });
@@ -63,10 +63,10 @@ function PersonnalPopover({
         <PersoButton onClick={eOpen} variant="contained" ref={editRef}>
           <Edit />
         </PersoButton>
-        <PersoButton
+        <Button
           onClick={() => setOpenModal(true)}
           variant="contained"
-          error
+          color="error"
           sx={{
             borderRadius: "100%",
             maxWidth: "35px",
@@ -76,7 +76,7 @@ function PersonnalPopover({
           }}
         >
           <Trash />
-        </PersoButton>
+        </Button>
       </Box>
       {openModal && (
         <DeleteDialog
