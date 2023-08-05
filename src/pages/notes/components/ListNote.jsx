@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  IconButton,
   Stack,
   ToggleButtonGroup,
   Typography,
@@ -86,23 +85,22 @@ function ListNote({
                 <PersonnalToggle
                   ref={textFieldEditRef}
                   className="trashNote"
-                  sx={
-                    index < data.length - 1 && {
+                  sx={{
+                    ...index < data.length - 1 && {
                       borderBottom: "1px solid #fffb",
-                    }
-                  }
+                    },
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between"
+                  }}
                   key={note?.id}
                   value={note}
                   aria-label="left aligned"
                 >
-                  {note?.libelle}
-                  <IconButton
-                    color="error"
-                    onClick={() => setOpenModal(true)}
-                    sx={{ position: "absolute", right: 10, minWidth: 4 }}
-                  >
-                    <Trash width={20} />
-                  </IconButton>
+                  <Typography variant="body2">
+                    {note?.libelle}
+                  </Typography>
+                  <Trash style={{ stroke: "#C00" }} onClick={() => setOpenModal(true)} width={20} />
                 </PersonnalToggle>
               );
             })}
@@ -122,7 +120,6 @@ function ListNote({
             <Typography
               border="1px solid red"
             >
-
             </Typography>
           </Stack>
         )}

@@ -12,8 +12,6 @@ function EditGroupe({ onClose, handleSubmit, groupeSelected }) {
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [groupeCouleur, setCouleurLibelle] = useState(null);
 
-  console.log(groupeCouleur);
-
   return (
     <Dialog open onClose={onClose}>
       <Stack gap={3} sx={{ p: 2, width: 450, textAlign: "center" }}>

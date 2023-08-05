@@ -16,6 +16,7 @@ Groupe.propTypes = {
 function Groupe({ data, setOpenOption }) {
   const [openTache, setOpenTache] = useState()
   const [deleteOpen, setDeleteOpen] = useState()
+  const [groupeDropSelected, setGroupeDropSelected] = useState()
   const queryClient = useQueryClient();
 
   const smallListGroup = data.map(function (groupe) {
@@ -26,13 +27,12 @@ function Groupe({ data, setOpenOption }) {
     entity: "taches"
   });
 
-  const { mutate } = useMutation(openTache?.tache?.id ? editData : createdData, {
+  const { mutate } = useMutation(openTache?.tache?.id || groupeDropSelected ? editData : createdData, {
     onSuccess: () => {
       // Mettre à jour la liste des taches après la création d'un nouvel élément
       queryClient.invalidateQueries("groupes");
     },
   });
-
 
   const handleSubmit = (e, x) => {
     e.preventDefault();
@@ -54,6 +54,16 @@ function Groupe({ data, setOpenOption }) {
     setOpenTache(null)
     setDeleteOpen(false)
   };
+
+  const test = (e, x) => {
+    e.preventDefault();
+    setGroupeDropSelected(x)
+    const itemData = e.dataTransfer.getData("application/json");
+    const parsedData = JSON.parse(itemData);
+    mutate({ ...parsedData.tache, groupeId: x })
+
+    setGroupeDropSelected(null)
+  }
 
   return (
     <Stack flexDirection="row" gap={3} sx={{ overflowX: "scroll", boxSizing: "border-box", width: "100%", height: "100%", paddingBottom: 3 }}>
@@ -91,6 +101,8 @@ function Groupe({ data, setOpenOption }) {
               </IconButton>
             </Box>
             <Paper
+              onDrop={(e) => test(e, groupe?.id)}
+              onDragOver={(e) => e.preventDefault()}
               elevation={3}
               style={{ padding: 15, maxWidth: "300px", height: "100%", backgroundColor: "#fff4", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", overflow: "hidden" }}
             >

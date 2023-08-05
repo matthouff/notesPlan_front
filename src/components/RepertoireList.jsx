@@ -192,30 +192,34 @@ function RepertoireList({
                     </Stack>
                   ) : (
                     <PersonnalToggle
-                      sx={
-                        index < repertoires.length - 1 && {
+                      sx={{
+                        ...index < repertoires.length - 1 && {
                           borderBottom: "1px solid #fffb",
-                        }
-                      }
+                        },
+                        display: "flex",
+                        justifyContent: "space-between"
+                      }}
                       key={repertoire?.id}
                       value={repertoire?.id}
                       aria-label="left aligned"
                     >
-                      {repertoire.libelle}
-
-                      <IconButton
-                        color="primary"
-                        onClick={(e) =>
-                          setOpenOption({
-                            open: true,
-                            anchor: e.currentTarget,
-                            selected: repertoire,
-                          })
-                        }
-                        sx={{ position: "absolute", right: 10, minWidth: 4 }}
-                      >
-                        <MoreVertical width={20} />
-                      </IconButton>
+                      <Typography variant="body2" sx={{
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                      }}>
+                        {repertoire.libelle}
+                      </Typography>
+                      <MoreVertical onClick={(e) =>
+                        setOpenOption({
+                          open: true,
+                          anchor: e.currentTarget,
+                          selected: repertoire,
+                        })}
+                        style={{ stroke: "#fff" }}
+                        height={17}
+                        width={17}
+                      />
                     </PersonnalToggle>
                   );
                 })}

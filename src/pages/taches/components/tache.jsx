@@ -12,7 +12,7 @@ function Tache({ tache, openModal }) {
   const [iconActive, setIconActive] = useState(false)
 
   const handleDragStart = (e) => {
-    console.log(e.dataTransfer);
+    e.dataTransfer.setData('application/json', JSON.stringify({ tache }));
   };
 
   return (
