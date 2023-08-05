@@ -6,6 +6,7 @@ import useEntityCrud from "../../../hooks/useEntityCrud";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import EditTache from "./EditTache";
+import DeleteDialog from "../../../components/DeleteDialog";
 
 Groupe.propTypes = {
   data: PropTypes.array,
@@ -13,50 +14,46 @@ Groupe.propTypes = {
 };
 
 function Groupe({ data, setOpenOption }) {
-  const [groupeSelected, setGroupeSelected] = useState()
-  const [tacheSelected, setTacheSelected] = useState()
-  const [editTacheOpen, setEditTacheOpen] = useState()
+  const [openTache, setOpenTache] = useState()
+  const [deleteOpen, setDeleteOpen] = useState()
   const queryClient = useQueryClient();
 
-  const { createdData, editData } = useEntityCrud({
-    entity: "taches",
-    complement: "groupes",
-    id: groupeSelected,
-    enabled: !!groupeSelected
+  const smallListGroup = data.map(function (groupe) {
+    return { id: groupe.id, libelle: groupe.libelle }
+  })
+
+  const { createdData, editData, deletedData } = useEntityCrud({
+    entity: "taches"
   });
 
-  const { mutate } = useMutation(tacheSelected?.id ? editData : createdData, {
+  const { mutate } = useMutation(openTache?.tache?.id ? editData : createdData, {
     onSuccess: () => {
       // Mettre à jour la liste des taches après la création d'un nouvel élément
       queryClient.invalidateQueries("groupes");
     },
   });
 
+
   const handleSubmit = (e, x) => {
     e.preventDefault();
 
-    if (editTacheOpen) {
-      if (!tacheSelected?.id) {
-        mutate({ ...x, groupeId: groupeSelected });
-      } else {
-        mutate({ ...x, id: tacheSelected.id });
-      }
+    if (!openTache?.tache?.id) {
+      mutate({ ...x, groupeId: openTache?.groupe?.id });
+    } else {
+      mutate({ ...x, id: openTache?.tache?.id });
     }
-
-    setEditTacheOpen(false)
+    setOpenTache({ open: false })
   }
 
   const handleClose = () => {
-    setTacheSelected(null)
-    setEditTacheOpen(null)
+    setOpenTache({ open: false, tache: null, groupe: null })
   }
 
-  const handleOpenTache = (x) => {
-    console.log(x.tache);
-    setEditTacheOpen(true)
-    setTacheSelected(x.tache)
-    setGroupeSelected(x.groupe.id)
-  }
+  const onDelete = () => {
+    deletedData(openTache?.tache?.id);
+    setOpenTache(null)
+    setDeleteOpen(false)
+  };
 
   return (
     <Stack flexDirection="row" gap={3} sx={{ overflowX: "scroll", boxSizing: "border-box", width: "100%", height: "100%", paddingBottom: 3 }}>
@@ -102,13 +99,13 @@ function Groupe({ data, setOpenOption }) {
                 {
                   groupe.taches.sort((a, b) => new Date(a.createdat) - new Date(b.createdat)).map(tache => {
                     return (
-                      <Tache key={tache.id} tache={tache} openModal={() => handleOpenTache({ groupe: groupe, tache: tache })} />
+                      <Tache key={tache.id} tache={tache} openModal={() => setOpenTache({ groupe: groupe, tache: tache, open: true })} />
                     )
                   })
                 }
               </Stack>
               <IconButton
-                onClick={() => handleOpenTache(groupe)}
+                onClick={() => setOpenTache({ groupe: groupe, open: true })}
                 color="primary"
                 sx={{ width: "100%", borderRadius: "0" }}
               >
@@ -118,9 +115,18 @@ function Groupe({ data, setOpenOption }) {
           </Stack >
         )
       })}
-      {editTacheOpen &&
-        <EditTache tacheSelected={tacheSelected} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} />
+      {openTache?.open &&
+        <EditTache listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
       }
+      {deleteOpen && (
+        <DeleteDialog
+          open
+          selected={openTache?.tache}
+          setOpenModal={setDeleteOpen}
+          onDelete={onDelete}
+          title="supprimer la note ?"
+        />
+      )}
     </Stack >
   );
 }
