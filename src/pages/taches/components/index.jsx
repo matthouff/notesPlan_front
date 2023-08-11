@@ -37,6 +37,7 @@ function Groupe({ data, setOpenOption }) {
   const handleSubmit = (e, x) => {
     e.preventDefault();
 
+    console.log(x);
     if (!openTache?.tache?.id) {
       mutate({ ...x, groupeId: openTache?.groupe?.id });
     } else {
