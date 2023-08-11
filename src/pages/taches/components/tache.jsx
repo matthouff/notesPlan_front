@@ -28,7 +28,7 @@ function Tache({ tache, openModal }) {
     <ListItem
       draggable
       onDragStart={handleDragStart}
-      sx={{ bgcolor: "#fff", borderRadius: 2, borderLeft: `5px solid ${tache?.couleur}`, position: "relative" }}
+      sx={{ bgcolor: "#fff", borderRadius: 2, borderLeft: `5px solid ${tache?.couleur}`, position: "relative", display: "flex", gap: 0.5, flexDirection: "column", alignItems: "flex-start" }}
       onMouseEnter={() => setIconActive(true)}
       onMouseLeave={() => setIconActive(false)}
       secondaryAction={
@@ -45,9 +45,13 @@ function Tache({ tache, openModal }) {
       }}>
         {tache?.libelle}
       </Typography>
-      <Divider
-        sx={{ background: `linear-gradient(to right, ${couleurs})`, height: 4, position: "absolute", bottom: 0, left: 0, width: "100%", borderRadius: "0 0 100px 100px" }}
-      />
+      {tache?.labels.length !== 0 &&
+        <Divider
+          sx={{
+            background: `linear-gradient(to right, ${couleurs})`, height: 5, width: "100%", borderRadius: "100px"
+          }}
+        />
+      }
     </ListItem>
   );
 }
