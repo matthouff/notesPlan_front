@@ -8,15 +8,16 @@ import DeleteDialog from "../../../components/DeleteDialog";
 
 PopperLabel.propTypes = {
   // tacheLabel: PropTypes.array,
+  newTache: PropTypes.bool,
   handleClose: PropTypes.func,
   labelSelected: PropTypes.func,
 };
 
-function PopperLabel({ handleClose, labelSelected }) {
+function PopperLabel({ handleClose, labelSelected, newTache }) {
   const [newLabel, setNewLabel] = useState(null)
   const [selected, setSelected] = useState(null)
+  const [labelList, setLabelList] = useState([])
   const queryClient = useQueryClient();
-
   const { data, createdData, deletedData } = useEntityCrud({
     entity: "labels",
   });
@@ -38,6 +39,17 @@ function PopperLabel({ handleClose, labelSelected }) {
   const onDelete = () => {
     deletedData(selected?.label?.id)
     setSelected(null)
+  }
+
+  const handleSelect = (x) => {
+    if (newTache) {
+      if (!labelList.map(y => y.id).includes(x.id)) {
+        setLabelList([...labelList, x])
+        labelSelected([...labelList, x])
+      }
+    } else {
+      labelSelected(x)
+    }
   }
 
   return (
@@ -83,7 +95,7 @@ function PopperLabel({ handleClose, labelSelected }) {
             data?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat)).map(label => {    /* .filter(x => !tacheLabel.map(y => y.id).includes(x.id)) */
               return (
                 <ListItem disablePadding key={label.id} secondaryAction={<IconButton onClick={() => setSelected({ label: label, open: true })} size="small"><Trash height={20} stroke="#C00" /></IconButton>}>
-                  <ListItemButton onClick={() => labelSelected(label)} sx={{ background: `linear-gradient(45deg, ${label.couleur} 0%, #fff 25%, transparent)`, borderBottom: `2px solid ${label.couleur}`, borderRadius: "10px", mb: 0.5, py: 0.5 }} >
+                  <ListItemButton onClick={() => handleSelect(label)} sx={{ background: `linear-gradient(45deg, ${label.couleur} 0%, #fff 25%, transparent)`, borderBottom: `2px solid ${label.couleur}`, borderRadius: "10px", mb: 0.5, py: 0.5 }} >
                     <ListItemText>
                       {label?.libelle}
                     </ListItemText>

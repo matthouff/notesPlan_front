@@ -17,6 +17,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [description, setDescription] = useState(null);
   const [groupe, setGroupe] = useState(null);
+  const [listNewTache, setlListNewTache] = useState(null);
   const [editOpenLabel, setEditOpenLabel] = useState(null);
 
   const { data, addRelationData, deletedData } = useEntityCrud({
@@ -30,7 +31,15 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
     setEditOpenLabel({ anchorEl: e.currentTarget, open: true });
   };
 
-  console.log(data);
+  let listLabels = listNewTache ?? data;
+
+  const addNewLabel = (x) => {
+    if (x.id) {
+      addRelationData(x);
+    } else {
+      setlListNewTache(x);
+    }
+  }
 
   return (
     <Dialog open onClose={onClose}>
@@ -40,10 +49,10 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
             {openTache?.tache?.id ? "Modifier" : "Ajouter"} une tache
           </Typography>
         </Box>
-        <form onSubmit={(e) => handleSubmit(e, { libelle: groupeLibelle ?? openTache?.tache?.libelle, detail: description, groupeId: groupe ?? openTache?.groupe?.id })} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <form onSubmit={(e) => handleSubmit(e, { libelle: groupeLibelle ?? openTache?.tache?.libelle, detail: description, groupeId: groupe ?? openTache?.groupe?.id, label: listNewTache })} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           <Box sx={{ display: "flex", gap: 2 }}>
             <Stack flexGrow={1} sx={{ gap: 2 }}>
-              <TextField label="Titre" value={!groupeLibelle ? openTache?.tache?.libelle : groupeLibelle} variant="outlined" onChange={(e) => setGroupeLibelle(e.target.value)} />
+              <TextField label="Titre" value={!groupeLibelle ? openTache?.tache?.libelle : groupeLibelle} variant="outlined" onChange={(e) => setGroupeLibelle(e.target.value)} required />
               <TextField minRows={10} multiline label="Description" value={description ?? openTache?.tache?.detail ?? undefined} variant="outlined" onChange={(e) => setDescription(e.target.value)} />
               {openTache?.tache?.id &&
                 <Select
@@ -68,7 +77,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
               <List
                 height={400}
               >
-                {data?.map(label => {
+                {listLabels?.map(label => {
                   return (
                     <ListItem sx={{ borderLeft: `5px solid ${label.couleur}`, px: 1 }} key={label.id} component="div" secondaryAction={<IconButton onClick={() => deletedData(`${label.id}/tache/${openTache?.tache?.id}`)} sx={{ p: 0 }} ><X /></IconButton>} disablePadding>
                       <ListItemButton sx={{ p: 0 }}>
@@ -99,7 +108,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
         </form>
       </Stack>
       {editOpenLabel?.open &&
-        <PopperLabel tacheLabel={data} labelSelected={(x) => addRelationData(x)} handleClose={() => setEditOpenLabel({ open: false })} />
+        <PopperLabel newTache={!openTache?.tache} tacheLabel={data} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
       }
     </Dialog >
   )

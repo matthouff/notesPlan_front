@@ -79,9 +79,13 @@ function RepertoireList({
     }
   };
 
+  console.log(actualRepertoire === repertoires[0]?.id);
+  console.log(repertoires[0]?.id);
+  console.log(actualRepertoire);
+
   useEffect(() => {
     if (repertoires) {
-      setRepertoireSelected(repertoires[0]?.id);
+      !actualRepertoire ? setRepertoireSelected(repertoires[0]?.id) : setRepertoireSelected(actualRepertoire);
     }
     if (open) {
       textFieldRef.current.focus();
@@ -95,7 +99,7 @@ function RepertoireList({
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("click", handleClickOutsideEdit);
     };
-  }, [repertoires, setRepertoireSelected, open, editOpen]);
+  }, [repertoires, setRepertoireSelected, open, editOpen, actualRepertoire]);
 
   const selectedRepertoire = (x) => {
     if (x !== null) {
@@ -149,8 +153,8 @@ function RepertoireList({
               repertoires
                 ?.sort(
                   (a, b) =>
-                    new Date(a.createdat).getTime() -
-                    new Date(b.createdat).getTime()
+                    new Date(b.createdat) -
+                    new Date(a.createdat)
                 )
                 .map((repertoire, index) => {
                   return editOpen &&
@@ -167,7 +171,7 @@ function RepertoireList({
                         style={{ display: "flex", alignItems: "center" }}
                         onSubmit={handleEditSubmit}
                       >
-                        <FormControl fullWidth>
+                        <FormControl>
                           <TextField
                             inputRef={textFieldEditRef}
                             name="libelle"
@@ -176,7 +180,6 @@ function RepertoireList({
                             InputProps={{
                               style: { color: "#fff", paddingRight: 40 },
                             }}
-                            fullWidth
                             color="secondary"
                           />
                         </FormControl>
@@ -235,7 +238,7 @@ function RepertoireList({
                 style={{ display: "flex", alignItems: "center" }}
                 onSubmit={handleSubmit}
               >
-                <FormControl fullWidth>
+                <FormControl >
                   <TextField
                     inputRef={textFieldRef}
                     name="libelle"
@@ -243,7 +246,7 @@ function RepertoireList({
                     InputProps={{
                       style: { color: "#fff", paddingRight: 40 },
                     }}
-                    fullWidth
+
                     color="secondary"
                   />
                 </FormControl>

@@ -105,7 +105,6 @@ function Note({ note, titleRef }) {
     <Box position="relative" paddingTop={5} height="100%">
       <PersoTextField
         inputRef={titleRef}
-        fullWidth
         name="message"
         value={title}
         onChange={(x) => handleChange({ libelle: x.target.value })}
