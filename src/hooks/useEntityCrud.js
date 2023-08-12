@@ -8,10 +8,11 @@ const instance = axios.create({
   },
 });
 
+
 function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
   const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
-
+  
   const createdData = async (x) => {
     await instance.post(entity, x);
     queryClient.invalidateQueries({entity});
@@ -23,6 +24,12 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     queryClient.invalidateQueries({entity});
   };
 
+  const addRelationData = async (x) => {
+    const url = `${entity}/${x.id}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`;
+    await instance.patch(url, x);
+    queryClient.invalidateQueries({entity});
+  };
+  
   const deletedData = async (entityId) => {
     const url = entity + "/" + entityId;
     await instance.delete(url);
@@ -36,7 +43,7 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     enabled: enabled,
   });
 
-  return { data, error, isLoading, createdData, deletedData, editData };
+  return { data, error, isLoading, createdData, deletedData, editData, addRelationData };
 }
 
 export default useEntityCrud;

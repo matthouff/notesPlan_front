@@ -33,7 +33,7 @@ function Tache({ tache, openModal }) {
       onMouseLeave={() => setIconActive(false)}
       secondaryAction={
         iconActive &&
-        <IconButton edge="end" onClick={openModal}>
+        <IconButton edge="end" onClick={() => openModal(tache)}>
           <MoreVertical />
         </IconButton>
       }

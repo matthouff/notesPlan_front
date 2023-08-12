@@ -2,6 +2,8 @@ import { Box, Button, Dialog, IconButton, List, ListItem, ListItemButton, ListIt
 import { Plus, X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import useEntityCrud from "../../../hooks/useEntityCrud";
+import PopperLabel from "./PopperLabel";
 
 EditTache.propTypes = {
   openTache: PropTypes.object,
@@ -15,6 +17,20 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [description, setDescription] = useState(null);
   const [groupe, setGroupe] = useState(null);
+  const [editOpenLabel, setEditOpenLabel] = useState(null);
+
+  const { data, addRelationData, deletedData } = useEntityCrud({
+    entity: `labels`,
+    complement: `tache`,
+    id: openTache?.tache?.id,
+    enabled: !!openTache?.tache?.id
+  });
+
+  const handleClick = (e) => {
+    setEditOpenLabel({ anchorEl: e.currentTarget, open: true });
+  };
+
+  console.log(data);
 
   return (
     <Dialog open onClose={onClose}>
@@ -52,9 +68,9 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
               <List
                 height={400}
               >
-                {openTache?.tache?.labels?.map(label => {
+                {data?.map(label => {
                   return (
-                    <ListItem sx={{ borderLeft: `5px solid ${label.couleur}`, px: 1 }} key={label.id} component="div" secondaryAction={<IconButton sx={{ p: 0 }} ><X /></IconButton>} disablePadding>
+                    <ListItem sx={{ borderLeft: `5px solid ${label.couleur}`, px: 1 }} key={label.id} component="div" secondaryAction={<IconButton onClick={() => deletedData(`${label.id}/tache/${openTache?.tache?.id}`)} sx={{ p: 0 }} ><X /></IconButton>} disablePadding>
                       <ListItemButton sx={{ p: 0 }}>
                         <ListItemText primary={label.libelle} />
                       </ListItemButton>
@@ -62,7 +78,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
                   )
                 })}
               </List>
-              <IconButton sx={{ borderRadius: 0, borderTop: "1px solid #000" }} size="small">
+              <IconButton onClick={handleClick} sx={{ borderRadius: 0, borderTop: "1px solid #000" }} size="small">
                 <Plus />
               </IconButton>
             </Stack>
@@ -82,6 +98,9 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
           </Stack>
         </form>
       </Stack>
+      {editOpenLabel?.open &&
+        <PopperLabel tacheLabel={data} labelSelected={(x) => addRelationData(x)} handleClose={() => setEditOpenLabel({ open: false })} />
+      }
     </Dialog >
   )
 }

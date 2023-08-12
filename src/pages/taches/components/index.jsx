@@ -19,6 +19,7 @@ function Groupe({ data, setOpenOption }) {
   const [groupeDropSelected, setGroupeDropSelected] = useState()
   const queryClient = useQueryClient();
 
+
   const smallListGroup = data.map(function (groupe) {
     return { id: groupe.id, libelle: groupe.libelle }
   })
@@ -37,7 +38,6 @@ function Groupe({ data, setOpenOption }) {
   const handleSubmit = (e, x) => {
     e.preventDefault();
 
-    console.log(x);
     if (!openTache?.tache?.id) {
       mutate({ ...x, groupeId: openTache?.groupe?.id });
     } else {
@@ -56,7 +56,7 @@ function Groupe({ data, setOpenOption }) {
     setDeleteOpen(false)
   };
 
-  const test = (e, x) => {
+  const drop = (e, x) => {
     e.preventDefault();
     setGroupeDropSelected(x)
     const itemData = e.dataTransfer.getData("application/json");
@@ -102,7 +102,7 @@ function Groupe({ data, setOpenOption }) {
               </IconButton>
             </Box>
             <Paper
-              onDrop={(e) => test(e, groupe?.id)}
+              onDrop={(e) => drop(e, groupe?.id)}
               onDragOver={(e) => e.preventDefault()}
               elevation={3}
               style={{ padding: 15, maxWidth: "300px", height: "100%", backgroundColor: "#fff4", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", overflow: "hidden" }}
@@ -112,7 +112,7 @@ function Groupe({ data, setOpenOption }) {
                 {
                   groupe.taches.sort((a, b) => new Date(a.createdat) - new Date(b.createdat)).map(tache => {
                     return (
-                      <Tache key={tache.id} tache={tache} openModal={() => setOpenTache({ groupe: groupe, tache: tache, open: true })} />
+                      <Tache key={tache.id} tache={tache} openModal={(x) => setOpenTache({ groupe: groupe, tache: x, open: true })} />
                     )
                   })
                 }
@@ -129,7 +129,7 @@ function Groupe({ data, setOpenOption }) {
         )
       })}
       {openTache?.open &&
-        <EditTache listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
+        < EditTache listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
       }
       {deleteOpen && (
         <DeleteDialog
