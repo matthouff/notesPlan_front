@@ -58,18 +58,19 @@ function GroupeNotes({ repertoireSelected }) {
     }
   };
 
-  const newNote = (x) => {
-    if (x) {
-      createdData(x)
+  const newNote = (x, newNote) => {
+    if (newNote) {
+      createdData({ ...x, repertoireId: repertoireSelected })
     } else {
-      //editData(x)
+      console.log(x);
+      editData(x)
     }
     setNoteSelected({ ...noteSelected, x })
   }
 
   return (
     <>
-      <Stack Stack width="22%">
+      <Stack width="22%">
         <ListNote
           data={notes}
           actualNote={noteSelected}

@@ -22,6 +22,7 @@ function Notes() {
       dark
     >
       <RepertoireList
+        title={"Notes"}
         repertoires={data}
         actualRepertoire={repertoireSelected}
         setRepertoireSelected={setRepertoireSelected}

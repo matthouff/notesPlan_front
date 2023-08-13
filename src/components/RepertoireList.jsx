@@ -17,6 +17,7 @@ import "../components/style.css";
 import PersonnalPopover from "./PersonnalPopover";
 
 RepertoireList.propTypes = {
+  title: PropTypes.string,
   repertoires: PropTypes.array,
   setRepertoireSelected: PropTypes.func,
   actualRepertoire: PropTypes.string,
@@ -32,7 +33,9 @@ function RepertoireList({
   deletedData,
   editData,
   createdData,
+  title,
 }) {
+  console.log(title);
   const textFieldRef = useRef(null);
   const textFieldEditRef = useRef(null);
   const buttonRef = useRef(null);
@@ -79,10 +82,6 @@ function RepertoireList({
     }
   };
 
-  console.log(actualRepertoire === repertoires[0]?.id);
-  console.log(repertoires[0]?.id);
-  console.log(actualRepertoire);
-
   useEffect(() => {
     if (repertoires) {
       !actualRepertoire ? setRepertoireSelected(repertoires[0]?.id) : setRepertoireSelected(actualRepertoire);
@@ -127,14 +126,11 @@ function RepertoireList({
   };
 
   return (
-    <Stack gap={10} width={repertoires ? "20%" : "100%"}>
+    <Stack gap={10} width={"20%"}>
       <Typography variant="h1" fontWeight="bold" color="primary" fontSize={70}>
-        Notes
+        {title}
       </Typography>
       <Stack
-        sx={
-          !repertoires && { width: "20%", textAlign: "center", marginX: "auto" }
-        }
         gap={1}
       >
         <Typography variant="h6" color="primary">
@@ -161,7 +157,6 @@ function RepertoireList({
                     repertoire?.id === openOption?.selected?.id ? (
                     <Stack
                       key={repertoire.id}
-                      Stack
                       flexDirection="row"
                       position="relative"
                       alignItems="center"

@@ -62,6 +62,7 @@ function Taches() {
       dark
     >
       <RepertoireList
+        title="Tâches"
         repertoires={data}
         actualRepertoire={repertoireSelected}
         setRepertoireSelected={setRepertoireSelected}
@@ -69,10 +70,10 @@ function Taches() {
         deletedData={deletedData}
         editData={editData}
       />
-      <Stack width="80%" paddingTop={2} maxWidth="80%" alignItems="flex-end" position="relative">
+      <Stack width="75%" paddingTop={2} maxWidth="80%" alignItems="flex-end" gap={3} sx={{ pr: 5 }}>
         <Button
           onClick={() => setEditGroupeOpen(true)}
-          sx={{ position: "absolute", top: -50, right: 100 }} variant="contained"
+          variant="contained"
         >
           Ajouter un groupe
         </Button>

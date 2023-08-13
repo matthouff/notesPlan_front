@@ -1,4 +1,4 @@
-import { Box, Divider, styled, TextField } from "@mui/material";
+import { Box, Divider, Stack, styled, TextField } from "@mui/material";
 import { useState } from "react";
 import "../style.css";
 import ReactQuill from "react-quill";
@@ -32,7 +32,7 @@ const toolbarOptions = [
   [{ header: [1, 2, 3, 4, 5, 6, false] }],
   ["bold", "italic", "underline", "strike"],
   [{ color: [] }, { background: [] }],
-  ["link", "image", "video"],
+  ["link"],
   ["blockquote", "code-block"],
   [{ list: "ordered" }, { list: "bullet" }],
   [{ align: [] }],
@@ -54,68 +54,62 @@ Note.propTypes = {
   note: PropTypes.object,
   editOpen: PropTypes.bool,
   titleRef: PropTypes.object,
-  newTitle: PropTypes.func,
+  newNote: PropTypes.func,
 };
 
-function Note({ note, titleRef }) {
+function Note({ note, titleRef, newNote, editOpen }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [isInitializing, setIsInitializing] = useState(true);
-
-  // const { mutate } = useMutation(createdData, {
-  //   onSuccess: () => {
-  //     // Mettre à jour la liste des répertoires après la création d'un nouvel élément
-  //     noteSelected();
-  //     queryClient.invalidateQueries("notes");
-  //   },
-  // });
-
-  // const handleTitleChange = (value) => {
-  //   setTitle(value.target.value);
-  //   newTitle({ itemValue: value.target.value, newNote: editOpen });
-  // };
+  const [timeoutId, setTimeoutId] = useState(null);  // enregistre l'id du précédent setTimeOut poru l'annuler
 
   useEffect(() => {
     setContent(note ? note?.message : "");
     setTitle(note ? note?.libelle : "");
     setIsInitializing(false); // Définir isInitializing sur false une fois que le composant est monté
-  }, [note]);
+  }, [note, note?.message,]);
+
+  const titleHandleChange = (e) => {
+    e.preventDefault();
+    handleChange({ libelle: e.target.value })
+  }
 
   const handleChange = (x) => {
-
     if (!isInitializing) {
+      clearTimeout(timeoutId);
+
       if (x.libelle) {
         setTitle(x.libelle)
+      } else {
+        setContent(x.message)
       }
-      console.log("coucou");
 
-      setTimeout(() => {
-        console.log("coucou");
-      }, 3000)
+      const newTimeoutId = setTimeout(() => {
+        console.log('test');
+        newNote({ ...x, id: note?.id }, editOpen);
+      }, 1500);
+
+      setTimeoutId(newTimeoutId);
     }
 
-
-    // mutate({ repertoireId: repertoireSelected, libelle: libelle });
-    // newNote(false);
-    // setLibelle(null);
-    // noteSelected(data[data.length - 1])
   };
 
   return (
-    <Box position="relative" paddingTop={5} height="100%">
+    <Stack position="relative" paddingTop={5} height="100%">
       <PersoTextField
+        fullWidth
         inputRef={titleRef}
         name="message"
         value={title}
-        onChange={(x) => handleChange({ libelle: x.target.value })}
+        onInput={titleHandleChange}
         placeholder="Title"
       />
-      <Box>
+      <Box height="100%">
         <Divider />
         <ReactQuill
           value={content}
           onChange={(x) => handleChange({ message: x })}
-          style={editorStyle}
+          style={{ editorStyle }}
           toolbarStyle={toolbarStyle}
           placeholder="Entrez votre note ici..."
           modules={{
@@ -123,7 +117,7 @@ function Note({ note, titleRef }) {
           }}
         />
       </Box>
-    </Box>
+    </Stack>
   );
 }
 

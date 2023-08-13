@@ -17,8 +17,7 @@ ListNote.propTypes = {
   actualNote: PropTypes.object,
   addButtonRef: PropTypes.object,
   textFieldEditRef: PropTypes.object,
-  textFieldRef: PropTypes.func,
-  open: PropTypes.bool,
+  textFieldRef: PropTypes.object,
   newNote: PropTypes.func,
   noteSelected: PropTypes.func.isRequired,
   createdData: PropTypes.func,
@@ -30,7 +29,6 @@ function ListNote({
   actualNote,
   noteSelected,
   deletedData,
-  open,
   newNote,
   textFieldEditRef,
   addButtonRef
@@ -80,7 +78,7 @@ function ListNote({
             aria-label="text note"
             sx={{ display: "flex", flexDirection: "column" }}
           >
-            {data?.map((note, index) => {
+            {data?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat)).map((note, index) => {
               return (
                 <PersonnalToggle
                   ref={textFieldEditRef}
@@ -109,19 +107,6 @@ function ListNote({
           <Typography textAlign="center" marginTop={5} color="primary">
             Aucune notes
           </Typography>
-        )}
-        {open && (
-          <Stack
-            flexDirection="row"
-            position="relative"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Typography
-              border="1px solid red"
-            >
-            </Typography>
-          </Stack>
         )}
         {openModal && (
           <DeleteDialog
