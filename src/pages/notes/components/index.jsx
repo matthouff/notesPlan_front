@@ -62,7 +62,6 @@ function GroupeNotes({ repertoireSelected }) {
     if (newNote) {
       createdData({ ...x, repertoireId: repertoireSelected })
     } else {
-      console.log(x);
       editData(x)
     }
     setNoteSelected({ ...noteSelected, x })

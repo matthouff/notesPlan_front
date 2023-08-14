@@ -18,7 +18,7 @@ function Notes() {
 
   return (
     <DefaultBox
-      persoStyle={{ pt: 20, display: "flex", flexDirection: "row", gap: 5 }}
+      persoStyle={{ pt: 15, display: "flex", flexDirection: "row", gap: 5 }}
       dark
     >
       <RepertoireList

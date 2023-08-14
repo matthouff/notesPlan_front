@@ -35,7 +35,6 @@ function RepertoireList({
   createdData,
   title,
 }) {
-  console.log(title);
   const textFieldRef = useRef(null);
   const textFieldEditRef = useRef(null);
   const buttonRef = useRef(null);
@@ -143,7 +142,7 @@ function RepertoireList({
             exclusive
             onChange={(e, x) => selectedRepertoire(x)}
             aria-label="text Repertoire"
-            sx={{ display: "flex", flexDirection: "column" }}
+            sx={{ display: "flex", flexDirection: "column", maxHeight: 400, overflow: "scroll", boxShadow: repertoires.length > 9 && "inset 0px -10px 30px -10px rgba(0, 0, 0, 1)" }}
           >
             {repertoires &&
               repertoires

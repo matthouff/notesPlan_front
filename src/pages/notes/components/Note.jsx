@@ -85,7 +85,6 @@ function Note({ note, titleRef, newNote, editOpen }) {
       }
 
       const newTimeoutId = setTimeout(() => {
-        console.log('test');
         newNote({ ...x, id: note?.id }, editOpen);
       }, 1500);
 
@@ -104,7 +103,7 @@ function Note({ note, titleRef, newNote, editOpen }) {
         onInput={titleHandleChange}
         placeholder="Title"
       />
-      <Box height="100%">
+      <Box height="100%" overflow="scroll">
         <Divider />
         <ReactQuill
           value={content}

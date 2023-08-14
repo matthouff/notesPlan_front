@@ -58,7 +58,7 @@ function Taches() {
 
   return (
     <DefaultBox
-      persoStyle={{ pt: 20, display: "flex", flexDirection: "row", gap: 10, paddingBottom: 10 }}
+      persoStyle={{ pt: 15, display: "flex", flexDirection: "row", gap: 10, paddingBottom: 10 }}
       dark
     >
       <RepertoireList

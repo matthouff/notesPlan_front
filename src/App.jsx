@@ -4,18 +4,24 @@ import HomePage from './pages/home'
 import Notes from './pages/notes'
 import NotFound from './pages/NotFound'
 import Taches from './pages/taches'
+import Connexion from './pages/connexion'
+import { ThemeProvider } from '@mui/material'
+import Theme from './utils/style'
 
 function App() {
 
   return (
-    <BrowserRouter >
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/notes" element={<Notes />} />
-        <Route path="/taches" element={<Taches />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter >
+    <ThemeProvider theme={Theme}>
+      <BrowserRouter >
+        <Routes>
+          <Route path="/" element={<Connexion />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/notes" element={<Notes />} />
+          <Route path="/taches" element={<Taches />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter >
+    </ThemeProvider>
   )
 }
 
