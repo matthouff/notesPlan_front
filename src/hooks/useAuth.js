@@ -6,6 +6,7 @@ const instance = axios.create({
   baseURL: 'http://localhost:3000/',
   headers: {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache'
   },
   withCredentials: true,
   credentials: 'include',
@@ -32,8 +33,6 @@ function useAuth() {
       refetchOnReconnect: false,
     }
   );
-
-  console.log(user);
 
   const isAuthenticated = !isLoading && !isError && !!user;
 

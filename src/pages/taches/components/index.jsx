@@ -10,10 +10,11 @@ import DeleteDialog from "../../../components/DeleteDialog";
 
 Groupe.propTypes = {
   data: PropTypes.array,
+  repertoireSelected: PropTypes.array,
   setOpenOption: PropTypes.func,
 };
 
-function Groupe({ data, setOpenOption }) {
+function Groupe({ data, setOpenOption, repertoireSelected }) {
   const [openTache, setOpenTache] = useState()
   const [deleteOpen, setDeleteOpen] = useState()
   const [groupeDropSelected, setGroupeDropSelected] = useState()
@@ -129,7 +130,7 @@ function Groupe({ data, setOpenOption }) {
         )
       })}
       {openTache?.open &&
-        < EditTache listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
+        < EditTache repertoireSelected={repertoireSelected} listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
       }
       {deleteOpen && (
         <DeleteDialog

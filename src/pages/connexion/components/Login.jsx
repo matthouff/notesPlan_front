@@ -41,6 +41,7 @@ function Login() {
           label="Email"
           color="secondary"
           name="email"
+          type="email"
           value={formData.login}
           onChange={handleInputChange}
           InputProps={{

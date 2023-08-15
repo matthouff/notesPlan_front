@@ -6,6 +6,7 @@ import useEntityCrud from "../../../hooks/useEntityCrud";
 import PopperLabel from "./PopperLabel";
 
 EditTache.propTypes = {
+  repertoireSelected: PropTypes.object,
   openTache: PropTypes.object,
   listGroupes: PropTypes.array,
   onClose: PropTypes.func,
@@ -13,7 +14,7 @@ EditTache.propTypes = {
   deleteTache: PropTypes.func,
 };
 
-function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache }) {
+function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache, repertoireSelected }) {
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [description, setDescription] = useState(null);
   const [groupe, setGroupe] = useState(null);
@@ -40,6 +41,8 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
       setlListNewTache(x);
     }
   }
+
+  console.log(repertoireSelected);
 
   return (
     <Dialog open onClose={onClose}>
@@ -108,7 +111,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache 
         </form>
       </Stack>
       {editOpenLabel?.open &&
-        <PopperLabel newTache={!openTache?.tache} tacheLabel={data} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
+        <PopperLabel newTache={!openTache?.tache} repertoireId={repertoireSelected} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
       }
     </Dialog >
   )

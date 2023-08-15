@@ -31,6 +31,8 @@ function GroupeNotes({ repertoireSelected }) {
     enabled: !!repertoireSelected, // Permet d'attendre que l'id soit présent pour envoyer la requête
   });
 
+  console.log(notes);
+
   useEffect(() => {
     if (notes) {
       setNoteSelected(notes[0]);

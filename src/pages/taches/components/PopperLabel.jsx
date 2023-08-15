@@ -7,19 +7,21 @@ import { useState } from "react";
 import DeleteDialog from "../../../components/DeleteDialog";
 
 PopperLabel.propTypes = {
-  // tacheLabel: PropTypes.array,
+  repertoireId: PropTypes.string,
   newTache: PropTypes.bool,
   handleClose: PropTypes.func,
   labelSelected: PropTypes.func,
 };
 
-function PopperLabel({ handleClose, labelSelected, newTache }) {
+function PopperLabel({ handleClose, labelSelected, newTache, repertoireId }) {
   const [newLabel, setNewLabel] = useState(null)
   const [selected, setSelected] = useState(null)
   const [labelList, setLabelList] = useState([])
   const queryClient = useQueryClient();
   const { data, createdData, deletedData } = useEntityCrud({
     entity: "labels",
+    id: "repertoire/" + repertoireId,
+    enabled: !!repertoireId
   });
 
   const { mutate } = useMutation(createdData, {
@@ -32,7 +34,7 @@ function PopperLabel({ handleClose, labelSelected, newTache }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
-    mutate({ libelle: newLabel.libelle, couleur: newLabel.couleur })
+    mutate({ libelle: newLabel.libelle, couleur: newLabel.couleur, repertoireId: repertoireId })
     setNewLabel(null)
   }
 

@@ -3,8 +3,10 @@ import { useQuery, useQueryClient } from 'react-query';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
+  withCredentials: true, // Envoyer les cookies avec les requêtes
   headers: {
     'content-type': 'application/json',
+    'Cache-Control': 'no-cache' // désactiver le cache (évite les erreurs 304: Not modified)
   },
 });
 

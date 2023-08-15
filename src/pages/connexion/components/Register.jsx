@@ -1,4 +1,4 @@
-import { Button, FormControl, IconButton, InputAdornment, TextField } from "@mui/material";
+import { Button, FormControl, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { User2 } from "lucide-react";
 import Theme from "../../../utils/style";
 import { Lock } from "lucide-react";
@@ -74,6 +74,7 @@ function Register() {
           label="Email"
           color="secondary"
           name="email"
+          type="email"
           value={formData.login}
           onChange={handleInputChange}
           InputProps={{
@@ -114,6 +115,7 @@ function Register() {
           }}
           variant="outlined"
         />
+        <Typography variant="caption" textAlign="right" mt={-2}>* obigatoire</Typography>
         <Button type="submit" sx={{ alignSelf: "end" }} color="success" variant="contained">
           Valider
         </Button>
