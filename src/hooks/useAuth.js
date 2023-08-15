@@ -1,37 +1,59 @@
 import axios from 'axios';
-import { useQueryClient } from 'react-query';
+import { useCallback, useState } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // Activer l'envoi de cookies avec les requêtes
-  credentials: 'include', // Indiquer au navigateur d'inclure les cookies
+  withCredentials: true,
+  credentials: 'include',
 });
 
 function useAuth() {
   const queryClient = useQueryClient();
+  const [error, setError] = useState(null);
+
+  const { data: user, isLoading, isError, refetch } = useQuery(
+    "/auth/user",
+    async () => {
+      try {
+        const response = await instance.get("/auth/user");
+        return response.data;
+      } catch (error) {
+        throw new Error("Unauthorized");
+      }
+    },
+    {
+      retry: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }
+  );
+
+  console.log(user);
+
+  const isAuthenticated = !isLoading && !isError && !!user;
+
+  //////////////////////////////////// CONNEXION ////////////////////////////////////
 
   const login = async (formData) => {
     try {
-      const jwt = await instance.post('auth/login', {
+      await instance.post('auth/login', {
         email: formData.email,
         password: formData.password,
       });
-
-      const data = await jwt.json();
-      if (jwt.ok) {
-        console.log(data.access_token);
-        login(data.access_token);
-      }
-
+      refetch();
       // Rafraîchir les données de l'utilisateur après la connexion
       queryClient.invalidateQueries('user');
     } catch (error) {
-      // Gérer les erreurs ici
+      setError({...error?.response?.data});
     }
   };
+
+  //////////////////////////////////// INSCRIPTION ////////////////////////////////////
 
   const register = async (userDto) => {
     try {
@@ -40,22 +62,22 @@ function useAuth() {
       // Rafraîchir les données après l'inscription
       queryClient.invalidateQueries('user');
     } catch (error) {
-      // Gérer les erreurs ici
+      setError({...error?.response?.data});
     }
   };
 
-  const logout = async () => {
+  //////////////////////////////////// DÉCONNEXION ////////////////////////////////////
+
+  const logout = useCallback(async () => {
     try {
       await instance.post('auth/logout');
-
-      // Rafraîchir les données après la déconnexion
-      queryClient.invalidateQueries('user');
+      refetch();
     } catch (error) {
-      // Gérer les erreurs ici
+      setError({...error?.response?.data});
     }
-  };
+  }, [refetch]);
 
-  return { login, register, logout };
+  return { user, isAuthenticated, login, register, logout, error };
 }
 
 export default useAuth;

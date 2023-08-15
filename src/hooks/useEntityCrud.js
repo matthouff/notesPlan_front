@@ -11,10 +11,11 @@ const instance = axios.create({
 
 function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
+
   const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
   
   const createdData = async (x) => {
-    await instance.post(entity, x);
+    await instance.post(entity, {...x});
     queryClient.invalidateQueries({entity});
   };
   

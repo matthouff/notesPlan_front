@@ -11,7 +11,7 @@ import PersonnalToggle from "./PersoToggle";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Plus, Check, MoreVertical } from "lucide-react";
-import useUser from "../hooks/useUser";
+import useAuth from "../hooks/useAuth";
 import { useMutation, useQueryClient } from "react-query";
 import "../components/style.css";
 import PersonnalPopover from "./PersonnalPopover";
@@ -44,7 +44,7 @@ function RepertoireList({
   const [openOption, setOpenOption] = useState(false);
   const [libelle, setLibelle] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
-  const { userId } = useUser();
+  const { userId } = useAuth();
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation(editOpen ? editData : createdData, {

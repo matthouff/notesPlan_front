@@ -3,17 +3,17 @@ import GroupeNotes from "./components";
 import { useState } from "react";
 import RepertoireList from "../../components/RepertoireList";
 import useEntityCrud from "../../hooks/useEntityCrud";
-import useUser from "../../hooks/useUser";
+import useAuth from "../../hooks/useAuth";
 
 function Notes() {
   const [repertoireSelected, setRepertoireSelected] = useState();
-  const { userId } = useUser();
+  const { user } = useAuth();
 
   const { data, createdData, deletedData, editData } = useEntityCrud({
     entity: "repertoires_notes",
     complement: "user",
-    id: userId,
-    enabled: !!userId
+    id: user.id,
+    enabled: !!user.id
   });
 
   return (

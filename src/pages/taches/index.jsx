@@ -2,25 +2,25 @@ import DefaultBox from "../../components/DefaultBox";
 import { useState } from "react";
 import RepertoireList from "../../components/RepertoireList";
 import useEntityCrud from "../../hooks/useEntityCrud";
-import useUser from "../../hooks/useUser";
 import Groupe from "./components";
 import { Button, Stack } from "@mui/material";
 import { useMutation, useQueryClient } from "react-query";
 import EditGroupe from "./components/EditGroupe";
 import PersonnalPopover from "../../components/PersonnalPopover";
+import useAuth from "../../hooks/useAuth";
 
 function Taches() {
   const [repertoireSelected, setRepertoireSelected] = useState();
   const [openOption, setOpenOption] = useState();
   const [editGroupeOpen, setEditGroupeOpen] = useState();
-  const { userId } = useUser();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data, createdData, deletedData, editData } = useEntityCrud({
     entity: "repertoires_groupes",
     complement: "user",
-    id: userId,
-    enabled: !!userId
+    id: user?.id,
+    enabled: !!user?.id
   });
 
   const { data: groupe, createdData: createGroupe, editData: editGroupe, deletedData: deleteGroupe } = useEntityCrud({
