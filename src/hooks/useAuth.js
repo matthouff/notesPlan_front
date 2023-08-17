@@ -16,6 +16,8 @@ function useAuth() {
   const queryClient = useQueryClient();
   const [response, setResponse] = useState(null)
 
+  //////////////////////////////////// USER CONNECTÉ ////////////////////////////////////
+
   const { data: user, isLoading, isError, refetch } = useQuery(
     "/auth/user",
     async () => {
@@ -24,7 +26,7 @@ function useAuth() {
 
         return user.data
       } catch (error) {
-        throw new Error("Unauthorized");
+        return;
       }
     },
     {

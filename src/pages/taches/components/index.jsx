@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 
 Groupe.propTypes = {
   data: PropTypes.array,
-  repertoireSelected: PropTypes.array,
+  repertoireSelected: PropTypes.string,
   setOpenOption: PropTypes.func,
   setResponse: PropTypes.func,
 };
