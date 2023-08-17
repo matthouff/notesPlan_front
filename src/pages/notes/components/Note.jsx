@@ -54,10 +54,11 @@ Note.propTypes = {
   note: PropTypes.object,
   editOpen: PropTypes.bool,
   titleRef: PropTypes.object,
+  reactQuillRef: PropTypes.object,
   newNote: PropTypes.func,
 };
 
-function Note({ note, titleRef, newNote, editOpen }) {
+function Note({ note, titleRef, reactQuillRef, newNote, editOpen }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [isInitializing, setIsInitializing] = useState(true);
@@ -106,6 +107,7 @@ function Note({ note, titleRef, newNote, editOpen }) {
       <Box height="100%" overflow="scroll">
         <Divider />
         <ReactQuill
+          ref={reactQuillRef}
           value={content}
           onChange={(x) => handleChange({ message: x })}
           style={{ editorStyle }}

@@ -6,20 +6,28 @@ import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 import { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
+import { useMutation } from "react-query";
 import SnackBarPerso from "../../../components/SnackbarPerso";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false)
+  const [responseInfo, setResponse] = useState(null);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
-  const { error, login } = useAuth()
+  const { login } = useAuth()
+
+  const { mutate } = useMutation(login, {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
+    },
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    login(formData)
+    mutate(formData)
   }
 
   const handleInputChange = (e) => {
@@ -86,9 +94,7 @@ function Login() {
           Connexion
         </Button>
       </FormControl>
-      {error &&
-        <SnackBarPerso type={error?.type} message={error?.message} />
-      }
+      {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
     </form>
   )
 }

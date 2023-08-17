@@ -1,12 +1,12 @@
 import { Box, Button, Dialog, IconButton, List, ListItem, ListItemButton, ListItemText, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
 import { Plus, X } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useEntityCrud from "../../../hooks/useEntityCrud";
 import PopperLabel from "./PopperLabel";
 
 EditTache.propTypes = {
-  repertoireSelected: PropTypes.object,
+  repertoireSelected: PropTypes.string,
   openTache: PropTypes.object,
   listGroupes: PropTypes.array,
   onClose: PropTypes.func,
@@ -18,10 +18,10 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [description, setDescription] = useState(null);
   const [groupe, setGroupe] = useState(null);
-  const [listNewTache, setlListNewTache] = useState(null);
   const [editOpenLabel, setEditOpenLabel] = useState(null);
+  const [listNewTache, setListNewTache] = useState([]);
 
-  const { data, addRelationData, deletedData } = useEntityCrud({
+  const { data } = useEntityCrud({
     entity: `labels`,
     complement: `tache`,
     id: openTache?.tache?.id,
@@ -32,17 +32,24 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
     setEditOpenLabel({ anchorEl: e.currentTarget, open: true });
   };
 
-  let listLabels = listNewTache ?? data;
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setListNewTache([...data]); // Créer une nouvelle copie du tableau avec les nouvelles données
+    }
+  }, [data]);
 
   const addNewLabel = (x) => {
-    if (x.id) {
-      addRelationData(x);
-    } else {
-      setlListNewTache(x);
+    // Vérifier si l'élément n'existe pas déjà dans le tableau listNewTache
+    if (!listNewTache.map(item => item.id).includes(x.id)) {
+      setListNewTache(prevList => [...prevList, x]); // Ajouter la nouvelle donnée à la copie actuelle du tableau
     }
-  }
+  };
 
-  console.log(repertoireSelected);
+
+  const removeTacheLabel = (id) => {
+    setListNewTache(prevList => prevList.filter(item => item.id !== id));
+  };
 
   return (
     <Dialog open onClose={onClose}>
@@ -80,9 +87,9 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
               <List
                 height={400}
               >
-                {listLabels?.map(label => {
+                {listNewTache?.map(label => {
                   return (
-                    <ListItem sx={{ borderLeft: `5px solid ${label.couleur}`, px: 1 }} key={label.id} component="div" secondaryAction={<IconButton onClick={() => deletedData(`${label.id}/tache/${openTache?.tache?.id}`)} sx={{ p: 0 }} ><X /></IconButton>} disablePadding>
+                    <ListItem sx={{ borderLeft: `5px solid ${label?.couleur}`, px: 1 }} key={label?.id} component="div" secondaryAction={<IconButton onClick={() => removeTacheLabel(label.id)} sx={{ p: 0 }} ><X /></IconButton>} disablePadding>
                       <ListItemButton sx={{ p: 0 }}>
                         <ListItemText primary={label.libelle} />
                       </ListItemButton>
@@ -111,7 +118,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
         </form>
       </Stack>
       {editOpenLabel?.open &&
-        <PopperLabel newTache={!openTache?.tache} repertoireId={repertoireSelected} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
+        <PopperLabel repertoireId={repertoireSelected} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
       }
     </Dialog >
   )

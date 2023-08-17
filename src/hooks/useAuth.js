@@ -14,14 +14,15 @@ const instance = axios.create({
 
 function useAuth() {
   const queryClient = useQueryClient();
-  const [error, setError] = useState(null);
+  const [response, setResponse] = useState(null)
 
   const { data: user, isLoading, isError, refetch } = useQuery(
     "/auth/user",
     async () => {
       try {
-        const response = await instance.get("/auth/user");
-        return response.data;
+        const user = await instance.get("/auth/user");
+
+        return user.data
       } catch (error) {
         throw new Error("Unauthorized");
       }
@@ -40,15 +41,17 @@ function useAuth() {
 
   const login = async (formData) => {
     try {
-      await instance.post('auth/login', {
+      const response = await instance.post('auth/login', {
         email: formData.email,
         password: formData.password,
       });
       refetch();
       // Rafraîchir les données de l'utilisateur après la connexion
       queryClient.invalidateQueries('user');
+      setResponse(response)
+      return response;
     } catch (error) {
-      setError({...error?.response?.data});
+      return error?.response;
     }
   };
 
@@ -56,12 +59,14 @@ function useAuth() {
 
   const register = async (userDto) => {
     try {
-      await instance.post('auth/register', userDto);
+      const response = await instance.post('auth/register', userDto);
 
       // Rafraîchir les données après l'inscription
       queryClient.invalidateQueries('user');
+      setResponse(response)
+      return response;
     } catch (error) {
-      setError({...error?.response?.data});
+      return error?.response;
     }
   };
 
@@ -69,14 +74,16 @@ function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await instance.post('auth/logout');
+      const response = await instance.post('auth/logout');
       refetch();
+      setResponse(response)
+      return response;
     } catch (error) {
-      setError({...error?.response?.data});
+      return error?.response;
     }
   }, [refetch]);
 
-  return { user, isAuthenticated, login, register, logout, error };
+  return { user, response, isAuthenticated, login, register, logout };
 }
 
 export default useAuth;

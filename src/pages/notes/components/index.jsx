@@ -4,6 +4,8 @@ import ListNote from "./ListNote.jsx";
 import { useEffect, useRef, useState } from "react";
 import useEntityCrud from "../../../hooks/useEntityCrud.js";
 import PropTypes from "prop-types";
+import { useMutation } from "react-query";
+import SnackBarPerso from "../../../components/SnackbarPerso.jsx";
 
 GroupeNotes.propTypes = {
   repertoireSelected: PropTypes.string,
@@ -12,7 +14,9 @@ GroupeNotes.propTypes = {
 function GroupeNotes({ repertoireSelected }) {
   const [noteSelected, setNoteSelected] = useState(null);
   const [open, setOpen] = useState(false);
+  const [responseInfo, setResponse] = useState(null);
   const textFielTitledRef = useRef(null);
+  const reactQuillRef = useRef(null);
   const textFieldEditRef = useRef(null);
   const textFieldRef = useRef(null);
   const addButtonRef = useRef(null);
@@ -31,10 +35,15 @@ function GroupeNotes({ repertoireSelected }) {
     enabled: !!repertoireSelected, // Permet d'attendre que l'id soit présent pour envoyer la requête
   });
 
-  console.log(notes);
+  const { mutate } = useMutation(!open ? editData : createdData, {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
+      setOpen(false)
+    },
+  });
 
   useEffect(() => {
-    if (notes) {
+    if (notes && !noteSelected && !open) {
       setNoteSelected(notes[0]);
     }
     if (open) {
@@ -44,7 +53,7 @@ function GroupeNotes({ repertoireSelected }) {
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [notes, open]);
+  }, [notes, noteSelected, open]);
 
   const handleClickOutside = (event) => {
     if (
@@ -60,14 +69,21 @@ function GroupeNotes({ repertoireSelected }) {
     }
   };
 
-  const newNote = (x, newNote) => {
-    if (newNote) {
-      createdData({ ...x, repertoireId: repertoireSelected })
+  const newNote = (x) => {
+    if (open) {
+      mutate({ ...x, repertoireId: repertoireSelected });
+      textFielTitledRef.current.focus();
     } else {
-      editData(x)
+      mutate({ ...x, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
     }
-    setNoteSelected({ ...noteSelected, x })
-  }
+    setNoteSelected({ ...noteSelected, ...x });
+    setOpen(false); // Fermer le mode édition
+    if (x.libelle) {
+      textFielTitledRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
+    } else if (x.message) {
+      reactQuillRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
+    }
+  };
 
   return (
     <>
@@ -94,9 +110,11 @@ function GroupeNotes({ repertoireSelected }) {
             note={open ? null : noteSelected ?? notes[0]}
             editOpen={open}
             titleRef={textFielTitledRef}
+            reactQuillRef={reactQuillRef}
             newNote={newNote} />
         }
       </Box>
+      <SnackBarPerso response={responseInfo} />
     </>
   );
 }

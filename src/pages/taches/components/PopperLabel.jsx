@@ -8,16 +8,15 @@ import DeleteDialog from "../../../components/DeleteDialog";
 
 PopperLabel.propTypes = {
   repertoireId: PropTypes.string,
-  newTache: PropTypes.bool,
   handleClose: PropTypes.func,
   labelSelected: PropTypes.func,
 };
 
-function PopperLabel({ handleClose, labelSelected, newTache, repertoireId }) {
+function PopperLabel({ handleClose, labelSelected, repertoireId }) {
   const [newLabel, setNewLabel] = useState(null)
   const [selected, setSelected] = useState(null)
-  const [labelList, setLabelList] = useState([])
   const queryClient = useQueryClient();
+
   const { data, createdData, deletedData } = useEntityCrud({
     entity: "labels",
     id: "repertoire/" + repertoireId,
@@ -44,14 +43,7 @@ function PopperLabel({ handleClose, labelSelected, newTache, repertoireId }) {
   }
 
   const handleSelect = (x) => {
-    if (newTache) {
-      if (!labelList.map(y => y.id).includes(x.id)) {
-        setLabelList([...labelList, x])
-        labelSelected([...labelList, x])
-      }
-    } else {
-      labelSelected(x)
-    }
+    labelSelected(x)
   }
 
   return (

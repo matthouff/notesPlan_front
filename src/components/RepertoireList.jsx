@@ -14,6 +14,7 @@ import { Plus, Check, MoreVertical } from "lucide-react";
 import { useMutation, useQueryClient } from "react-query";
 import "../components/style.css";
 import PersonnalPopover from "./PersonnalPopover";
+import SnackBarPerso from "./SnackbarPerso";
 
 RepertoireList.propTypes = {
   title: PropTypes.string,
@@ -39,6 +40,7 @@ function RepertoireList({
   const buttonRef = useRef(null);
   const sendButtonRef = useRef(null);
   const editRef = useRef(null);
+  const [responseInfo, setResponse] = useState(false);
   const [open, setOpen] = useState(false);
   const [openOption, setOpenOption] = useState(false);
   const [libelle, setLibelle] = useState(null);
@@ -46,7 +48,8 @@ function RepertoireList({
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation(editOpen ? editData : createdData, {
-    onSuccess: () => {
+    onSuccess: (error) => {
+      setResponse({ ...error.data, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des répertoires après la création d'un nouvel élément
       setRepertoireSelected();
       queryClient.invalidateQueries("repertoires_notes");
@@ -81,8 +84,11 @@ function RepertoireList({
 
   useEffect(() => {
     if (repertoires) {
-      !actualRepertoire ? setRepertoireSelected(repertoires[0]?.id) : setRepertoireSelected(actualRepertoire);
+      setRepertoireSelected(prevActualRepertoire => prevActualRepertoire ?? repertoires[0]?.id);
     }
+  }, [repertoires, setRepertoireSelected])
+
+  useEffect(() => {
     if (open) {
       textFieldRef.current.focus();
     }
@@ -95,7 +101,7 @@ function RepertoireList({
       document.removeEventListener("click", handleClickOutside);
       document.removeEventListener("click", handleClickOutsideEdit);
     };
-  }, [repertoires, setRepertoireSelected, open, editOpen, actualRepertoire]);
+  }, [setRepertoireSelected, open, editOpen, actualRepertoire]);
 
   const selectedRepertoire = (x) => {
     if (x !== null) {
@@ -275,6 +281,7 @@ function RepertoireList({
           editRef={editRef}
         />
       )}
+      {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
     </Stack>
   );
 }

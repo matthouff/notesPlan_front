@@ -3,11 +3,12 @@ import GroupeNotes from "./components";
 import { useState } from "react";
 import RepertoireList from "../../components/RepertoireList";
 import useEntityCrud from "../../hooks/useEntityCrud";
+import SnackBarPerso from "../../components/SnackbarPerso";
 
 function Notes() {
-  const [repertoireSelected, setRepertoireSelected] = useState();
+  const [repertoireSelected, setRepertoireSelected] = useState(null);
 
-  const { data, createdData, deletedData, editData } = useEntityCrud({
+  const { data, createdData, deletedData, editData, error } = useEntityCrud({
     entity: "repertoires_notes",
   });
 
@@ -26,6 +27,10 @@ function Notes() {
         editData={editData}
       />
       {data && <GroupeNotes repertoireSelected={repertoireSelected} />}
+
+      {!!error &&
+        <SnackBarPerso error={error} />
+      }
     </DefaultBox>
   );
 }

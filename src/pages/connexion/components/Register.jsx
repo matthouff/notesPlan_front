@@ -5,21 +5,37 @@ import { Lock } from "lucide-react";
 import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useMutation } from "react-query";
 import useAuth from "../../../hooks/useAuth";
-import SnackBarPerso from "../../../components/SnackbarPerso";
+import PropTypes from "prop-types";
 
-function Register() {
+Register.propTypes = {
+  setAuth: PropTypes.func,
+  setResponse: PropTypes.func,
+};
+
+function Register({ setAuth, setResponse }) {
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
-  const { error, register } = useAuth()
+  const { register } = useAuth()
+
+  const { mutate } = useMutation(register, {
+    onSuccess: (response) => {
+      if (response.data.type === "success") {
+        setAuth(true)
+      }
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
+    },
+  });
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    register(formData)
+    mutate(formData)
   }
 
   const handleInputChange = (e) => {
@@ -120,10 +136,6 @@ function Register() {
           Valider
         </Button>
       </FormControl>
-
-      {error &&
-        <SnackBarPerso type={error?.type} message={error?.message} />
-      }
     </form>
   )
 }

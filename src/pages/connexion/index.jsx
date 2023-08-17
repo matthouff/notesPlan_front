@@ -5,9 +5,11 @@ import { useState } from "react";
 import "../connexion/"
 import Login from "./components/Login";
 import Register from "./components/Register";
+import SnackBarPerso from "../../components/SnackbarPerso";
 
 function Connexion() {
-  const [login, setLogin] = useState(true)
+  const [auth, setAuth] = useState(true)
+  const [responseInfo, setResponse] = useState(null);
 
 
   return (
@@ -26,23 +28,24 @@ function Connexion() {
           <Stack width="100%" marginX="auto" alignItems="center" justifyContent="center" height="100%" >
             <Paper sx={{ borderRadius: 7, width: "45%", border: `2px solid ${Theme.palette.primary.main}`, display: "flex", gap: 4, flexDirection: "column", alignItems: "center", justifyContent: "center", p: 2 }}>
               <Typography variant="h2" fontSize={30}>
-                {login ? "Connexion" : "S'inscrire"}
+                {auth ? "Connexion" : "S'inscrire"}
               </Typography>
-              {login ?
+              {auth ?
                 <Login />
                 :
-                <Register />
+                <Register setResponse={setResponse} setAuth={setAuth} />
               }
               <Divider sx={{ border: `1px solid ${Theme.palette.secondary.main}` }} width="80%" />
               <Typography display="flex" alignItems="center" gap={1}>
-                {login ? "Pas de" : "Déjà un"} compte ?
-                <Button onClick={() => setLogin(!login)} variant="text" color="secondary" to="/notes">{login ? "Créer un compte" : "Se connecter"} </Button>
+                {auth ? "Pas de" : "Déjà un"} compte ?
+                <Button onClick={() => setAuth(!auth)} variant="text" color="secondary" to="/notes">{auth ? "Créer un compte" : "Se connecter"} </Button>
               </Typography>
             </Paper>
           </Stack>
         </Grid>
         <Grid item xs={3} />
       </Grid>
+      {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
     </DefaultBox >
   )
 }

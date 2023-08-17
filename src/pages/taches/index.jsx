@@ -7,11 +7,13 @@ import { Button, Stack } from "@mui/material";
 import { useMutation, useQueryClient } from "react-query";
 import EditGroupe from "./components/EditGroupe";
 import PersonnalPopover from "../../components/PersonnalPopover";
+import SnackBarPerso from "../../components/SnackbarPerso";
 
 function Taches() {
   const [repertoireSelected, setRepertoireSelected] = useState();
   const [openOption, setOpenOption] = useState();
   const [editGroupeOpen, setEditGroupeOpen] = useState();
+  const [responseInfo, setResponse] = useState(null);
   const queryClient = useQueryClient();
 
   const { data, createdData, deletedData, editData } = useEntityCrud({
@@ -26,9 +28,15 @@ function Taches() {
   });
 
   const { mutate } = useMutation(openOption?.selected?.id ? editGroupe : createGroupe, {
-    onSuccess: () => {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des groupes après la création d'un nouvel élément
       queryClient.invalidateQueries("groupes");
+    },
+  });
+  const { mutate: mutateDelet } = useMutation(deletedData, {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
     },
   });
 
@@ -62,7 +70,7 @@ function Taches() {
         actualRepertoire={repertoireSelected}
         setRepertoireSelected={setRepertoireSelected}
         createdData={createdData}
-        deletedData={deletedData}
+        deletedData={mutateDelet}
         editData={editData}
       />
       <Stack width="75%" paddingTop={2} maxWidth="80%" alignItems="flex-end" gap={3} sx={{ pr: 5 }}>
@@ -72,7 +80,7 @@ function Taches() {
         >
           Ajouter un groupe
         </Button>
-        <Groupe repertoireSelected={repertoireSelected} data={groupe} setOpenOption={setOpenOption} />
+        <Groupe setResponse={setResponse} repertoireSelected={repertoireSelected} data={groupe} setOpenOption={setOpenOption} />
       </Stack>
 
       {editGroupeOpen &&
@@ -88,6 +96,10 @@ function Taches() {
           editOpen={setEditGroupeOpen}
         />
       )}
+
+      {
+        responseInfo?.open && <SnackBarPerso response={responseInfo} />
+      }
     </DefaultBox >
   );
 }

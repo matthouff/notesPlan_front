@@ -1,20 +1,21 @@
 import { Box, Divider, IconButton, Paper, Stack, Typography } from "@mui/material";
 import Tache from "./tache";
-import PropTypes from "prop-types";
 import { MoreHorizontal, Plus } from "lucide-react";
 import useEntityCrud from "../../../hooks/useEntityCrud";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import EditTache from "./EditTache";
 import DeleteDialog from "../../../components/DeleteDialog";
+import PropTypes from "prop-types";
 
 Groupe.propTypes = {
   data: PropTypes.array,
   repertoireSelected: PropTypes.array,
   setOpenOption: PropTypes.func,
+  setResponse: PropTypes.func,
 };
 
-function Groupe({ data, setOpenOption, repertoireSelected }) {
+function Groupe({ data, setOpenOption, repertoireSelected, setResponse }) {
   const [openTache, setOpenTache] = useState()
   const [deleteOpen, setDeleteOpen] = useState()
   const [groupeDropSelected, setGroupeDropSelected] = useState()
@@ -30,7 +31,8 @@ function Groupe({ data, setOpenOption, repertoireSelected }) {
   });
 
   const { mutate } = useMutation(openTache?.tache?.id || groupeDropSelected ? editData : createdData, {
-    onSuccess: () => {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des taches après la création d'un nouvel élément
       queryClient.invalidateQueries("groupes");
     },
@@ -130,7 +132,7 @@ function Groupe({ data, setOpenOption, repertoireSelected }) {
         )
       })}
       {openTache?.open &&
-        < EditTache repertoireSelected={repertoireSelected} listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
+        <EditTache repertoireSelected={repertoireSelected} listGroupes={smallListGroup} openTache={openTache} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} deleteTache={() => setDeleteOpen(true)} />
       }
       {deleteOpen && (
         <DeleteDialog

@@ -13,18 +13,29 @@ const instance = axios.create({
 
 function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
-
   const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
   
   const createdData = async (x) => {
-    await instance.post(entity, {...x});
-    queryClient.invalidateQueries({entity});
+    try{
+      const response = await instance.post(entity, {...x});
+      queryClient.invalidateQueries({entity});
+
+      return response;
+    }catch(error){
+      return {...error.message ? {...error?.response?.data} : {...error}};
+    }
   };
   
   const editData = async (x) => {
-    const url = entity + "/" + x.id;
-    await instance.patch(url, x);
-    queryClient.invalidateQueries({entity});
+    try{
+      const url = entity + "/" + x.id;
+      const response = await instance.patch(url, x);
+      queryClient.invalidateQueries({entity});
+
+      return response;
+    }catch(error){
+      return {...error.message ? {...error?.response?.data} : {...error}};
+    }
   };
 
   const addRelationData = async (x) => {
@@ -34,19 +45,26 @@ function useEntityCrud({ entity, complement, id, enabled }) {
   };
   
   const deletedData = async (entityId) => {
-    const url = entity + "/" + entityId;
-    await instance.delete(url);
-    queryClient.invalidateQueries({entity});
+    try{
+      const url = entity + "/" + entityId;
+      const response = await instance.delete(url);
+      queryClient.invalidateQueries({entity});
+
+      return response;
+    }catch(error){
+      return {...error.message ? {...error?.response?.data} : {...error}};
+    }
   };
 
-  const { data = [], error, isLoading } = useQuery(fullEntity, async () => {
+  const { data = [], isLoading } = useQuery(fullEntity, async () => {
     const response = await instance.get(fullEntity);
+    
     return response.data;
   }, {
     enabled: enabled,
   });
 
-  return { data, error, isLoading, createdData, deletedData, editData, addRelationData };
+  return { data, isLoading, createdData, deletedData, editData, addRelationData };
 }
 
 export default useEntityCrud;
