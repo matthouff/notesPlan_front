@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useMutation } from "react-query";
 import useAuth from "../../../hooks/useAuth";
 import PropTypes from "prop-types";
+import useResponsive from "../../../hooks/useResponsive";
 
 Register.propTypes = {
   setAuth: PropTypes.func,
@@ -16,6 +17,7 @@ Register.propTypes = {
 
 function Register({ setAuth, setResponse }) {
   const [showPassword, setShowPassword] = useState(false)
+  const isTablet = useResponsive("down", "xl");
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -52,6 +54,7 @@ function Register({ setAuth, setResponse }) {
     <form onSubmit={(e) => handleSubmit(e)} style={{ display: "flex", justifyContent: "center" }}>
       <FormControl sx={{ gap: 4 }} variant="standard" >
         <TextField
+          size={isTablet && "small"}
           id="input-with-icon-textfield"
           label="Nom"
           color="secondary"
@@ -68,6 +71,7 @@ function Register({ setAuth, setResponse }) {
           variant="outlined"
         />
         <TextField
+          size={isTablet && "small"}
           required
           id="input-with-icon-textfield"
           label="Prénom"
@@ -85,6 +89,7 @@ function Register({ setAuth, setResponse }) {
           variant="outlined"
         />
         <TextField
+          size={isTablet && "small"}
           required
           id="input-with-icon-textfield"
           label="Email"
@@ -103,6 +108,7 @@ function Register({ setAuth, setResponse }) {
           variant="outlined"
         />
         <TextField
+          size={isTablet && "small"}
           required
           id="input-with-icon-textfield"
           label="Mot de passe"
