@@ -102,12 +102,13 @@ function Taches() {
                   </IconButton>
                   <Typography variant="h1" fontSize={40} color="secondary" mb={2}>Tâches</Typography>
                   <FormControl sx={{ maxWidth: 350 }} variant="outlined" fullWidth>
-                    <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                    <InputLabel color="secondary" variant="standard" htmlFor="uncontrolled-native">
                       Répertoire
                     </InputLabel>
                     <NativeSelect
                       onInput={(e) => setRepertoireSelected(e.target.value)}
                       size="small"
+                      color="secondary"
                       defaultValue={data[0]?.id ?? ""}
                       inputProps={{
                         name: 'repertoire',

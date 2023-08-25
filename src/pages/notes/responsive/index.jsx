@@ -89,7 +89,7 @@ function MobileNote({ isLoading, repertoires, repertoireSelected, setRepertoireS
 
   return (
     !isLoading ?
-      <Stack width="100%" gap={2}>
+      <Stack width="100%" gap={2} className="notes">
         <Typography variant="h1" fontSize={40} color="primary" textAlign="center">Notes</Typography>
         {(!isLoading && repertoires.length > 0) &&
           <Box display="flex" sx={{ width: "100%", marginX: "auto", justifyContent: "center" }} justifyContent="space-around">
@@ -98,6 +98,7 @@ function MobileNote({ isLoading, repertoires, repertoireSelected, setRepertoireS
                 Répertoire
               </InputLabel>
               <NativeSelect
+                className="seclect_note"
                 onInput={(e) => setRepertoireSelected(e.target.value)}
                 size="small"
                 defaultValue={repertoires[0]?.id ?? ""}

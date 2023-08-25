@@ -14,6 +14,14 @@ div.ql-container.ql-snow img {
   color: #fffA;
 }
 
+.notes .css-e3bvit-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input.css-e3bvit-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input.css-e3bvit-MuiNativeSelect-select-MuiInputBase-input-MuiInput-input{
+  color: #fff;
+}
+
+.notes .css-1ghmrlz-MuiFormLabel-root-MuiInputLabel-root{
+  color: #fff !important;
+}
+
 .quill {
   height: 100%;
   display: flex;
