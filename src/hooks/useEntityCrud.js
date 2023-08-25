@@ -58,7 +58,7 @@ function useEntityCrud({ entity, complement, id, enabled }) {
 
   const { data = [], isLoading } = useQuery(fullEntity, async () => {
     const response = await instance.get(fullEntity);
-    
+
     return response.data;
   }, {
     enabled: enabled,

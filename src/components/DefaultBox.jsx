@@ -71,7 +71,7 @@ function DefaultBox({ persoStyle, dark, children }) {
           </IconButton>
         }
       </Stack>
-      <Stack sx={{ pl: "5%", pt: 5, height: "100%", minWidth: "100%", ...persoStyle }}>
+      <Stack sx={{ pl: "5%", height: "100%", pt: 5, minWidth: "100%", ...persoStyle }}>
         {children}
       </Stack>
 

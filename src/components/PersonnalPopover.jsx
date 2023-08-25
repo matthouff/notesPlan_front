@@ -1,9 +1,10 @@
 import { Box, Button, Popover } from "@mui/material";
-import { Trash, Edit } from "lucide-react";
+import { Trash, Edit, Plus } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { PersoButton } from "./styledComponent/PersonnalButtonEdit";
 import DeleteDialog from "./DeleteDialog";
+import useResponsive from "../hooks/useResponsive";
 
 PersonnalPopover.propTypes = {
   anchorEl: PropTypes.object,
@@ -25,6 +26,7 @@ function PersonnalPopover({
   editRef,
 }) {
   const [openModal, setOpenModal] = useState();
+  const isTablet = useResponsive("down", "md");
 
   const onDelete = () => {
     setOpenOption({ open: false, anchor: null });
@@ -34,6 +36,10 @@ function PersonnalPopover({
 
   const eOpen = () => {
     setOpenOption({ open: false, anchor: null, selected: selected });
+    editOpen(true);
+  };
+  const eNewOpen = () => {
+    setOpenOption({ open: false, anchor: null, selected: null });
     editOpen(true);
   };
 
@@ -60,6 +66,11 @@ function PersonnalPopover({
           gap: 1,
         }}
       >
+        {isTablet &&
+          <PersoButton onClick={eNewOpen} variant="contained" ref={editRef}>
+            <Plus />
+          </PersoButton>
+        }
         <PersoButton onClick={eOpen} variant="contained" ref={editRef}>
           <Edit />
         </PersoButton>

@@ -1,13 +1,9 @@
 .quill  .ql-container.ql-snow {
   font-family: Arial, sans-serif;
   font-size: 16px;
-  color: #fff;
   border: none;
+  background-color: #fffa;
   height: 100%;
-}
-
-.quill  .ql-container.ql-snow .ql-editor::before{
-  color: #fffd;
 }
 
 div.ql-container.ql-snow img {
@@ -26,29 +22,23 @@ div.ql-container.ql-snow img {
 
 .quill .ql-toolbar.ql-snow {
   z-index: 1000;
-  position: absolute;
-  left: 0;
+  position: sticky;
   top: 0;
   width: 100%;
-  color: #ddd;
   border: none;
-  height: 40px;
+  background-color: #fff;
   border-bottom: 1px solid #fff8;
-  border-top: 1px solid #fff8;
 }
 
-div .ql-snow .ql-stroke {
-  stroke: #fffc;
+.ql-clean svg .ql-stroke{
+  stroke: #a00;
+}
+.ql-clean svg .ql-fill{
+  fill: #a00;
 }
 
-.ql-picker-label::before {
-  color: #fffc;
-}
 
-.ql-picker-label svg .ql-stroke {
-  stroke: #fffc;
-}
 
-div .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill {
-  fill: #fffc;
-}
+
+/* Sélect des champs sur mobile */
+

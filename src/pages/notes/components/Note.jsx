@@ -1,10 +1,12 @@
-import { Box, Divider, Stack, styled, TextField } from "@mui/material";
+import { Box, Divider, IconButton, Stack, styled, TextField } from "@mui/material";
 import { useState } from "react";
 import "../style.css";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
+import useResponsive from "../../../hooks/useResponsive";
+import { Trash } from "lucide-react";
 
 const PersoTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -24,6 +26,14 @@ const PersoTextField = styled(TextField)(({ theme }) => ({
     },
     "&.Mui-focused fieldset": {
       borderColor: theme.palette.secondary.main,
+    },
+  },
+  // Styles spécifiques pour les écrans de largeur inférieure à 768px
+  "@media (max-width: 1024px)": {
+    "& .MuiOutlinedInput-root": {
+      "& input": {
+        fontSize: 20, // Réduisez la taille de la police pour les écrans plus petits
+      },
     },
   },
 }));
@@ -56,16 +66,18 @@ Note.propTypes = {
   titleRef: PropTypes.object,
   reactQuillRef: PropTypes.object,
   newNote: PropTypes.func,
+  deleted: PropTypes.func,
 };
 
-function Note({ note, titleRef, reactQuillRef, newNote, editOpen }) {
+function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [isInitializing, setIsInitializing] = useState(true);
   const [timeoutId, setTimeoutId] = useState(null);  // enregistre l'id du précédent setTimeOut poru l'annuler
+  const isTablet = useResponsive("down", "lg");
 
   useEffect(() => {
-    setContent(note ? note?.message : "");
+    setContent(note?.message ?? null);
     setTitle(note ? note?.libelle : "");
     setIsInitializing(false); // Définir isInitializing sur false une fois que le composant est monté
   }, [note, note?.message,]);
@@ -76,6 +88,9 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen }) {
   }
 
   const handleChange = (x) => {
+    // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
+    const verifContent = new DOMParser().parseFromString(x.message, "text/html").documentElement.textContent
+
     if (!isInitializing) {
       clearTimeout(timeoutId);
 
@@ -84,8 +99,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen }) {
       } else {
         setContent(x.message)
       }
-
-      const newTimeoutId = setTimeout(() => {
+      const newTimeoutId = verifContent && setTimeout(() => {
         newNote({ ...x, id: note?.id }, editOpen);
       }, 1500);
 
@@ -95,15 +109,22 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen }) {
   };
 
   return (
-    <Stack position="relative" paddingTop={5} height="100%">
-      <PersoTextField
-        fullWidth
-        inputRef={titleRef}
-        name="message"
-        value={title}
-        onInput={titleHandleChange}
-        placeholder="Title"
-      />
+    <Stack position="relative" height="100%">
+      <Box display="flex">
+        <PersoTextField
+          fullWidth
+          inputRef={titleRef}
+          name="message"
+          value={title}
+          onInput={titleHandleChange}
+          placeholder="Title"
+        />
+        {isTablet &&
+          <IconButton onClick={deleted} color="error">
+            <Trash />
+          </IconButton>
+        }
+      </Box>
       <Box height="100%" overflow="scroll">
         <Divider />
         <ReactQuill

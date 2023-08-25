@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material";
+import { Grid } from "@mui/material";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useRef, useState } from "react";
@@ -22,7 +22,6 @@ function GroupeNotes({ repertoireSelected }) {
   const addButtonRef = useRef(null);
   let editRef = useRef(null);
 
-
   const {
     data: notes,
     createdData,
@@ -43,17 +42,14 @@ function GroupeNotes({ repertoireSelected }) {
   });
 
   useEffect(() => {
-    if (notes && !noteSelected && !open) {
+    if (notes) {
       setNoteSelected(notes[0]);
-    }
-    if (open) {
-      textFielTitledRef?.current?.focus();
     }
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [notes, noteSelected, open]);
+  }, [notes, open]);
 
   const handleClickOutside = (event) => {
     if (
@@ -78,16 +74,12 @@ function GroupeNotes({ repertoireSelected }) {
     }
     setNoteSelected({ ...noteSelected, ...x });
     setOpen(false); // Fermer le mode édition
-    if (x.libelle) {
-      textFielTitledRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
-    } else if (x.message) {
-      reactQuillRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
-    }
+
   };
 
   return (
     <>
-      <Stack width="22%">
+      <Grid item xs={3}>
         <ListNote
           data={notes}
           actualNote={noteSelected}
@@ -101,8 +93,8 @@ function GroupeNotes({ repertoireSelected }) {
           textFieldEditRef={textFieldEditRef}
           textFieldRef={textFieldRef}
         />
-      </Stack>
-      <Box width="58%" height="100%">
+      </Grid>
+      <Grid item xs={6}>
         {(notes[0] || open) &&
           <Note
             editData={editData}
@@ -113,7 +105,7 @@ function GroupeNotes({ repertoireSelected }) {
             reactQuillRef={reactQuillRef}
             newNote={newNote} />
         }
-      </Box>
+      </Grid>
       <SnackBarPerso response={responseInfo} />
     </>
   );

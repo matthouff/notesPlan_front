@@ -1,22 +1,22 @@
 import DefaultBox from "../../components/DefaultBox";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import RepertoireList from "../../components/RepertoireList";
 import useEntityCrud from "../../hooks/useEntityCrud";
 import Groupe from "./components";
-import { Button, Stack } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Stack, Typography } from "@mui/material";
 import { useMutation, useQueryClient } from "react-query";
 import EditGroupe from "./components/EditGroupe";
 import PersonnalPopover from "../../components/PersonnalPopover";
 import SnackBarPerso from "../../components/SnackbarPerso";
 
 function Taches() {
-  const [repertoireSelected, setRepertoireSelected] = useState();
+  const [repertoireSelected, setRepertoireSelected] = useState(null);
   const [openOption, setOpenOption] = useState();
   const [editGroupeOpen, setEditGroupeOpen] = useState();
   const [responseInfo, setResponse] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data, createdData, deletedData, editData } = useEntityCrud({
+  const { data, isLoading, createdData, deletedData, editData } = useEntityCrud({
     entity: "repertoires_groupes",
   });
 
@@ -26,6 +26,12 @@ function Taches() {
     id: repertoireSelected,
     enabled: !!repertoireSelected
   });
+
+  useEffect(() => {
+    if (!isLoading) {
+      setRepertoireSelected(data[0].id)
+    }
+  }, [data, isLoading])
 
   const { mutate } = useMutation(openOption?.selected?.id ? editGroupe : createGroupe, {
     onSuccess: (response) => {
@@ -64,24 +70,40 @@ function Taches() {
       persoStyle={{ display: "flex", flexDirection: "row", gap: 10, paddingBottom: 10 }}
       dark
     >
-      <RepertoireList
-        title="Tâches"
-        repertoires={data}
-        actualRepertoire={repertoireSelected}
-        setRepertoireSelected={setRepertoireSelected}
-        createdData={createdData}
-        deletedData={mutateDelet}
-        editData={editData}
-      />
-      <Stack width="75%" paddingTop={2} maxWidth="80%" alignItems="flex-end" gap={3} sx={{ pr: 5 }}>
-        <Button
-          onClick={() => setEditGroupeOpen(true)}
-          variant="contained"
-        >
-          Ajouter un groupe
-        </Button>
-        <Groupe setResponse={setResponse} repertoireSelected={repertoireSelected} data={groupe} setOpenOption={setOpenOption} />
-      </Stack>
+      {!isLoading ?
+        <Grid container>
+          <Grid item xs={4}>
+            <RepertoireList
+              title="Tâches"
+              repertoires={data}
+              actualRepertoire={repertoireSelected}
+              setRepertoireSelected={setRepertoireSelected}
+              createdData={createdData}
+              deletedData={mutateDelet}
+              editData={editData}
+            />
+          </Grid>
+
+          <Grid item={8}>
+            <Stack paddingTop={2} alignItems="flex-end" gap={3} sx={{ pr: 5 }}>
+              <Button
+                onClick={() => setEditGroupeOpen(true)}
+                variant="contained"
+              >
+                Ajouter un groupe
+              </Button>
+              <Groupe setResponse={setResponse} repertoireSelected={repertoireSelected} data={groupe} setOpenOption={setOpenOption} />
+            </Stack>
+          </Grid>
+        </Grid>
+        :
+        <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%", height: "100%", gap: 2 }}>
+          <Typography color="primary">
+            Loading...
+          </Typography>
+          <CircularProgress />
+        </Box>
+      }
 
       {editGroupeOpen &&
         <EditGroupe groupeSelected={openOption?.selected} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} />

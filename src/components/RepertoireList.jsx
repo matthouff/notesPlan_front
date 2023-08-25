@@ -51,7 +51,7 @@ function RepertoireList({
     onSuccess: (error) => {
       setResponse({ ...error.data, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des répertoires après la création d'un nouvel élément
-      setRepertoireSelected();
+      !editOpen && setRepertoireSelected();
       queryClient.invalidateQueries("repertoires_notes");
     },
   });
@@ -83,12 +83,6 @@ function RepertoireList({
   };
 
   useEffect(() => {
-    if (repertoires) {
-      setRepertoireSelected(prevActualRepertoire => prevActualRepertoire ?? repertoires[0]?.id);
-    }
-  }, [repertoires, setRepertoireSelected])
-
-  useEffect(() => {
     if (open) {
       textFieldRef.current.focus();
     }
@@ -104,13 +98,9 @@ function RepertoireList({
   }, [setRepertoireSelected, open, editOpen, actualRepertoire]);
 
   const selectedRepertoire = (x) => {
-    if (x !== null) {
+    if (x) {
       setRepertoireSelected(x);
     }
-  };
-
-  const handleChange = (event) => {
-    setLibelle(event.target.value);
   };
 
   const handleEditSubmit = (e) => {
@@ -128,9 +118,10 @@ function RepertoireList({
     setLibelle(null);
   };
 
+
   return (
-    <Stack gap={10} width={"20%"}>
-      <Typography variant="h1" fontWeight="bold" color="primary" fontSize={70}>
+    <Stack gap={10}>
+      <Typography variant="h1" fontWeight="bold" color="primary" fontSize={60}>
         {title}
       </Typography>
       <Stack
@@ -174,9 +165,9 @@ function RepertoireList({
                             inputRef={textFieldEditRef}
                             name="libelle"
                             value={libelle ?? openOption?.selected?.libelle}
-                            onChange={handleChange}
+                            onInput={(e) => setLibelle(e.target.value)}
                             InputProps={{
-                              style: { color: "#fff", paddingRight: 40 },
+                              style: { width: "100%", color: "#fff", paddingRight: 40 },
                             }}
                             color="secondary"
                           />
@@ -218,8 +209,6 @@ function RepertoireList({
                           selected: repertoire,
                         })}
                         style={{ stroke: "#fff" }}
-                        height={17}
-                        width={17}
                       />
                     </PersonnalToggle>
                   );
@@ -236,11 +225,11 @@ function RepertoireList({
                 style={{ display: "flex", alignItems: "center" }}
                 onSubmit={handleSubmit}
               >
-                <FormControl >
+                <FormControl fullWidth>
                   <TextField
                     inputRef={textFieldRef}
                     name="libelle"
-                    onChange={handleChange}
+                    onChange={(e) => setLibelle(e.target.value)}
                     InputProps={{
                       style: { color: "#fff", paddingRight: 40 },
                     }}

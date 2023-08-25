@@ -52,7 +52,7 @@ function ListNote({
   };
 
   return (
-    <>
+    <Stack height="100%">
       <Stack flexDirection="row" justifyContent="space-between">
         <Typography variant="h6" color="primary">
           Notes
@@ -118,7 +118,7 @@ function ListNote({
           />
         )}
       </Box>
-    </>
+    </Stack>
   );
 }
 
