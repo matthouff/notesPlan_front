@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import useEntityCrud from "../../../hooks/useEntityCrud";
 import PopperLabel from "./PopperLabel";
+import useResponsive from "../../../hooks/useResponsive";
 
 EditTache.propTypes = {
   repertoireSelected: PropTypes.string,
@@ -20,6 +21,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
   const [groupe, setGroupe] = useState(null);
   const [editOpenLabel, setEditOpenLabel] = useState(null);
   const [listNewTache, setListNewTache] = useState([]);
+  const isTablet = useResponsive("down", "md");
 
   const { data } = useEntityCrud({
     entity: `labels`,
@@ -53,7 +55,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
 
   return (
     <Dialog open onClose={onClose}>
-      <Stack gap={3} sx={{ p: 2, width: 600 }}>
+      <Stack gap={3} sx={{ p: 2, width: !isTablet ? 600 : "inherit" }}>
         <Box display="flex" alignItems="center" justifyContent="space-between" paddingRight={1}>
           <Typography variant="h2" fontSize={25}>
             {openTache?.tache?.id ? "Modifier" : "Ajouter"} une tache

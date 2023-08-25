@@ -38,7 +38,7 @@ function DefaultBox({ persoStyle, dark, children }) {
     <Stack className="test" sx={{
       backgroundImage: `url(${dark ? backgroundDark : background})`,
       backgroundPosition: 'center',
-      height: "100vh"
+      height: "100svh"
     }}>
       <Stack
         borderBottom="2px solid #FFF"
@@ -49,6 +49,9 @@ function DefaultBox({ persoStyle, dark, children }) {
         justifyContent={isAuthenticated ? "space-between" : "center"}
         alignItems="center"
         width="100%"
+        position="absolute"
+        top={0}
+        right={0}
       >
         <Link to="/"><Box height={isTablet && 40}><img height="100%" src="../../public/logo.svg" /></Box></Link>
         {!isTablet ?
@@ -71,7 +74,7 @@ function DefaultBox({ persoStyle, dark, children }) {
           </IconButton>
         }
       </Stack>
-      <Stack sx={{ pl: "5%", height: "100%", pt: 5, minWidth: "100%", ...persoStyle }}>
+      <Stack sx={{ pl: "5%", height: "100%", pt: 14, minWidth: "100%", ...persoStyle }}>
         {children}
       </Stack>
 

@@ -9,7 +9,7 @@ import DeleteDialog from "../../../components/DeleteDialog";
 import "../style.css";
 import { MoreVertical, Plus } from "lucide-react";
 import PersonnalPopover from "../../../components/PersonnalPopover";
-import EditDialogRepertoire from "./EditDialogRepertoire";
+import EditDialogRepertoire from "../../../components/responsive/EditDialogRepertoire";
 
 
 MobileNote.propTypes = {

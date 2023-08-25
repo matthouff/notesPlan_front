@@ -1,6 +1,7 @@
 import { Button, Dialog, Stack, TextField, Typography } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import useResponsive from "../../../hooks/useResponsive";
 
 EditGroupe.propTypes = {
   groupeSelected: PropTypes.object,
@@ -11,10 +12,11 @@ EditGroupe.propTypes = {
 function EditGroupe({ onClose, handleSubmit, groupeSelected }) {
   const [groupeLibelle, setGroupeLibelle] = useState(null);
   const [groupeCouleur, setCouleurLibelle] = useState(null);
+  const isTablet = useResponsive("down", "md");
 
   return (
     <Dialog open onClose={onClose}>
-      <Stack gap={3} sx={{ p: 2, width: 450, textAlign: "center" }}>
+      <Stack gap={3} sx={{ p: 2, width: !isTablet ? 450 : "inherit", textAlign: "center" }}>
         <Typography variant="h2" fontSize={25}>
           Ajouter un groupe
         </Typography>

@@ -2,6 +2,7 @@ import { Divider, IconButton, ListItem, Typography } from "@mui/material";
 import { MoreVertical } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
+import useResponsive from "../../../hooks/useResponsive";
 
 Tache.propTypes = {
   tache: PropTypes.object,
@@ -10,6 +11,7 @@ Tache.propTypes = {
 
 function Tache({ tache, openModal }) {
   const [iconActive, setIconActive] = useState(false)
+  const isDesktop = useResponsive("up", "md");
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData('application/json', JSON.stringify({ tache }));
@@ -32,10 +34,15 @@ function Tache({ tache, openModal }) {
       onMouseEnter={() => setIconActive(true)}
       onMouseLeave={() => setIconActive(false)}
       secondaryAction={
-        iconActive &&
-        <IconButton edge="end" onClick={() => openModal(tache)}>
-          <MoreVertical />
-        </IconButton>
+        isDesktop ?
+          iconActive &&
+          <IconButton edge="end" onClick={() => openModal(tache)}>
+            <MoreVertical />
+          </IconButton>
+          :
+          <IconButton edge="end" onClick={() => openModal(tache)}>
+            <MoreVertical />
+          </IconButton>
       }
     >
       <Typography sx={{

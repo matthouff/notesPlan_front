@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } 
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
-import SnackBarPerso from "../../../components/SnackbarPerso";
+import SnackBarPerso from "../SnackbarPerso";
 import "../style.css";
 
 

@@ -21,7 +21,6 @@ function Groupe({ data, setOpenOption, repertoireSelected, setResponse }) {
   const [groupeDropSelected, setGroupeDropSelected] = useState()
   const queryClient = useQueryClient();
 
-
   const smallListGroup = data.map(function (groupe) {
     return { id: groupe.id, libelle: groupe.libelle }
   })
@@ -70,12 +69,12 @@ function Groupe({ data, setOpenOption, repertoireSelected, setResponse }) {
   }
 
   return (
-    <Stack flexDirection="row" gap={3} sx={{ overflowX: "scroll", boxSizing: "border-box", width: "100%", height: "100%", paddingBottom: 3 }}>
+    <Stack flexDirection="row" gap={3} sx={{ height: "100%", overflowX: "scroll", width: "100%", paddingBottom: 5, pt: 7 }}>
       {data && data?.sort((a, b) => new Date(a.createdat) - new Date(b.createdat)).map(groupe => {
         return (
           <Stack
             key={groupe?.id}
-            sx={{ maxWidth: "300px", minWidth: "300px", height: "100%" }}
+            sx={{ maxWidth: "300px", minWidth: "300px" }}
           >
             <Box display="flex" alignItems="center" justifyContent="space-between">
               <Typography
@@ -108,7 +107,7 @@ function Groupe({ data, setOpenOption, repertoireSelected, setResponse }) {
               onDrop={(e) => drop(e, groupe?.id)}
               onDragOver={(e) => e.preventDefault()}
               elevation={3}
-              style={{ padding: 15, maxWidth: "300px", height: "100%", backgroundColor: "#fff4", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", overflow: "hidden" }}
+              style={{ height: "100%", padding: 15, maxWidth: "300px", backgroundColor: "#fff4", display: "flex", flexDirection: "column", alignItems: "center", position: "relative", overflow: "hidden" }}
             >
               <Divider sx={{ border: `2px solid ${groupe?.couleur}`, width: "100%", position: "absolute", top: 0 }} />
               <Stack sx={{ overflowY: "auto", width: "100%", borderBottom: "1px solid #fff", pb: 1 }} gap={2}>
