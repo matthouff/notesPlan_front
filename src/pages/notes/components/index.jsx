@@ -43,13 +43,13 @@ function GroupeNotes({ repertoireSelected }) {
 
   useEffect(() => {
     if (notes) {
-      setNoteSelected(notes[0]);
+      setNoteSelected(noteSelected ?? notes[0]);
     }
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [notes, open]);
+  }, [notes, noteSelected, open]);
 
   const handleClickOutside = (event) => {
     if (
