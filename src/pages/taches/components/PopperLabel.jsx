@@ -42,8 +42,8 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
     setSelected(null)
   }
 
-  const handleSelect = (x) => {
-    labelSelected(x)
+  const handleSelect = (label) => {
+    labelSelected(label)
   }
 
   return (

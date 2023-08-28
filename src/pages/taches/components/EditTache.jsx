@@ -41,10 +41,10 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
     }
   }, [data]);
 
-  const addNewLabel = (x) => {
+  const addNewLabel = (label) => {
     // Vérifier si l'élément n'existe pas déjà dans le tableau listNewTache
-    if (!listNewTache.map(item => item.id).includes(x.id)) {
-      setListNewTache(prevList => [...prevList, x]); // Ajouter la nouvelle donnée à la copie actuelle du tableau
+    if (!listNewTache.map(item => item.id).includes(label.id)) {
+      setListNewTache(prevList => [...prevList, label]); // Ajouter la nouvelle donnée à la copie actuelle du tableau
     }
   };
 
@@ -120,7 +120,7 @@ function EditTache({ onClose, handleSubmit, openTache, listGroupes, deleteTache,
         </form>
       </Stack>
       {editOpenLabel?.open &&
-        <PopperLabel repertoireId={repertoireSelected} labelSelected={(x) => addNewLabel(x)} handleClose={() => setEditOpenLabel({ open: false })} />
+        <PopperLabel repertoireId={repertoireSelected} labelSelected={(label) => addNewLabel(label)} handleClose={() => setEditOpenLabel({ open: false })} />
       }
     </Dialog >
   )

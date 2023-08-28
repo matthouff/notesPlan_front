@@ -87,20 +87,20 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
     handleChange({ libelle: e.target.value })
   }
 
-  const handleChange = (x) => {
+  const handleChange = (newValue) => {
     // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
-    const verifContent = new DOMParser().parseFromString(x.message, "text/html").documentElement.textContent
+    const verifContent = new DOMParser().parseFromString(newValue.message, "text/html").documentElement.textContent
 
     if (!isInitializing) {
       clearTimeout(timeoutId);
 
-      if (x.libelle) {
-        setTitle(x.libelle)
+      if (newValue.libelle) {
+        setTitle(newValue.libelle)
       } else {
-        setContent(x.message)
+        setContent(newValue.message)
       }
       const newTimeoutId = verifContent && setTimeout(() => {
-        newNote({ ...x, id: note?.id }, editOpen);
+        newNote({ ...newValue, id: note?.id }, editOpen);
       }, 1500);
 
       setTimeoutId(newTimeoutId);
@@ -130,7 +130,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
         <ReactQuill
           ref={reactQuillRef}
           value={content}
-          onChange={(x) => handleChange({ message: x })}
+          onChange={(newMessage) => handleChange({ message: newMessage })}
           style={{ editorStyle }}
           toolbarStyle={toolbarStyle}
           placeholder="Entrez votre note ici..."

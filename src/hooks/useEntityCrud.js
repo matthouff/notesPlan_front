@@ -16,9 +16,9 @@ function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
   const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
   
-  const createdData = useCallback(async (x) => {
+  const createdData = useCallback(async (data) => {
     try{
-      const response = await instance.post(entity, {...x});
+      const response = await instance.post(entity, {...data});
       queryClient.invalidateQueries({entity});
 
       return response;
@@ -27,10 +27,10 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     }
   },[entity, queryClient]);
   
-  const editData = useCallback(async (x) => {
+  const editData = useCallback(async (data) => {
     try{
-      const url = entity + "/" + x.id;
-      const response = await instance.patch(url, x);
+      const url = entity + "/" + data.id;
+      const response = await instance.patch(url, data);
       queryClient.invalidateQueries({entity});
 
       return response;
@@ -39,9 +39,9 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     }
   }, [entity, queryClient]);
 
-  const addRelationData = useCallback(async (x) => {
-    const url = `${entity}/${x.id}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`;
-    await instance.patch(url, x);
+  const addRelationData = useCallback(async (data) => {
+    const url = `${entity}/${data.id}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`;
+    await instance.patch(url, data);
     queryClient.invalidateQueries({entity});
   },[complement, entity, id, queryClient]);
   

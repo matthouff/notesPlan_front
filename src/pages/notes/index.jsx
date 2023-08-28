@@ -18,7 +18,7 @@ function Notes() {
 
   useEffect(() => {
     if (!isLoading) {
-      setRepertoireSelected(repertoireSelected ?? data[0].id)
+      setRepertoireSelected(repertoireSelected ?? data[0]?.id)
     }
   }, [data, repertoireSelected, isLoading])
 

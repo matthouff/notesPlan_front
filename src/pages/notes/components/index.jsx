@@ -65,14 +65,14 @@ function GroupeNotes({ repertoireSelected }) {
     }
   };
 
-  const newNote = (x) => {
+  const newNote = (note) => {
     if (open) {
-      mutate({ ...x, repertoireId: repertoireSelected });
+      mutate({ ...note, repertoireId: repertoireSelected });
       textFielTitledRef.current.focus();
     } else {
-      mutate({ ...x, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
+      mutate({ ...note, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
     }
-    setNoteSelected({ ...noteSelected, ...x });
+    setNoteSelected({ ...noteSelected, ...note });
     setOpen(false); // Fermer le mode édition
 
   };

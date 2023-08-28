@@ -66,18 +66,18 @@ function MobileNote({ isLoading, repertoires, repertoireSelected, setRepertoireS
   });
 
 
-  const newNote = (x) => {
+  const newNote = (newValue) => {
     if (open) {
-      mutate({ ...x, repertoireId: repertoireSelected ?? repertoires[0].id });
+      mutate({ ...newValue, repertoireId: repertoireSelected ?? repertoires[0].id });
       textFielTitledRef.current.focus();
     } else {
-      mutate({ ...x, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
+      mutate({ ...newValue, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
     }
-    setNoteSelected({ ...noteSelected, ...x });
+    setNoteSelected({ ...noteSelected, ...newValue });
     setOpen(false); // Fermer le mode édition
-    if (x.libelle) {
+    if (newValue.libelle) {
       textFielTitledRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
-    } else if (x.message) {
+    } else if (newValue.message) {
       reactQuillRef.current.focus(); // Mettre le focus sur le champ de titre après l'ajout/modification
     }
   };

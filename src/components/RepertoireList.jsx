@@ -97,9 +97,9 @@ function RepertoireList({
     };
   }, [setRepertoireSelected, open, editOpen, actualRepertoire]);
 
-  const selectedRepertoire = (x) => {
-    if (x) {
-      setRepertoireSelected(x);
+  const selectedRepertoire = (repertoireId) => {
+    if (repertoireId) {
+      setRepertoireSelected(repertoireId);
     }
   };
 
@@ -135,7 +135,7 @@ function RepertoireList({
             color="secondary"
             value={actualRepertoire}
             exclusive
-            onChange={(e, x) => selectedRepertoire(x)}
+            onChange={(e, repertoireId) => selectedRepertoire(repertoireId)}
             aria-label="text Repertoire"
             sx={{ display: "flex", flexDirection: "column", maxHeight: 400, overflow: "scroll", boxShadow: repertoires.length > 9 && "inset 0px -10px 30px -10px rgba(0, 0, 0, 1)" }}
           >

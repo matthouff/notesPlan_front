@@ -35,7 +35,7 @@ function Taches() {
 
   useEffect(() => {
     if (!isLoading) {
-      setRepertoireSelected(repertoireSelected ?? data[0].id)
+      setRepertoireSelected(repertoireSelected ?? data[0]?.id)
     }
   }, [data, isLoading, repertoireSelected])
 
@@ -52,14 +52,14 @@ function Taches() {
     },
   });
 
-  const handleSubmit = (e, x) => {
+  const handleSubmit = (e, groupe) => {
     e.preventDefault();
 
     if (!openOption?.selected?.id) {
-      const newGroupe = { ...x, repertoireId: repertoireSelected }
+      const newGroupe = { ...groupe, repertoireId: repertoireSelected }
       mutate(newGroupe);
     } else {
-      mutate({ id: openOption?.selected.id, ...x });
+      mutate({ id: openOption?.selected.id, ...groupe });
     }
     setOpenOption(null)
     setEditGroupeOpen(false);
@@ -101,11 +101,12 @@ function Taches() {
                     <ChevronLeft />
                   </IconButton>
                   <Typography variant="h1" fontSize={40} color="secondary" mb={2}>Tâches</Typography>
-                  <FormControl sx={{ maxWidth: 350 }} variant="outlined" fullWidth>
+                  <FormControl sx={{ maxWidth: 350, display: "flex", flexDirection: "row" }} variant="outlined" fullWidth>
                     <InputLabel color="secondary" variant="standard" htmlFor="uncontrolled-native">
                       Répertoire
                     </InputLabel>
                     <NativeSelect
+                      fullWidth
                       onInput={(e) => setRepertoireSelected(e.target.value)}
                       size="small"
                       color="secondary"
@@ -121,17 +122,17 @@ function Taches() {
                         )
                       })}
                     </NativeSelect>
+                    <IconButton
+                      onClick={(e) =>
+                        setOpenOption({
+                          open: true,
+                          selected: data.find(x => x.id === repertoireSelected),
+                          anchor: e.currentTarget,
+                          isRepertoire: true
+                        })} size="small" >
+                      <MoreVertical color="#000" width={30} height={30} />
+                    </IconButton>
                   </FormControl>
-                  <IconButton
-                    onClick={(e) =>
-                      setOpenOption({
-                        open: true,
-                        selected: data.find(x => x.id === repertoireSelected),
-                        anchor: e.currentTarget,
-                        isRepertoire: true
-                      })} size="small" >
-                    <MoreVertical color="#fff" width={30} height={30} />
-                  </IconButton>
                 </Stack>
               </Drawer>
             }
@@ -165,7 +166,7 @@ function Taches() {
 
       {
         editGroupeOpen &&
-        <EditGroupe groupeSelected={openOption?.selected} onClose={handleClose} handleSubmit={(e, x) => handleSubmit(e, x)} />
+        <EditGroupe groupeSelected={openOption?.selected} onClose={handleClose} handleSubmit={(e, groupe) => handleSubmit(e, groupe)} />
       }
       {
         openOption?.open && (

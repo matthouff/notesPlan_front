@@ -29,11 +29,11 @@ function EditDialogRepertoire({ repertoireSelected, handleClose, createRep, edit
     },
   });
 
-  const newRepertoire = (x) => {
+  const newRepertoire = (repertoireLibelle) => {
     if (repertoireSelected) {
-      mutate({ ...repertoireSelected, libelle: x })
+      mutate({ ...repertoireSelected, libelle: repertoireLibelle })
     } else {
-      mutate({ libelle: x })
+      mutate({ libelle: repertoireLibelle })
     }
   }
 
