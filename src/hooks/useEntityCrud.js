@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useCallback } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 
 const instance = axios.create({
@@ -15,7 +16,7 @@ function useEntityCrud({ entity, complement, id, enabled }) {
   const queryClient = useQueryClient();
   const fullEntity = `${entity}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`
   
-  const createdData = async (x) => {
+  const createdData = useCallback(async (x) => {
     try{
       const response = await instance.post(entity, {...x});
       queryClient.invalidateQueries({entity});
@@ -24,9 +25,9 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     }catch(error){
       return {...error.message ? {...error?.response?.data} : {...error}};
     }
-  };
+  },[entity, queryClient]);
   
-  const editData = async (x) => {
+  const editData = useCallback(async (x) => {
     try{
       const url = entity + "/" + x.id;
       const response = await instance.patch(url, x);
@@ -36,15 +37,15 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     }catch(error){
       return {...error.message ? {...error?.response?.data} : {...error}};
     }
-  };
+  }, [entity, queryClient]);
 
-  const addRelationData = async (x) => {
+  const addRelationData = useCallback(async (x) => {
     const url = `${entity}/${x.id}${ complement ? "/" + complement : ""}${id ? "/" + id : ""}`;
     await instance.patch(url, x);
     queryClient.invalidateQueries({entity});
-  };
+  },[complement, entity, id, queryClient]);
   
-  const deletedData = async (entityId) => {
+  const deletedData = useCallback(async (entityId) => {
     try{
       const url = entity + "/" + entityId;
       const response = await instance.delete(url);
@@ -54,7 +55,7 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     }catch(error){
       return {...error.message ? {...error?.response?.data} : {...error}};
     }
-  };
+  },[entity, queryClient]);
 
   const { data = [], isLoading } = useQuery(fullEntity, async () => {
     const response = await instance.get(fullEntity);

@@ -41,7 +41,7 @@ function useAuth() {
 
   //////////////////////////////////// CONNEXION ////////////////////////////////////
 
-  const login = async (formData) => {
+  const login = useCallback(async (formData) => {
     try {
       const response = await instance.post('auth/login', {
         email: formData.email,
@@ -55,11 +55,11 @@ function useAuth() {
     } catch (error) {
       return error?.response;
     }
-  };
+  },[queryClient, refetch]);
 
   //////////////////////////////////// INSCRIPTION ////////////////////////////////////
 
-  const register = async (userDto) => {
+  const register = useCallback(async (userDto) => {
     try {
       const response = await instance.post('auth/register', userDto);
 
@@ -70,7 +70,7 @@ function useAuth() {
     } catch (error) {
       return error?.response;
     }
-  };
+  },[queryClient]);
 
   //////////////////////////////////// DÉCONNEXION ////////////////////////////////////
 
