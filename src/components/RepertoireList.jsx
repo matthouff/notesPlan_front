@@ -118,15 +118,12 @@ function RepertoireList({
     setLibelle(null);
   };
 
-
   return (
     <Stack gap={10}>
       <Typography variant="h1" fontWeight="bold" color="primary" fontSize={60}>
         {title}
       </Typography>
-      <Stack
-        gap={1}
-      >
+      <Stack gap={1}>
         <Typography variant="h6" color="primary">
           Repertoires
         </Typography>
@@ -137,15 +134,19 @@ function RepertoireList({
             exclusive
             onChange={(e, repertoireId) => selectedRepertoire(repertoireId)}
             aria-label="text Repertoire"
-            sx={{ display: "flex", flexDirection: "column", maxHeight: 400, overflow: "scroll", boxShadow: repertoires.length > 9 && "inset 0px -10px 30px -10px rgba(0, 0, 0, 1)" }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              maxHeight: 400,
+              overflow: "auto",
+              boxShadow:
+                repertoires.length > 9 &&
+                "inset 0px -10px 30px -10px rgba(0, 0, 0, 1)",
+            }}
           >
             {repertoires &&
               repertoires
-                ?.sort(
-                  (a, b) =>
-                    new Date(b.createdat) -
-                    new Date(a.createdat)
-                )
+                ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
                 .map((repertoire, index) => {
                   return editOpen &&
                     repertoire?.id === openOption?.selected?.id ? (
@@ -167,7 +168,11 @@ function RepertoireList({
                             value={libelle ?? openOption?.selected?.libelle}
                             onInput={(e) => setLibelle(e.target.value)}
                             InputProps={{
-                              style: { width: "100%", color: "#fff", paddingRight: 40 },
+                              style: {
+                                width: "100%",
+                                color: "#fff",
+                                paddingRight: 40,
+                              },
                             }}
                             color="secondary"
                           />
@@ -185,29 +190,34 @@ function RepertoireList({
                   ) : (
                     <PersonnalToggle
                       sx={{
-                        ...index < repertoires.length - 1 && {
+                        ...(index < repertoires.length - 1 && {
                           borderBottom: "1px solid #fffb",
-                        },
+                        }),
                         display: "flex",
-                        justifyContent: "space-between"
+                        justifyContent: "space-between",
                       }}
                       key={repertoire?.id}
                       value={repertoire?.id}
                       aria-label="left aligned"
                     >
-                      <Typography variant="body2" sx={{
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                      }}>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
                         {repertoire.libelle}
                       </Typography>
-                      <MoreVertical onClick={(e) =>
-                        setOpenOption({
-                          open: true,
-                          anchor: e.currentTarget,
-                          selected: repertoire,
-                        })}
+                      <MoreVertical
+                        onClick={(e) =>
+                          setOpenOption({
+                            open: true,
+                            anchor: e.currentTarget,
+                            selected: repertoire,
+                          })
+                        }
                         style={{ stroke: "#fff" }}
                       />
                     </PersonnalToggle>
@@ -233,7 +243,6 @@ function RepertoireList({
                     InputProps={{
                       style: { color: "#fff", paddingRight: 40 },
                     }}
-
                     color="secondary"
                   />
                 </FormControl>

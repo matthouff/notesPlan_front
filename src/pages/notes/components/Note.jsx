@@ -1,4 +1,11 @@
-import { Box, Divider, IconButton, Stack, styled, TextField } from "@mui/material";
+import {
+  Box,
+  Divider,
+  IconButton,
+  Stack,
+  styled,
+  TextField,
+} from "@mui/material";
 import { useState } from "react";
 import "../style.css";
 import ReactQuill from "react-quill";
@@ -73,39 +80,43 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [isInitializing, setIsInitializing] = useState(true);
-  const [timeoutId, setTimeoutId] = useState(null);  // enregistre l'id du précédent setTimeOut poru l'annuler
+  const [timeoutId, setTimeoutId] = useState(null); // enregistre l'id du précédent setTimeOut poru l'annuler
   const isTablet = useResponsive("down", "lg");
 
   useEffect(() => {
     setContent(note?.message ?? null);
     setTitle(note ? note?.libelle : "");
     setIsInitializing(false); // Définir isInitializing sur false une fois que le composant est monté
-  }, [note, note?.message,]);
+  }, [note, note?.message]);
 
   const titleHandleChange = (e) => {
     e.preventDefault();
-    handleChange({ libelle: e.target.value })
-  }
+    handleChange({ libelle: e.target.value });
+  };
 
   const handleChange = (newValue) => {
     // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
-    const verifContent = new DOMParser().parseFromString(newValue.message, "text/html").documentElement.textContent
+    const verifContent = new DOMParser().parseFromString(
+      newValue.message,
+      "text/html"
+    ).documentElement.textContent;
 
     if (!isInitializing) {
       clearTimeout(timeoutId);
 
       if (newValue.libelle) {
-        setTitle(newValue.libelle)
+        setTitle(newValue.libelle);
       } else {
-        setContent(newValue.message)
+        setContent(newValue.message);
       }
-      const newTimeoutId = verifContent && setTimeout(() => {
-        newNote({ ...newValue, id: note?.id }, editOpen);
-      }, 1500);
+      const newTimeoutId =
+        verifContent &&
+        setTimeout(() => {
+          newNote({ ...newValue, id: note?.id }, editOpen);
+        }, 1500);
 
       setTimeoutId(newTimeoutId);
     }
-
   };
 
   return (
@@ -119,13 +130,13 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           onInput={titleHandleChange}
           placeholder="Title"
         />
-        {isTablet &&
+        {isTablet && (
           <IconButton onClick={deleted} color="error">
             <Trash />
           </IconButton>
-        }
+        )}
       </Box>
-      <Box height="100%" overflow="scroll">
+      <Box height="100%" overflow="auto">
         <Divider />
         <ReactQuill
           ref={reactQuillRef}
