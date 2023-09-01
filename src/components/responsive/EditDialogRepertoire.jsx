@@ -1,10 +1,16 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+} from "@mui/material";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import SnackBarPerso from "../SnackbarPerso";
 import "../style.css";
-
 
 EditDialogRepertoire.propTypes = {
   repertoireSelected: PropTypes.object,
@@ -13,15 +19,20 @@ EditDialogRepertoire.propTypes = {
   editRep: PropTypes.func,
 };
 
-function EditDialogRepertoire({ repertoireSelected, handleClose, createRep, editRep }) {
-  const [state, setState] = useState("")
+function EditDialogRepertoire({
+  repertoireSelected,
+  handleClose,
+  createRep,
+  editRep,
+}) {
+  const [state, setState] = useState("");
   const [responseInfo, setResponse] = useState(false);
 
   useEffect(() => {
     if (repertoireSelected) {
-      setState(repertoireSelected?.libelle)
+      setState(repertoireSelected?.libelle);
     }
-  }, [repertoireSelected])
+  }, [repertoireSelected]);
 
   const { mutate } = useMutation(!repertoireSelected ? createRep : editRep, {
     onSuccess: (response) => {
@@ -31,17 +42,19 @@ function EditDialogRepertoire({ repertoireSelected, handleClose, createRep, edit
 
   const newRepertoire = (repertoireLibelle) => {
     if (repertoireSelected) {
-      mutate({ ...repertoireSelected, libelle: repertoireLibelle })
+      mutate({ ...repertoireSelected, libelle: repertoireLibelle });
     } else {
-      mutate({ libelle: repertoireLibelle })
+      mutate({ libelle: repertoireLibelle });
     }
-  }
+  };
 
   return (
     <>
       <Dialog open onClose={handleClose}>
         <DialogTitle>
-          {repertoireSelected ? "Modifier le répertoire" : "Créer un répertoire"}
+          {repertoireSelected
+            ? "Modifier le répertoire"
+            : "Créer un répertoire"}
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -54,16 +67,28 @@ function EditDialogRepertoire({ repertoireSelected, handleClose, createRep, edit
             type="text"
             fullWidth
             variant="standard"
+            color="secondary"
           />
         </DialogContent>
         <DialogActions>
-          <Button variant="contain" onClick={handleClose}>Annuler</Button>
-          <Button variant="contain" color="secondary" onClick={() => { newRepertoire(state); handleClose(); }}>Subscribe</Button>
+          <Button variant="contain" onClick={handleClose}>
+            Annuler
+          </Button>
+          <Button
+            variant="contain"
+            color="secondary"
+            onClick={() => {
+              newRepertoire(state);
+              handleClose();
+            }}
+          >
+            Subscribe
+          </Button>
         </DialogActions>
       </Dialog>
       {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
     </>
-  )
+  );
 }
 
 export default EditDialogRepertoire;

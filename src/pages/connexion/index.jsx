@@ -16,7 +16,7 @@ function Connexion() {
 
   return (
     <DefaultBox persoStyle={{ px: "5%" }}>
-      <Grid container height="100%">
+      <Grid container height="100%" rowSpacing={2}>
         <Grid item xs={12} lg={3}>
           <Typography
             fontSize={(isMobile && 50) || (isTablet && 60)}

@@ -10,55 +10,77 @@ Tache.propTypes = {
 };
 
 function Tache({ tache, openModal }) {
-  const [iconActive, setIconActive] = useState(false)
+  const [iconActive, setIconActive] = useState(false);
   const isDesktop = useResponsive("up", "md");
 
+  const couleursFiltred = tache?.labels.filter(
+    (label) => label.couleur !== null
+  );
+
   const handleDragStart = (e) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({ tache }));
+    e.dataTransfer.setData("application/json", JSON.stringify({ tache }));
   };
 
-  const couleurs = tache?.labels
-    .map((label, index) => `
-      ${label.couleur} ${index * (100 / tache?.labels.length)}% 
-      ${index * (100 / tache?.labels.length)}%, 
-      ${label.couleur} ${(index + 1) * (100 / tache?.labels.length)}% 
-      ${(index + 1) * (100 / tache?.labels.length)}%
-    `)
-    .join(', ');
+  const couleurs = couleursFiltred
+    .map(
+      (label, index) => `
+      ${label.couleur} ${index * (100 / couleursFiltred.length)}% 
+      ${index * (100 / couleursFiltred.length)}%, 
+      ${label.couleur} ${(index + 1) * (100 / couleursFiltred.length)}% 
+      ${(index + 1) * (100 / couleursFiltred.length)}%
+    `
+    )
+    .join(", ");
 
   return (
     <ListItem
       draggable
       onDragStart={handleDragStart}
-      sx={{ bgcolor: "#fff", borderRadius: 2, borderLeft: `5px solid ${tache?.couleur}`, position: "relative", display: "flex", gap: 0.5, flexDirection: "column", alignItems: "flex-start" }}
+      sx={{
+        bgcolor: "#fff",
+        borderRadius: 2,
+        borderLeft: `5px solid ${tache?.couleur}`,
+        position: "relative",
+        display: "flex",
+        gap: 0.5,
+        flexDirection: "column",
+        alignItems: "flex-start",
+      }}
       onMouseEnter={() => setIconActive(true)}
       onMouseLeave={() => setIconActive(false)}
       secondaryAction={
-        isDesktop ?
-          iconActive &&
+        isDesktop ? (
+          iconActive && (
+            <IconButton edge="end" onClick={() => openModal(tache)}>
+              <MoreVertical />
+            </IconButton>
+          )
+        ) : (
           <IconButton edge="end" onClick={() => openModal(tache)}>
             <MoreVertical />
           </IconButton>
-          :
-          <IconButton edge="end" onClick={() => openModal(tache)}>
-            <MoreVertical />
-          </IconButton>
+        )
       }
     >
-      <Typography sx={{
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-      }}>
+      <Typography
+        sx={{
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+        }}
+      >
         {tache?.libelle}
       </Typography>
-      {tache?.labels.length !== 0 &&
+      {couleurs.length !== 0 && (
         <Divider
           sx={{
-            background: `linear-gradient(to right, ${couleurs})`, height: 5, width: "100%", borderRadius: "100px"
+            background: `linear-gradient(to right, ${couleurs})`,
+            height: 5,
+            width: "100%",
+            borderRadius: "100px",
           }}
         />
-      }
+      )}
     </ListItem>
   );
 }

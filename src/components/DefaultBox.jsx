@@ -98,7 +98,7 @@ function DefaultBox({ persoStyle, dark, children }) {
         sx={{
           pl: "5%",
           height: "100%",
-          pt: 14,
+          pt: isTablet ? 10 : 14,
           minWidth: "100%",
           ...persoStyle,
         }}
