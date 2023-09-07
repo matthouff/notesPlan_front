@@ -27,7 +27,7 @@ function Connexion() {
             flexDirection="column"
             lineHeight={1}
           >
-            Weather the storm
+            Notes& Plan
           </Typography>
         </Grid>
         <Grid item xs={12} lg={6}>

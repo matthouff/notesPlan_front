@@ -57,7 +57,7 @@ function DefaultBox({ persoStyle, dark, children }) {
       >
         <Link to="/">
           <Box height={isTablet && 40}>
-            <img height="100%" src="../../public/logoApp1.svg" />
+            <img height="100%" src="../../public/logolight.svg" />
           </Box>
         </Link>
         {!isTablet

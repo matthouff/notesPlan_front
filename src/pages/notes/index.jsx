@@ -80,7 +80,6 @@ function Notes() {
           editRep={editData}
         />
       )}
-
       {!!error && <SnackBarPerso error={error} />}
     </DefaultBox>
   );
