@@ -11,7 +11,13 @@ const instance = axios.create({
   },
 });
 
-function useEntityCrud({ entity, complement, id, enabled }) {
+function useEntityCrud({
+  entity,
+  complement,
+  id,
+  enabled,
+  queryOption = { suspense: false },
+}) {
   const queryClient = useQueryClient();
   const fullEntity = `${entity}${complement ? "/" + complement : ""}${
     id ? "/" + id : ""
@@ -82,11 +88,11 @@ function useEntityCrud({ entity, complement, id, enabled }) {
     fullEntity,
     async () => {
       const response = await instance.get(fullEntity);
-
       return response.data;
     },
     {
       enabled: enabled,
+      ...queryOption,
     }
   );
 

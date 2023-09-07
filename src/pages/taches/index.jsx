@@ -37,6 +37,9 @@ function Taches() {
   const { data, isLoading, createdData, deletedData, editData } = useEntityCrud(
     {
       entity: "repertoires_groupes",
+      queryOption: {
+        cacheTime: 0,
+      },
     }
   );
 
@@ -54,7 +57,7 @@ function Taches() {
 
   useEffect(() => {
     if (!isLoading) {
-      setRepertoireSelected(repertoireSelected ?? data[0]?.id);
+      setRepertoireSelected(repertoireSelected ?? data[0]?.id ?? null);
     }
   }, [data, isLoading, repertoireSelected]);
 

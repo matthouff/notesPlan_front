@@ -113,7 +113,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
         verifContent &&
         setTimeout(() => {
           newNote({ ...newValue, id: note?.id }, editOpen);
-        }, 1500);
+        }, 1000);
 
       setTimeoutId(newTimeoutId);
     }

@@ -12,62 +12,76 @@ function Notes() {
   const [repertoireSelected, setRepertoireSelected] = useState(null);
   const isTablet = useResponsive("down", "lg");
 
-  const { data, isLoading, createdData, deletedData, editData, error } = useEntityCrud({
-    entity: "repertoires_notes",
-  });
+  const { data, isLoading, createdData, deletedData, editData, error } =
+    useEntityCrud({
+      entity: "repertoires_notes",
+      queryOption: {
+        cacheTime: 0,
+      },
+    });
 
   useEffect(() => {
     if (!isLoading) {
-      setRepertoireSelected(repertoireSelected ?? data[0]?.id)
+      setRepertoireSelected(repertoireSelected ?? data[0]?.id);
     }
-  }, [data, repertoireSelected, isLoading])
+  }, [data, repertoireSelected, isLoading]);
 
   return (
     <DefaultBox
-      persoStyle={{ pl: isTablet ? "5%" : 5, pr: isTablet && "5%", display: "flex", flexDirection: "row", gap: 5 }}
+      persoStyle={{
+        pl: isTablet ? "5%" : 5,
+        pr: isTablet && "5%",
+        display: "flex",
+        flexDirection: "row",
+        gap: 5,
+      }}
       dark
     >
-      {
-        !isTablet ?
-          <Grid container columnSpacing={4}>
-            <Grid item xs={3}>
-              <RepertoireList
-                title={"Notes"}
-                repertoires={data}
-                actualRepertoire={repertoireSelected}
-                setRepertoireSelected={setRepertoireSelected}
-                createdData={createdData}
-                deletedData={deletedData}
-                editData={editData}
-              />
-            </Grid>
-            {!isLoading ?
-              <GroupeNotes repertoireSelected={repertoireSelected} />
-              :
-              <Box sx={{ display: 'flex', flexDirection: "column", justifyContent: "center", alignItems: "center", width: "100%", height: "100%", gap: 2 }}>
-                <Typography color="primary">
-                  Loading...
-                </Typography>
-                <CircularProgress />
-              </Box>
-            }
+      {!isTablet ? (
+        <Grid container columnSpacing={4}>
+          <Grid item xs={3}>
+            <RepertoireList
+              title={"Notes"}
+              repertoires={data}
+              actualRepertoire={repertoireSelected}
+              setRepertoireSelected={setRepertoireSelected}
+              createdData={createdData}
+              deletedData={deletedData}
+              editData={editData}
+            />
           </Grid>
+          {!isLoading ? (
+            <GroupeNotes repertoireSelected={repertoireSelected} />
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+                height: "100%",
+                gap: 2,
+              }}
+            >
+              <Typography color="primary">Loading...</Typography>
+              <CircularProgress />
+            </Box>
+          )}
+        </Grid>
+      ) : (
+        <MobileNote
+          isLoading={isLoading}
+          repertoires={data}
+          repertoireSelected={repertoireSelected}
+          setRepertoireSelected={setRepertoireSelected}
+          deleteRepertoire={deletedData}
+          createRep={createdData}
+          editRep={editData}
+        />
+      )}
 
-          :
-          <MobileNote
-            isLoading={isLoading}
-            repertoires={data}
-            repertoireSelected={repertoireSelected}
-            setRepertoireSelected={setRepertoireSelected}
-            deleteRepertoire={deletedData}
-            createRep={createdData}
-            editRep={editData}
-          />
-      }
-
-      {!!error &&
-        <SnackBarPerso error={error} />
-      }
+      {!!error && <SnackBarPerso error={error} />}
     </DefaultBox>
   );
 }

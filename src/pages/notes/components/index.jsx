@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Button, Grid, Stack } from "@mui/material";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useRef, useState } from "react";
@@ -37,7 +37,7 @@ function GroupeNotes({ repertoireSelected }) {
   const { mutate } = useMutation(!open ? editData : createdData, {
     onSuccess: (response) => {
       setResponse({ ...response.data, key: new Date().getTime(), open: true });
-      setOpen(false)
+      setOpen(false);
     },
   });
 
@@ -70,44 +70,62 @@ function GroupeNotes({ repertoireSelected }) {
       mutate({ ...note, repertoireId: repertoireSelected });
       textFielTitledRef.current.focus();
     } else {
-      mutate({ ...note, id: noteSelected?.id ? noteSelected?.id : notes[0]?.id });
+      mutate({
+        ...note,
+        id: noteSelected?.id ? noteSelected?.id : notes[0]?.id,
+      });
     }
     setNoteSelected({ ...noteSelected, ...note });
     setOpen(false); // Fermer le mode édition
-
   };
 
   return (
-    <>
-      <Grid item xs={3}>
-        <ListNote
-          data={notes}
-          actualNote={noteSelected}
-          noteSelected={setNoteSelected}
-          repertoireSelected={repertoireSelected}
-          createdData={createdData}
-          deletedData={deletedData}
-          open={open}
-          newNote={setOpen}
-          addButtonRef={addButtonRef}
-          textFieldEditRef={textFieldEditRef}
-          textFieldRef={textFieldRef}
-        />
-      </Grid>
-      <Grid item xs={6}>
-        {(notes[0] || open) &&
-          <Note
-            editData={editData}
-            repertoireSelected={repertoireSelected}
-            note={open ? null : noteSelected ?? notes[0]}
-            editOpen={open}
-            titleRef={textFielTitledRef}
-            reactQuillRef={reactQuillRef}
-            newNote={newNote} />
-        }
-      </Grid>
-      <SnackBarPerso response={responseInfo} />
-    </>
+    repertoireSelected && (
+      <>
+        <Grid item xs={3}>
+          {notes.length > 0 ? (
+            <ListNote
+              data={notes}
+              actualNote={noteSelected}
+              noteSelected={setNoteSelected}
+              repertoireSelected={repertoireSelected}
+              createdData={createdData}
+              deletedData={deletedData}
+              open={open}
+              newNote={setOpen}
+              addButtonRef={addButtonRef}
+              textFieldEditRef={textFieldEditRef}
+              textFieldRef={textFieldRef}
+            />
+          ) : (
+            <Stack justifyContent="center" alignItems="center" height="100%">
+              <Button
+                onClick={() => setOpen(true)}
+                variant="contained"
+                fontSize={20}
+              >
+                Ajouter une note
+              </Button>
+            </Stack>
+          )}
+        </Grid>
+        <Grid item xs={6}>
+          {(notes[0] || open) && (
+            <Note
+              editData={editData}
+              repertoireSelected={repertoireSelected}
+              note={open ? null : noteSelected ?? notes[0]}
+              editOpen={open}
+              titleRef={textFielTitledRef}
+              reactQuillRef={reactQuillRef}
+              newNote={newNote}
+            />
+          )}
+        </Grid>
+
+        <SnackBarPerso response={responseInfo} />
+      </>
+    )
   );
 }
 

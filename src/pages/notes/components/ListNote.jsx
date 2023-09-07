@@ -31,9 +31,11 @@ function ListNote({
   deletedData,
   newNote,
   textFieldEditRef,
-  addButtonRef
+  addButtonRef,
 }) {
   const [openModal, setOpenModal] = useState();
+
+  console.log(actualNote);
 
   const addNote = () => {
     newNote(true);
@@ -55,7 +57,7 @@ function ListNote({
     <Stack height="100%">
       <Stack flexDirection="row" justifyContent="space-between">
         <Typography variant="h6" color="primary">
-          Notes
+          Notes <span style={{ fontSize: 15 }}>({`${data.length}`})</span>
         </Typography>
         <Button
           ref={addButtonRef}
@@ -78,30 +80,34 @@ function ListNote({
             aria-label="text note"
             sx={{ display: "flex", flexDirection: "column" }}
           >
-            {data?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat)).map((note, index) => {
-              return (
-                <PersonnalToggle
-                  ref={textFieldEditRef}
-                  className="trashNote"
-                  sx={{
-                    ...index < data.length - 1 && {
-                      borderBottom: "1px solid #fffb",
-                    },
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between"
-                  }}
-                  key={note?.id}
-                  value={note}
-                  aria-label="left aligned"
-                >
-                  <Typography variant="body2">
-                    {note?.libelle}
-                  </Typography>
-                  <Trash style={{ stroke: "#C00" }} onClick={() => setOpenModal(true)} width={20} />
-                </PersonnalToggle>
-              );
-            })}
+            {data
+              ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
+              .map((note, index) => {
+                return (
+                  <PersonnalToggle
+                    ref={textFieldEditRef}
+                    className="trashNote"
+                    sx={{
+                      ...(index < data.length - 1 && {
+                        borderBottom: "1px solid #fffb",
+                      }),
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                    key={note?.id}
+                    value={note}
+                    aria-label="left aligned"
+                  >
+                    <Typography variant="body2">{note?.libelle}</Typography>
+                    <Trash
+                      style={{ stroke: "#C00" }}
+                      onClick={() => setOpenModal(true)}
+                      width={20}
+                    />
+                  </PersonnalToggle>
+                );
+              })}
           </ToggleButtonGroup>
         ) : (
           <Typography textAlign="center" marginTop={5} color="primary">
