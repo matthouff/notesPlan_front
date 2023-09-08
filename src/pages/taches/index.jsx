@@ -221,19 +221,23 @@ function Taches() {
                 <ChevronRight />
               </IconButton>
             )}
-            <Button
-              onClick={() => setEditGroupeOpen(true)}
-              variant="contained"
-              sx={{ position: "absolute", right: 0 }}
-            >
-              Ajouter un groupe
-            </Button>
-            <Groupe
-              setResponse={setResponse}
-              repertoireSelected={repertoireSelected}
-              data={groupe}
-              setOpenOption={setOpenOption}
-            />
+            {data.length > 0 && (
+              <>
+                <Button
+                  onClick={() => setEditGroupeOpen(true)}
+                  variant="contained"
+                  sx={{ position: "absolute", right: 0 }}
+                >
+                  Ajouter un groupe
+                </Button>
+                <Groupe
+                  setResponse={setResponse}
+                  repertoireSelected={repertoireSelected}
+                  data={groupe}
+                  setOpenOption={setOpenOption}
+                />
+              </>
+            )}
           </Grid>
         </Grid>
       ) : (

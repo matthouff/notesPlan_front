@@ -68,7 +68,12 @@ function ListNote({
           Ajouter +
         </Button>
       </Stack>
-      <Box borderRight="1px solid #fffb" bgcolor="#ffffff26" height="100%">
+      <Box
+        borderRight="1px solid #fffb"
+        bgcolor="#ffffff26"
+        height={600}
+        sx={{ overflowY: "auto" }}
+      >
         {data?.length > 0 ? (
           <ToggleButtonGroup
             color="secondary"

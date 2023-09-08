@@ -20,7 +20,7 @@ EditGroupe.propTypes = {
 
 function EditGroupe({ onClose, handleSubmit, groupeSelected }) {
   const [groupeLibelle, setGroupeLibelle] = useState("");
-  const [groupeCouleur, setCouleurLibelle] = useState("");
+  const [groupeCouleur, setCouleurLibelle] = useState("00000000");
   const isTablet = useResponsive("down", "md");
 
   return (
@@ -43,12 +43,13 @@ function EditGroupe({ onClose, handleSubmit, groupeSelected }) {
         >
           <TextField
             color="secondary"
-            label="Test"
+            label="Titre"
             defaultValue={
               !groupeLibelle ? groupeSelected?.libelle : groupeLibelle
             }
             variant="outlined"
             onInput={(e) => setGroupeLibelle(e.target.value)}
+            required
           />
           <Stack direction="row" alignItems="center">
             <input
