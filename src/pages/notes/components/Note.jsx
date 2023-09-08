@@ -77,22 +77,21 @@ Note.propTypes = {
 };
 
 function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
+  const [content, setContent] = useState({ libelle: "", message: "" });
   const [isInitializing, setIsInitializing] = useState(true);
   const [timeoutId, setTimeoutId] = useState(null); // enregistre l'id du précédent setTimeOut poru l'annuler
   const isTablet = useResponsive("down", "lg");
 
   useEffect(() => {
-    setContent(note?.message ?? null);
-    setTitle(note ? note?.libelle : "");
+    setContent({ libelle: note?.libelle ?? "", message: note?.message ?? "" });
     setIsInitializing(false); // Définir isInitializing sur false une fois que le composant est monté
   }, [note, note?.message]);
 
-  const titleHandleChange = (e) => {
-    e.preventDefault();
-    handleChange({ libelle: e.target.value });
-  };
+  useEffect(() => {
+    if (editOpen && !content.libelle && !content.message) {
+      setContent({ libelle: "", message: "" });
+    }
+  }, [editOpen, content]);
 
   const handleChange = (newValue) => {
     // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
@@ -104,15 +103,13 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
     if (!isInitializing) {
       clearTimeout(timeoutId);
 
-      if (newValue.libelle) {
-        setTitle(newValue.libelle);
-      } else {
-        setContent(newValue.message);
-      }
+      setContent({ ...content, ...newValue });
+
+      console.log(!!verifContent);
       const newTimeoutId =
-        verifContent &&
+        !!verifContent &&
         setTimeout(() => {
-          newNote({ ...newValue, id: note?.id }, editOpen);
+          newNote({ ...content, ...newValue, id: note?.id }, editOpen);
         }, 1000);
 
       setTimeoutId(newTimeoutId);
@@ -126,8 +123,8 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           fullWidth
           inputRef={titleRef}
           name="message"
-          value={title}
-          onInput={titleHandleChange}
+          value={content.libelle}
+          onInput={(e) => handleChange({ libelle: e.target.value })}
           placeholder="Title"
         />
         {isTablet && (
@@ -136,11 +133,10 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           </IconButton>
         )}
       </Box>
-      <Box height="100%" overflow="auto">
+      <Box ref={reactQuillRef} height="100%" overflow="auto">
         <Divider />
         <ReactQuill
-          ref={reactQuillRef}
-          value={content}
+          value={content.message}
           onChange={(newMessage) => handleChange({ message: newMessage })}
           style={{ editorStyle }}
           toolbarStyle={toolbarStyle}

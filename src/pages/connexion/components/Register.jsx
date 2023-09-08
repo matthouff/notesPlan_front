@@ -24,7 +24,8 @@ Register.propTypes = {
 };
 
 function Register({ setAuth, setResponse }) {
-  const isTablet = useResponsive("down", "md");
+  const isTablet = useResponsive("down", "sm");
+  const isLargeTablet = useResponsive("down", "lg");
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -64,7 +65,7 @@ function Register({ setAuth, setResponse }) {
     >
       <Stack
         overflow="auto"
-        sx={{ ...(isTablet && { maxHeight: "300px", py: 1 }) }}
+        sx={{ ...(isTablet && { maxHeight: "300px", py: 1 }), py: 1 }}
       >
         <FormControl sx={{ gap: 4 }} variant="standard">
           <TextField
@@ -74,6 +75,7 @@ function Register({ setAuth, setResponse }) {
             name="nom"
             value={formData.login}
             onChange={handleInputChange}
+            size={isLargeTablet ? "small" : "medium"}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -91,6 +93,7 @@ function Register({ setAuth, setResponse }) {
             name="prenom"
             value={formData.login}
             onChange={handleInputChange}
+            size={isLargeTablet ? "small" : "medium"}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -109,6 +112,7 @@ function Register({ setAuth, setResponse }) {
             type="email"
             value={formData.login}
             onChange={handleInputChange}
+            size={isLargeTablet ? "small" : "medium"}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -126,6 +130,7 @@ function Register({ setAuth, setResponse }) {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
+            size={isLargeTablet ? "small" : "medium"}
             type={"password"}
             InputProps={{
               startAdornment: (

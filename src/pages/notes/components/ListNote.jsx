@@ -35,8 +35,6 @@ function ListNote({
 }) {
   const [openModal, setOpenModal] = useState();
 
-  console.log(actualNote);
-
   const addNote = () => {
     newNote(true);
     noteSelected(null);

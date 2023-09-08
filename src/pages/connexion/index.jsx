@@ -39,17 +39,17 @@ function Connexion() {
             height="100%"
           >
             <Paper
-              sx={{
+              style={{
                 borderRadius: 7,
                 width: "100%",
                 maxWidth: "350px",
                 border: `2px solid ${Theme.palette.primary.main}`,
                 display: "flex",
-                gap: 4,
+                gap: 15,
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                p: 2,
+                paddingTop: "20px",
               }}
             >
               <Typography variant="h2" fontSize={30}>

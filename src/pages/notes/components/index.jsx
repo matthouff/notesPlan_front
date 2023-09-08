@@ -53,6 +53,8 @@ function GroupeNotes({ repertoireSelected }) {
 
   const handleClickOutside = (event) => {
     if (
+      reactQuillRef?.current &&
+      !reactQuillRef?.current?.contains(event.target) &&
       textFielTitledRef?.current &&
       !textFielTitledRef?.current?.contains(event.target) &&
       textFieldEditRef?.current &&
