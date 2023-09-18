@@ -45,12 +45,15 @@ function GroupeNotes({ repertoireSelected }) {
   });
 
   useEffect(() => {
-    setNoteSelected(notes[0])
+    setNoteSelected(notes[0]);
+  }, [notes]);
+
+  useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [notes]);
+  }, []);
 
   const handleClickOutside = (event) => {
     if (
