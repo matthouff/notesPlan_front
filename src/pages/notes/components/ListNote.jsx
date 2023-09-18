@@ -83,7 +83,6 @@ function ListNote({
             sx={{ display: "flex", flexDirection: "column" }}
           >
             {data
-              ?.sort((a, b) => new Date(a.createdat) - new Date(b.createdat))
               .map((note, index) => {
                 return (
                   <PersonnalToggle

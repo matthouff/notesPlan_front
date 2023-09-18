@@ -103,7 +103,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
     if (!isInitializing && (
       content?.libelle !== newValue?.libelle && content?.libelle !== "" &&
       note?.message !== verifContent && verifContent !== undefined
-    )) {
+    ) || editOpen) {
       clearTimeout(timeoutId);
       setContent({ ...content, ...newValue });
 
