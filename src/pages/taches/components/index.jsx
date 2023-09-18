@@ -8,12 +8,12 @@ import {
 } from "@mui/material";
 import Tache from "./tache";
 import { MoreHorizontal, Plus } from "lucide-react";
-import useEntityCrud from "../../../hooks/useEntityCrud";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import EditTache from "./EditTache";
 import DeleteDialog from "../../../components/DeleteDialog";
 import PropTypes from "prop-types";
+import useEditEntity from "../../../hooks/useEditEntity";
 
 Groupe.propTypes = {
   data: PropTypes.array,
@@ -32,7 +32,7 @@ function Groupe({ data, setOpenOption, repertoireSelected, setResponse }) {
     return { id: groupe.id, libelle: groupe.libelle };
   });
 
-  const { createdData, editData, deletedData } = useEntityCrud({
+  const { createdData, editData, deletedData } = useEditEntity({
     entity: "taches",
   });
 

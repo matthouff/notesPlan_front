@@ -13,7 +13,6 @@ import DeleteDialog from "../../../components/DeleteDialog.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
-  repertoireSelected: PropTypes.string,
   actualNote: PropTypes.object,
   addButtonRef: PropTypes.object,
   textFieldEditRef: PropTypes.object,
@@ -77,14 +76,14 @@ function ListNote({
         {data?.length > 0 ? (
           <ToggleButtonGroup
             color="secondary"
-            value={actualNote ?? data[0]}
+            value={actualNote}
             exclusive
             onChange={handleNoteSelected}
             aria-label="text note"
             sx={{ display: "flex", flexDirection: "column" }}
           >
             {data
-              ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
+              ?.sort((a, b) => new Date(a.createdat) - new Date(b.createdat))
               .map((note, index) => {
                 return (
                   <PersonnalToggle

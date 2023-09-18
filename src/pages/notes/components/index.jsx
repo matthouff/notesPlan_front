@@ -32,6 +32,9 @@ function GroupeNotes({ repertoireSelected }) {
     complement: `repertoire-notes`,
     id: repertoireSelected,
     enabled: !!repertoireSelected, // Permet d'attendre que l'id soit présent pour envoyer la requête
+    queryOption: {
+      cacheTime: 0,
+    },
   });
 
   const { mutate } = useMutation(!open ? editData : createdData, {
@@ -42,14 +45,12 @@ function GroupeNotes({ repertoireSelected }) {
   });
 
   useEffect(() => {
-    if (notes) {
-      setNoteSelected(noteSelected ?? notes[0]);
-    }
+    setNoteSelected(notes[0])
     document.addEventListener("click", handleClickOutside);
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [notes, noteSelected, open]);
+  }, [notes]);
 
   const handleClickOutside = (event) => {
     if (
@@ -90,7 +91,6 @@ function GroupeNotes({ repertoireSelected }) {
               data={notes}
               actualNote={noteSelected}
               noteSelected={setNoteSelected}
-              repertoireSelected={repertoireSelected}
               createdData={createdData}
               deletedData={deletedData}
               open={open}
@@ -116,7 +116,7 @@ function GroupeNotes({ repertoireSelected }) {
             <Note
               editData={editData}
               repertoireSelected={repertoireSelected}
-              note={open ? null : noteSelected ?? notes[0]}
+              note={open ? null : noteSelected}
               editOpen={open}
               titleRef={textFielTitledRef}
               reactQuillRef={reactQuillRef}

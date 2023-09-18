@@ -88,7 +88,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
   }, [note, note?.message]);
 
   useEffect(() => {
-    if (editOpen && !content.libelle && !content.message) {
+    if (editOpen && !content?.libelle && !content?.message) {
       setContent({ libelle: "", message: "" });
     }
   }, [editOpen, content]);
@@ -96,16 +96,17 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
   const handleChange = (newValue) => {
     // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
     const verifContent = new DOMParser().parseFromString(
-      newValue.message,
+      newValue?.message,
       "text/html"
     ).documentElement.textContent;
 
-    if (!isInitializing) {
+    if (!isInitializing && (
+      content?.libelle !== newValue?.libelle && content?.libelle !== "" &&
+      note?.message !== verifContent && verifContent !== undefined
+    )) {
       clearTimeout(timeoutId);
-
       setContent({ ...content, ...newValue });
 
-      console.log(!!verifContent);
       const newTimeoutId =
         !!verifContent &&
         setTimeout(() => {
@@ -123,7 +124,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           fullWidth
           inputRef={titleRef}
           name="message"
-          value={content.libelle}
+          value={content?.libelle}
           onInput={(e) => handleChange({ libelle: e.target.value })}
           placeholder="Title"
         />
@@ -136,7 +137,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
       <Box ref={reactQuillRef} height="100%" overflow="auto">
         <Divider />
         <ReactQuill
-          value={content.message}
+          value={content?.message}
           onChange={(newMessage) => handleChange({ message: newMessage })}
           style={{ editorStyle }}
           toolbarStyle={toolbarStyle}

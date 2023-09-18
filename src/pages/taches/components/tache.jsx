@@ -64,8 +64,9 @@ function Tache({ tache, openModal }) {
     >
       <Typography
         sx={{
+          width: "100%",
           overflow: "hidden",
-          whiteSpace: "nowrap",
+          whiteSpace: "wrap",
           textOverflow: "ellipsis",
         }}
       >

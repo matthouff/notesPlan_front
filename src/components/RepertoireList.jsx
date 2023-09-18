@@ -148,7 +148,6 @@ function RepertoireList({
               repertoires
                 ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
                 .map((repertoire, index) => {
-                  console.log(repertoire.libelle);
                   return editOpen &&
                     repertoire?.id === openOption?.selected?.id ? (
                     <Stack
