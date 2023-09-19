@@ -161,7 +161,7 @@ function RepertoireList({
                         style={{ display: "flex", alignItems: "center" }}
                         onSubmit={handleEditSubmit}
                       >
-                        <FormControl>
+                        <FormControl fullWidth>
                           <TextField
                             inputRef={textFieldEditRef}
                             name="libelle"
@@ -206,6 +206,8 @@ function RepertoireList({
                           overflow: "hidden",
                           whiteSpace: "nowrap",
                           textOverflow: "ellipsis",
+                          textTransform: "initial",
+                          fontWeight: "bold"
                         }}
                       >
                         {repertoire.libelle}

@@ -16,10 +16,8 @@ ListNote.propTypes = {
   actualNote: PropTypes.object,
   addButtonRef: PropTypes.object,
   textFieldEditRef: PropTypes.object,
-  textFieldRef: PropTypes.object,
   newNote: PropTypes.func,
   noteSelected: PropTypes.func.isRequired,
-  createdData: PropTypes.func,
   deletedData: PropTypes.func,
 };
 
@@ -36,7 +34,7 @@ function ListNote({
 
   const addNote = () => {
     newNote(true);
-    noteSelected(null);
+    noteSelected(actualNote);
   };
 
   const onDelete = () => {
@@ -76,7 +74,7 @@ function ListNote({
         {data?.length > 0 ? (
           <ToggleButtonGroup
             color="secondary"
-            value={actualNote}
+            value={data.filter(note => note?.id === actualNote?.id)[0] ?? data[0]}
             exclusive
             onChange={handleNoteSelected}
             aria-label="text note"
@@ -100,7 +98,7 @@ function ListNote({
                     value={note}
                     aria-label="left aligned"
                   >
-                    <Typography variant="body2">{note?.libelle}</Typography>
+                    <Typography variant="body2" textTransform="initial">{note?.libelle}</Typography>
                     <Trash
                       style={{ stroke: "#C00" }}
                       onClick={() => setOpenModal(true)}

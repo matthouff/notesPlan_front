@@ -37,16 +37,16 @@ function GroupeNotes({ repertoireSelected }) {
     },
   });
 
+  useEffect(() => {
+    setNoteSelected(notes[0]);
+  }, [repertoireSelected]);
+
   const { mutate } = useMutation(!open ? editData : createdData, {
     onSuccess: (response) => {
       setResponse({ ...response.data, key: new Date().getTime(), open: true });
       setOpen(false);
     },
   });
-
-  useEffect(() => {
-    setNoteSelected(notes[0]);
-  }, [notes]);
 
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
@@ -119,7 +119,7 @@ function GroupeNotes({ repertoireSelected }) {
             <Note
               editData={editData}
               repertoireSelected={repertoireSelected}
-              note={open ? null : noteSelected}
+              note={open ? null : noteSelected ?? notes[0]}
               editOpen={open}
               titleRef={textFielTitledRef}
               reactQuillRef={reactQuillRef}
