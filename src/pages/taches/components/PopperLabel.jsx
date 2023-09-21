@@ -89,13 +89,18 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
           justifyContent="space-between"
         >
           Mes labels
-          <Button
-            onClick={() => setNewLabel(true)}
-            size="small"
-            sx={{ p: 0.5, border: "1px solid #000", color: "#000" }}
-          >
-            Nouveau
-          </Button>
+          <Box>
+            <Button
+              onClick={() => setNewLabel(true)}
+              size="small"
+              sx={{ p: 0.5, border: "1px solid #000", color: "#000" }}
+            >
+              Nouveau
+            </Button>
+            <IconButton edge="end" onClick={handleClose}>
+              <X />
+            </IconButton>
+          </Box>
         </Typography>
         {newLabel && (
           <form onSubmit={handleSubmit}>
@@ -189,6 +194,7 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
             })}
         </List>
       </Box>
+
       {selected?.open && (
         <DeleteDialog
           open
@@ -199,6 +205,7 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
         />
       )}
       {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
+
     </Dialog>
   );
 }

@@ -46,20 +46,10 @@ function Tache({ tache, openModal }) {
         flexDirection: "column",
         alignItems: "flex-start",
       }}
-      onMouseEnter={() => setIconActive(true)}
-      onMouseLeave={() => setIconActive(false)}
       secondaryAction={
-        isDesktop ? (
-          iconActive && (
-            <IconButton edge="end" onClick={() => openModal(tache)}>
-              <MoreVertical />
-            </IconButton>
-          )
-        ) : (
-          <IconButton edge="end" onClick={() => openModal(tache)}>
-            <MoreVertical />
-          </IconButton>
-        )
+        <IconButton edge="end" onClick={() => openModal(tache)}>
+          <MoreVertical />
+        </IconButton>
       }
     >
       <Typography
