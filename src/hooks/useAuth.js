@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 const instance = axios.create({
-  baseURL: "http://127.0.0.1:3000/",
+  baseURL: "http://localhost:3000/",
   headers: {
     "Content-Type": "application/json",
     "Cache-Control": "no-cache",

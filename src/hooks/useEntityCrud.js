@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { useQuery, useQueryClient } from "react-query";
 
 const instance = axios.create({
-  baseURL: "http://127.0.0.1:3000/",
+  baseURL: "http://localhost:3000/",
   withCredentials: true, // Envoyer les cookies avec les requêtes
   headers: {
     "content-type": "application/json",
@@ -19,9 +19,8 @@ function useEntityCrud({
   queryOption = { suspense: false },
 }) {
   const queryClient = useQueryClient();
-  const fullEntity = `${entity}${complement ? "/" + complement : ""}${
-    id ? "/" + id : ""
-  }`;
+  const fullEntity = `${entity}${complement ? "/" + complement : ""}${id ? "/" + id : ""
+    }`;
 
   const createdData = useCallback(
     async (data) => {
@@ -58,9 +57,8 @@ function useEntityCrud({
 
   const addRelationData = useCallback(
     async (data) => {
-      const url = `${entity}/${data.id}${complement ? "/" + complement : ""}${
-        id ? "/" + id : ""
-      }`;
+      const url = `${entity}/${data.id}${complement ? "/" + complement : ""}${id ? "/" + id : ""
+        }`;
       await instance.patch(url, data);
       queryClient.invalidateQueries({ entity });
     },

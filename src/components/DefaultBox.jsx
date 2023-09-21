@@ -62,37 +62,43 @@ function DefaultBox({ persoStyle, dark, children }) {
         </Link>
         {!isTablet
           ? isAuthenticated && (
-              <Stack
-                fontSize={20}
-                flexDirection="row"
-                gap={5}
-                display="flex"
-                alignItems="center"
-              >
-                <>
-                  <Link
-                    style={{ color: "#fff", textDecoration: "none" }}
-                    to="/notes"
-                  >
-                    Mes notes
-                  </Link>
-                  <Link
-                    style={{ color: "#fff", textDecoration: "none" }}
-                    to="/taches"
-                  >
-                    Mes tâches
-                  </Link>
-                  <Button onClick={handleLogout} variant="contained">
-                    Déconnexion
-                  </Button>
-                </>
-              </Stack>
-            )
+            <Stack
+              fontSize={20}
+              flexDirection="row"
+              gap={5}
+              display="flex"
+              alignItems="center"
+            >
+              <>
+                <Link
+                  style={{ color: "#fff", textDecoration: "none" }}
+                  to="/"
+                >
+                  Accueil
+                </Link>
+                <Link
+                  style={{ color: "#fff", textDecoration: "none" }}
+                  to="/notes"
+                >
+                  Mes notes
+                </Link>
+                <Link
+                  style={{ color: "#fff", textDecoration: "none" }}
+                  to="/taches"
+                >
+                  Mes tâches
+                </Link>
+                <Button onClick={handleLogout} variant="contained">
+                  Déconnexion
+                </Button>
+              </>
+            </Stack>
+          )
           : isAuthenticated && (
-              <IconButton color="primary" onClick={handleClick}>
-                {open ? <X size={30} /> : <MenuIcon size={30} />}
-              </IconButton>
-            )}
+            <IconButton color="primary" onClick={handleClick}>
+              {open ? <X size={30} /> : <MenuIcon size={30} />}
+            </IconButton>
+          )}
       </Stack>
       <Stack
         sx={{
