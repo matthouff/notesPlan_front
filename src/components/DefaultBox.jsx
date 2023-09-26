@@ -1,5 +1,5 @@
 import { Box, Button, IconButton, Menu, MenuItem, Stack } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import background from "../assets/paysageDesktop.jpg";
 import backgroundDark from "../assets/darkPaysage.jpg";
 import PropTypes from "prop-types";
@@ -15,6 +15,7 @@ DefaultBox.propTypes = {
 };
 
 function DefaultBox({ persoStyle, dark, children }) {
+  const sampleLocation = useLocation();
   const { logout, isAuthenticated } = useAuth();
   const isTablet = useResponsive("down", "md");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -62,43 +63,61 @@ function DefaultBox({ persoStyle, dark, children }) {
         </Link>
         {!isTablet
           ? isAuthenticated && (
-            <Stack
-              fontSize={20}
-              flexDirection="row"
-              gap={5}
-              display="flex"
-              alignItems="center"
-            >
-              <>
-                <Link
-                  style={{ color: "#fff", textDecoration: "none" }}
-                  to="/"
-                >
-                  Accueil
-                </Link>
-                <Link
-                  style={{ color: "#fff", textDecoration: "none" }}
-                  to="/notes"
-                >
-                  Mes notes
-                </Link>
-                <Link
-                  style={{ color: "#fff", textDecoration: "none" }}
-                  to="/taches"
-                >
-                  Mes tâches
-                </Link>
-                <Button onClick={handleLogout} variant="contained">
-                  Déconnexion
-                </Button>
-              </>
-            </Stack>
-          )
+              <Stack
+                fontSize={20}
+                flexDirection="row"
+                gap={5}
+                display="flex"
+                alignItems="center"
+              >
+                <>
+                  <Link
+                    style={{
+                      color:
+                        sampleLocation.pathname === "/" || !sampleLocation
+                          ? "#D5BE87"
+                          : "#fff",
+                      textDecoration: "none",
+                    }}
+                    to="/"
+                  >
+                    Accueil
+                  </Link>
+                  <Link
+                    style={{
+                      color:
+                        sampleLocation.pathname === "/notes"
+                          ? "#D5BE87"
+                          : "#fff",
+                      textDecoration: "none",
+                    }}
+                    to="/notes"
+                  >
+                    Mes notes
+                  </Link>
+                  <Link
+                    style={{
+                      color:
+                        sampleLocation.pathname === "/taches"
+                          ? "#D5BE87"
+                          : "#fff",
+                      textDecoration: "none",
+                    }}
+                    to="/taches"
+                  >
+                    Mes tâches
+                  </Link>
+                  <Button onClick={handleLogout} variant="contained">
+                    Déconnexion
+                  </Button>
+                </>
+              </Stack>
+            )
           : isAuthenticated && (
-            <IconButton color="primary" onClick={handleClick}>
-              {open ? <X size={30} /> : <MenuIcon size={30} />}
-            </IconButton>
-          )}
+              <IconButton color="primary" onClick={handleClick}>
+                {open ? <X size={30} /> : <MenuIcon size={30} />}
+              </IconButton>
+            )}
       </Stack>
       <Stack
         sx={{
