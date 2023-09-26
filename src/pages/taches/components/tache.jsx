@@ -1,8 +1,6 @@
 import { Divider, IconButton, ListItem, Typography } from "@mui/material";
 import { MoreVertical } from "lucide-react";
 import PropTypes from "prop-types";
-import { useState } from "react";
-import useResponsive from "../../../hooks/useResponsive";
 
 Tache.propTypes = {
   tache: PropTypes.object,
@@ -10,9 +8,6 @@ Tache.propTypes = {
 };
 
 function Tache({ tache, openModal }) {
-  const [iconActive, setIconActive] = useState(false);
-  const isDesktop = useResponsive("up", "md");
-
   const couleursFiltred = tache?.labels.filter(
     (label) => label.couleur !== null
   );
@@ -56,7 +51,7 @@ function Tache({ tache, openModal }) {
         sx={{
           width: "100%",
           overflow: "hidden",
-          whiteSpace: "wrap",
+          whiteSpace: "nowrap",
           textOverflow: "ellipsis",
         }}
       >

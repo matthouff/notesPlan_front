@@ -20,7 +20,7 @@ EditGroupe.propTypes = {
 
 function EditGroupe({ onClose, handleSubmit, groupeSelected }) {
   const [groupeLibelle, setGroupeLibelle] = useState("");
-  const [groupeCouleur, setCouleurLibelle] = useState("00000000");
+  const [groupeCouleur, setCouleurLibelle] = useState();
   const isTablet = useResponsive("down", "md");
 
   return (
