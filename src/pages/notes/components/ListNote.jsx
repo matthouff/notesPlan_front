@@ -74,43 +74,55 @@ function ListNote({
         {data?.length > 0 ? (
           <ToggleButtonGroup
             color="secondary"
-            value={data.filter(note => note?.id === actualNote?.id)[0] ?? data[0]}
+            value={
+              data.filter((note) => note?.id === actualNote?.id)[0] ?? data[0]
+            }
             exclusive
             onChange={handleNoteSelected}
             aria-label="text note"
             sx={{ display: "flex", flexDirection: "column" }}
           >
-            {data
-              .map((note, index) => {
-                return (
-                  <PersonnalToggle
-                    ref={textFieldEditRef}
-                    className="trashNote"
+            {data.map((note, index) => {
+              return (
+                <PersonnalToggle
+                  ref={textFieldEditRef}
+                  className="trashNote"
+                  sx={{
+                    ...(index < data.length - 1 && {
+                      borderBottom: "1px solid #fffb",
+                    }),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                  }}
+                  key={note?.id}
+                  value={note}
+                  aria-label="left aligned"
+                >
+                  <Typography
                     sx={{
-                      ...(index < data.length - 1 && {
-                        borderBottom: "1px solid #fffb",
-                      }),
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
+                      width: "100%",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                      textOverflow: "ellipsis",
                     }}
-                    key={note?.id}
-                    value={note}
-                    aria-label="left aligned"
+                    variant="body2"
+                    textTransform="initial"
                   >
-                    <Typography variant="body2" textTransform="initial">{note?.libelle}</Typography>
-                    <Trash
-                      style={{ stroke: "#C00" }}
-                      onClick={() => setOpenModal(true)}
-                      width={20}
-                    />
-                  </PersonnalToggle>
-                );
-              })}
+                    {note?.libelle}
+                  </Typography>
+                  <Trash
+                    style={{ stroke: "#C00" }}
+                    onClick={() => setOpenModal(true)}
+                    width={20}
+                  />
+                </PersonnalToggle>
+              );
+            })}
           </ToggleButtonGroup>
         ) : (
           <Typography textAlign="center" marginTop={5} color="primary">
-            Aucune notes
+            Aucune note
           </Typography>
         )}
         {openModal && (
