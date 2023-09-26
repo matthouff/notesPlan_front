@@ -213,8 +213,7 @@ function RepertoireList({
                       >
                         {repertoire.libelle}
                       </Typography>
-                      <IconButton
-                        size="small"
+                      <MoreVertical
                         onClick={(e) =>
                           setOpenOption({
                             open: true,
@@ -222,9 +221,8 @@ function RepertoireList({
                             selected: repertoire,
                           })
                         }
-                      >
-                        <MoreVertical style={{ stroke: "#fff" }} />
-                      </IconButton>
+                        style={{ stroke: "#fff" }}
+                      />
                     </PersonnalToggle>
                   );
                 })}
