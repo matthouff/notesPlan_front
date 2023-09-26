@@ -195,6 +195,7 @@ function RepertoireList({
                         }),
                         display: "flex",
                         justifyContent: "space-between",
+                        p: 1,
                       }}
                       key={repertoire?.id}
                       value={repertoire?.id}
@@ -207,12 +208,13 @@ function RepertoireList({
                           whiteSpace: "nowrap",
                           textOverflow: "ellipsis",
                           textTransform: "initial",
-                          fontWeight: "bold"
+                          fontWeight: "bold",
                         }}
                       >
                         {repertoire.libelle}
                       </Typography>
-                      <MoreVertical
+                      <IconButton
+                        size="small"
                         onClick={(e) =>
                           setOpenOption({
                             open: true,
@@ -220,8 +222,9 @@ function RepertoireList({
                             selected: repertoire,
                           })
                         }
-                        style={{ stroke: "#fff" }}
-                      />
+                      >
+                        <MoreVertical style={{ stroke: "#fff" }} />
+                      </IconButton>
                     </PersonnalToggle>
                   );
                 })}
