@@ -100,10 +100,14 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
       "text/html"
     ).documentElement.textContent;
 
-    if (!isInitializing && (
-      content?.libelle !== newValue?.libelle && content?.libelle !== "" &&
-      note?.message !== verifContent && verifContent !== undefined
-    ) || editOpen) {
+    if (
+      (!isInitializing &&
+        content?.libelle !== newValue?.libelle &&
+        content?.libelle !== "" &&
+        note?.message !== verifContent &&
+        verifContent !== undefined) ||
+      editOpen
+    ) {
       clearTimeout(timeoutId);
       setContent({ ...content, ...newValue });
 
@@ -123,6 +127,7 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
         <PersoTextField
           fullWidth
           inputRef={titleRef}
+          inputProps={{ maxLength: 60 }}
           name="message"
           value={content?.libelle}
           onInput={(e) => handleChange({ libelle: e.target.value })}
