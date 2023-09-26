@@ -1,4 +1,4 @@
-import { Button, Grid, Stack } from "@mui/material";
+import { Grid } from "@mui/material";
 import Note from "./Note.jsx";
 import ListNote from "./ListNote.jsx";
 import { useEffect, useRef, useState } from "react";
@@ -39,6 +39,7 @@ function GroupeNotes({ repertoireSelected }) {
 
   useEffect(() => {
     setNoteSelected(notes[0]);
+    setOpen(false);
   }, [repertoireSelected]);
 
   const { mutate } = useMutation(!open ? editData : createdData, {
@@ -89,30 +90,18 @@ function GroupeNotes({ repertoireSelected }) {
     repertoireSelected && (
       <>
         <Grid item xs={3}>
-          {notes.length > 0 ? (
-            <ListNote
-              data={notes}
-              actualNote={noteSelected}
-              noteSelected={setNoteSelected}
-              createdData={createdData}
-              deletedData={deletedData}
-              open={open}
-              newNote={setOpen}
-              addButtonRef={addButtonRef}
-              textFieldEditRef={textFieldEditRef}
-              textFieldRef={textFieldRef}
-            />
-          ) : (
-            <Stack justifyContent="center" alignItems="center" height="100%">
-              <Button
-                onClick={() => setOpen(true)}
-                variant="contained"
-                fontSize={20}
-              >
-                Ajouter une note
-              </Button>
-            </Stack>
-          )}
+          <ListNote
+            data={notes}
+            actualNote={noteSelected}
+            noteSelected={setNoteSelected}
+            createdData={createdData}
+            deletedData={deletedData}
+            open={open}
+            newNote={setOpen}
+            addButtonRef={addButtonRef}
+            textFieldEditRef={textFieldEditRef}
+            textFieldRef={textFieldRef}
+          />
         </Grid>
         <Grid item xs={6}>
           {(notes[0] || open) && (
