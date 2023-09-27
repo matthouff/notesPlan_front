@@ -75,6 +75,7 @@ function GroupeNotes({ repertoireSelected }) {
   const newNote = (note) => {
     if (open) {
       mutate({ ...note, repertoireId: repertoireSelected });
+      setNoteSelected({ ...noteSelected, ...note });
       textFielTitledRef.current.focus();
     } else {
       mutate({
@@ -82,8 +83,12 @@ function GroupeNotes({ repertoireSelected }) {
         id: noteSelected?.id ? noteSelected?.id : notes[0]?.id,
       });
     }
-    setNoteSelected({ ...noteSelected, ...note });
     setOpen(false); // Fermer le mode édition
+  };
+
+  const deleteNote = (x) => {
+    deletedData(x);
+    setNoteSelected(notes[0]);
   };
 
   return (
@@ -95,7 +100,7 @@ function GroupeNotes({ repertoireSelected }) {
             actualNote={noteSelected}
             noteSelected={setNoteSelected}
             createdData={createdData}
-            deletedData={deletedData}
+            deletedData={deleteNote}
             open={open}
             newNote={setOpen}
             addButtonRef={addButtonRef}
