@@ -39,11 +39,7 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
 
   const { mutate } = useMutation(createdData, {
     onSuccess: (response) => {
-      setResponse({
-        ...response,
-        key: new Date().getTime(),
-        open: true,
-      });
+      setResponse({ ...response, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des taches après la création d'un nouvel élément
       queryClient.invalidateQueries("groupes");
     },
@@ -205,7 +201,6 @@ function PopperLabel({ handleClose, labelSelected, repertoireId }) {
         />
       )}
       {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
-
     </Dialog>
   );
 }
