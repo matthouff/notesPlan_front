@@ -102,6 +102,7 @@ function Note({
     }
   }, [editOpen, content]);
 
+  // Permet de traiter et vérifier les données des libelle et messages
   const handleChange = (newValue) => {
     // Permet de transformer le html en text pour vérifier si c'est une valeur vide ou non
     const verifContent = new DOMParser().parseFromString(
@@ -112,16 +113,14 @@ function Note({
     if (
       (!isInitializing &&
         content?.libelle !== newValue?.libelle &&
-        content?.libelle !== "" &&
-        note?.message !== verifContent &&
-        verifContent !== undefined) ||
+        note?.message !== verifContent) ||
       editOpen
     ) {
       clearTimeout(timeoutId);
       setContent({ ...content, ...newValue });
 
       const newTimeoutId =
-        !!verifContent &&
+        (!!newValue.libelle || !!newValue.message) &&
         setTimeout(() => {
           newNote({ ...content, ...newValue, id: note?.id }, editOpen);
         }, 1000);

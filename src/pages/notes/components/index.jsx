@@ -36,11 +36,7 @@ function GroupeNotes({ repertoireSelected }) {
     },
   });
 
-  useEffect(() => {
-    setNoteSelected(notes[0]);
-    setOpen(false);
-  }, [repertoireSelected]);
-
+  // Envoyer les requêtes d'ajout / edit avec la response si success
   const { mutate } = useMutation(!open ? editData : createdData, {
     onSuccess: (response) => {
       setResponse({ ...response.data, key: new Date().getTime(), open: true });
@@ -48,6 +44,18 @@ function GroupeNotes({ repertoireSelected }) {
     },
   });
 
+  // fermer l'édition et sélectionner notes[0] lors du changement de répertoire
+  useEffect(() => {
+    setNoteSelected(notes[0]);
+    setOpen(false);
+  }, [repertoireSelected]);
+
+  // Faire un focus sur le champ libelle de la note lors d'un ajout
+  useEffect(() => {
+    open && textFielTitledRef.current.focus();
+  }, [open]);
+
+  // Permet d'appeler handleClickOutside
   useEffect(() => {
     document.addEventListener("click", handleClickOutside);
     return () => {
@@ -55,6 +63,7 @@ function GroupeNotes({ repertoireSelected }) {
     };
   }, []);
 
+  // Fermer l'edition lorsque l'on clique ailleurs que les éléments compris dans le if
   const handleClickOutside = (event) => {
     if (
       reactQuillRef?.current &&
@@ -74,7 +83,6 @@ function GroupeNotes({ repertoireSelected }) {
   const newNote = (note) => {
     if (open) {
       mutate({ ...note, repertoireId: repertoireSelected });
-      textFielTitledRef.current.focus();
     } else {
       mutate({
         ...note,
