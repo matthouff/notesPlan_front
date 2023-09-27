@@ -3,34 +3,41 @@ div.css-3bmhjh-MuiPaper-root-MuiPopover-paper {
   box-shadow: none;
 }
 
+li.MuiListItem-root > div.MuiButtonBase-root.Mui-selected,
+li.MuiListItem-root > div.MuiButtonBase-root.Mui-selected:hover {
+  background-color: #d5be8744;
+}
 
+li.MuiListItem-root > div.MuiButtonBase-root:hover {
+  background-color: #fff2;
+}
 
 label.Mui-focused {
-  color: "#fff",
-};
+  color: "#fff";
+}
 
 label {
-  color: "#fff",
-};
+  color: "#fff";
+}
 
 .MuiInput-underline:after {
-  border-bottom-color: "#fff",
-};
+  border-bottom-color: "#fff";
+}
 
 .MuiOutlinedInput-root {
   & fieldset {
-    border-color: "#fff",
-  };
+    border-color: "#fff";
+  }
 
   &:hover fieldset {
-    border-color: "#fff",
-  };
+    border-color: "#fff";
+  }
 
   &.Mui-focused fieldset {
-    border-color: "red",
-  };
+    border-color: "red";
+  }
 
   & .MuiOutlinedInput-input {
-    color: "#fff",
-  };
+    color: "#fff";
+  }
 }

@@ -101,7 +101,12 @@ function Taches() {
 
   return (
     <DefaultBox
-      persoStyle={{ pr: "5%", display: "flex", flexDirection: "row", gap: 10 }}
+      persoStyle={{
+        px: isTablet ? "5%" : 10,
+        display: "flex",
+        flexDirection: "row",
+        gap: 10,
+      }}
       dark
     >
       {!isLoading ? (

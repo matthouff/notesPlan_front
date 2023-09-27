@@ -2,12 +2,13 @@ import {
   Box,
   FormControl,
   IconButton,
+  List,
+  ListItem,
+  ListItemButton,
   Stack,
   TextField,
-  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import PersonnalToggle from "./PersoToggle";
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { Plus, Check, MoreVertical } from "lucide-react";
@@ -127,23 +128,8 @@ function RepertoireList({
         <Typography variant="h6" color="primary">
           Repertoires
         </Typography>
-        <Box border="1px solid #fffb" borderLeft="none" height="100%">
-          <ToggleButtonGroup
-            color="secondary"
-            value={actualRepertoire}
-            exclusive
-            onChange={(e, repertoireId) => selectedRepertoire(repertoireId)}
-            aria-label="text Repertoire"
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              maxHeight: 400,
-              overflow: "auto",
-              boxShadow:
-                repertoires.length > 9 &&
-                "inset 0px -10px 30px -10px rgba(0, 0, 0, 1)",
-            }}
-          >
+        <Box border="1px solid #fffb" height="100%">
+          <List sx={{ p: 0 }}>
             {repertoires &&
               repertoires
                 ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
@@ -188,45 +174,57 @@ function RepertoireList({
                       </form>
                     </Stack>
                   ) : (
-                    <PersonnalToggle
-                      sx={{
-                        ...(index < repertoires.length - 1 && {
-                          borderBottom: "1px solid #fffb",
-                        }),
-                        display: "flex",
-                        justifyContent: "space-between",
-                        p: 1,
-                      }}
+                    <ListItem
                       key={repertoire?.id}
-                      value={repertoire?.id}
-                      aria-label="left aligned"
+                      sx={{ p: 0 }}
+                      secondaryAction={
+                        <IconButton
+                          onClick={(e) =>
+                            setOpenOption({
+                              open: true,
+                              anchor: e.currentTarget,
+                              selected: repertoire,
+                            })
+                          }
+                        >
+                          <MoreVertical style={{ stroke: "#fff" }} />
+                        </IconButton>
+                      }
                     >
-                      <Typography
-                        variant="body2"
+                      <ListItemButton
                         sx={{
-                          overflow: "hidden",
-                          whiteSpace: "nowrap",
-                          textOverflow: "ellipsis",
-                          textTransform: "initial",
-                          fontWeight: "bold",
+                          ...(index < repertoires.length - 1 && {
+                            borderBottom: "1px solid #fffb",
+                          }),
+                          display: "flex",
+                          justifyContent: "space-between",
+                          py: 1.5,
                         }}
-                      >
-                        {repertoire.libelle}
-                      </Typography>
-                      <MoreVertical
-                        onClick={(e) =>
-                          setOpenOption({
-                            open: true,
-                            anchor: e.currentTarget,
-                            selected: repertoire,
-                          })
+                        selected={
+                          repertoire?.id === actualRepertoire ??
+                          repertoires[0]?.id
                         }
-                        style={{ stroke: "#fff" }}
-                      />
-                    </PersonnalToggle>
+                        key={repertoire?.id}
+                        onClick={() => selectedRepertoire(repertoire?.id)}
+                      >
+                        <Typography
+                          variant="body2"
+                          color="primary"
+                          sx={{
+                            overflow: "hidden",
+                            whiteSpace: "nowrap",
+                            textOverflow: "ellipsis",
+                            textTransform: "initial",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {repertoire.libelle}
+                        </Typography>
+                      </ListItemButton>
+                    </ListItem>
                   );
                 })}
-          </ToggleButtonGroup>
+          </List>
           {open && (
             <Stack
               flexDirection="row"
