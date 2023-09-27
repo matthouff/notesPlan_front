@@ -7,39 +7,29 @@ import {
 } from "@mui/material";
 import PropTypes from "prop-types";
 import PersonnalToggle from "../../../components/PersoToggle.jsx";
-import { Trash } from "lucide-react";
-import { useState } from "react";
-import DeleteDialog from "../../../components/DeleteDialog.jsx";
 
 ListNote.propTypes = {
   data: PropTypes.array,
+  open: PropTypes.bool,
   actualNote: PropTypes.object,
   addButtonRef: PropTypes.object,
   textFieldEditRef: PropTypes.object,
   newNote: PropTypes.func,
-  noteSelected: PropTypes.func.isRequired,
-  deletedData: PropTypes.func,
+  noteSelected: PropTypes.func,
 };
 
 function ListNote({
   data,
+  open,
   actualNote,
   noteSelected,
-  deletedData,
   newNote,
   textFieldEditRef,
   addButtonRef,
 }) {
-  const [openModal, setOpenModal] = useState();
-
   const addNote = () => {
     newNote(true);
     noteSelected(actualNote);
-  };
-
-  const onDelete = () => {
-    deletedData(actualNote.id);
-    setOpenModal(false);
   };
 
   const handleNoteSelected = (e, newNote) => {
@@ -75,7 +65,10 @@ function ListNote({
           <ToggleButtonGroup
             color="secondary"
             value={
-              data.filter((note) => note?.id === actualNote?.id)[0] ?? data[0]
+              !open
+                ? data.filter((note) => note?.id === actualNote?.id)[0] ??
+                  data[0]
+                : null
             }
             exclusive
             onChange={handleNoteSelected}
@@ -91,13 +84,9 @@ function ListNote({
                     ...(index < data.length - 1 && {
                       borderBottom: "1px solid #fffb",
                     }),
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
                   }}
                   key={note?.id}
                   value={note}
-                  aria-label="left aligned"
                 >
                   <Typography
                     sx={{
@@ -106,16 +95,12 @@ function ListNote({
                       whiteSpace: "nowrap",
                       textOverflow: "ellipsis",
                     }}
+                    textAlign="start"
                     variant="body2"
                     textTransform="initial"
                   >
                     {note?.libelle}
                   </Typography>
-                  <Trash
-                    style={{ stroke: "#C00" }}
-                    onClick={() => setOpenModal(true)}
-                    width={20}
-                  />
                 </PersonnalToggle>
               );
             })}
@@ -124,15 +109,6 @@ function ListNote({
           <Typography textAlign="center" marginTop={5} color="primary">
             Aucune note
           </Typography>
-        )}
-        {openModal && (
-          <DeleteDialog
-            open
-            selected={actualNote}
-            setOpenModal={setOpenModal}
-            onDelete={onDelete}
-            title="supprimer la note ?"
-          />
         )}
       </Box>
     </Stack>

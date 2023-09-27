@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { useEffect } from "react";
 import useResponsive from "../../../hooks/useResponsive";
 import { Trash } from "lucide-react";
+import DeleteDialog from "../../../components/DeleteDialog";
 
 const PersoTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
@@ -73,10 +74,18 @@ Note.propTypes = {
   titleRef: PropTypes.object,
   reactQuillRef: PropTypes.object,
   newNote: PropTypes.func,
-  deleted: PropTypes.func,
+  deletedData: PropTypes.func,
 };
 
-function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
+function Note({
+  note,
+  titleRef,
+  reactQuillRef,
+  newNote,
+  editOpen,
+  deletedData,
+}) {
+  const [openModal, setOpenModal] = useState();
   const [content, setContent] = useState({ libelle: "", message: "" });
   const [isInitializing, setIsInitializing] = useState(true);
   const [timeoutId, setTimeoutId] = useState(null); // enregistre l'id du précédent setTimeOut poru l'annuler
@@ -121,6 +130,11 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
     }
   };
 
+  const onDelete = () => {
+    deletedData(note.id);
+    setOpenModal(false);
+  };
+
   return (
     <Stack position="relative" height="100%">
       <Box display="flex">
@@ -133,11 +147,13 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           onInput={(e) => handleChange({ libelle: e.target.value })}
           placeholder="Title"
         />
-        {isTablet && (
-          <IconButton onClick={deleted} color="error">
-            <Trash />
-          </IconButton>
-        )}
+        <IconButton
+          sx={{ mx: !isTablet && 2 }}
+          onClick={setOpenModal}
+          color="error"
+        >
+          <Trash width={30} height={30} />
+        </IconButton>
       </Box>
       <Box ref={reactQuillRef} height="100%" overflow="auto">
         <Divider />
@@ -152,6 +168,15 @@ function Note({ note, titleRef, reactQuillRef, newNote, editOpen, deleted }) {
           }}
         />
       </Box>
+      {openModal && (
+        <DeleteDialog
+          open
+          selected={note}
+          setOpenModal={setOpenModal}
+          onDelete={onDelete}
+          title="supprimer la note ?"
+        />
+      )}
     </Stack>
   );
 }

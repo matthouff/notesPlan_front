@@ -18,7 +18,6 @@ function GroupeNotes({ repertoireSelected }) {
   const textFielTitledRef = useRef(null);
   const reactQuillRef = useRef(null);
   const textFieldEditRef = useRef(null);
-  const textFieldRef = useRef(null);
   const addButtonRef = useRef(null);
   let editRef = useRef(null);
 
@@ -75,7 +74,6 @@ function GroupeNotes({ repertoireSelected }) {
   const newNote = (note) => {
     if (open) {
       mutate({ ...note, repertoireId: repertoireSelected });
-      setNoteSelected({ ...noteSelected, ...note });
       textFielTitledRef.current.focus();
     } else {
       mutate({
@@ -83,12 +81,13 @@ function GroupeNotes({ repertoireSelected }) {
         id: noteSelected?.id ? noteSelected?.id : notes[0]?.id,
       });
     }
+    setNoteSelected({ ...noteSelected, ...note });
     setOpen(false); // Fermer le mode édition
   };
 
   const deleteNote = (x) => {
     deletedData(x);
-    setNoteSelected(notes[0]);
+    setNoteSelected(null);
   };
 
   return (
@@ -99,25 +98,21 @@ function GroupeNotes({ repertoireSelected }) {
             data={notes}
             actualNote={noteSelected}
             noteSelected={setNoteSelected}
-            createdData={createdData}
-            deletedData={deleteNote}
             open={open}
             newNote={setOpen}
             addButtonRef={addButtonRef}
             textFieldEditRef={textFieldEditRef}
-            textFieldRef={textFieldRef}
           />
         </Grid>
         <Grid item xs={6}>
           {(notes[0] || open) && (
             <Note
-              editData={editData}
-              repertoireSelected={repertoireSelected}
               note={open ? null : noteSelected ?? notes[0]}
               editOpen={open}
               titleRef={textFielTitledRef}
               reactQuillRef={reactQuillRef}
               newNote={newNote}
+              deletedData={deleteNote}
             />
           )}
         </Grid>
