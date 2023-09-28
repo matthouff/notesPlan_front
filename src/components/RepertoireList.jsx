@@ -52,7 +52,7 @@ function RepertoireList({
     onSuccess: (error) => {
       setResponse({ ...error.data, key: new Date().getTime(), open: true });
       // Mettre à jour la liste des répertoires après la création d'un nouvel élément
-      !editOpen && setRepertoireSelected();
+      !editOpen && setRepertoireSelected(null);
       queryClient.invalidateQueries("repertoires_notes");
     },
   });
@@ -131,99 +131,97 @@ function RepertoireList({
         <Box border="1px solid #fffb" height="100%">
           <List sx={{ p: 0 }}>
             {repertoires &&
-              repertoires
-                ?.sort((a, b) => new Date(b.createdat) - new Date(a.createdat))
-                .map((repertoire, index) => {
-                  return editOpen &&
-                    repertoire?.id === openOption?.selected?.id ? (
-                    <Stack
-                      key={repertoire.id}
-                      flexDirection="row"
-                      position="relative"
-                      alignItems="center"
-                      justifyContent="center"
+              repertoires.map((repertoire, index) => {
+                return editOpen &&
+                  repertoire?.id === openOption?.selected?.id ? (
+                  <Stack
+                    key={repertoire.id}
+                    flexDirection="row"
+                    position="relative"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <form
+                      style={{ display: "flex", alignItems: "center" }}
+                      onSubmit={handleEditSubmit}
                     >
-                      <form
-                        style={{ display: "flex", alignItems: "center" }}
-                        onSubmit={handleEditSubmit}
-                      >
-                        <FormControl fullWidth>
-                          <TextField
-                            inputRef={textFieldEditRef}
-                            name="libelle"
-                            value={libelle ?? openOption?.selected?.libelle}
-                            onInput={(e) => setLibelle(e.target.value)}
-                            InputProps={{
-                              style: {
-                                width: "100%",
-                                color: "#fff",
-                                paddingRight: 40,
-                              },
-                            }}
-                            color="secondary"
-                          />
-                        </FormControl>
-                        <IconButton
-                          color="primary"
-                          ref={sendButtonRef}
-                          type="submit"
-                          sx={{ position: "absolute", minWidth: 4, right: 10 }}
-                        >
-                          <Check />
-                        </IconButton>
-                      </form>
-                    </Stack>
-                  ) : (
-                    <ListItem
-                      key={repertoire?.id}
-                      sx={{ p: 0 }}
-                      secondaryAction={
-                        <IconButton
-                          onClick={(e) =>
-                            setOpenOption({
-                              open: true,
-                              anchor: e.currentTarget,
-                              selected: repertoire,
-                            })
-                          }
-                        >
-                          <MoreVertical style={{ stroke: "#fff" }} />
-                        </IconButton>
-                      }
-                    >
-                      <ListItemButton
-                        sx={{
-                          ...(index < repertoires.length - 1 && {
-                            borderBottom: "1px solid #fffb",
-                          }),
-                          display: "flex",
-                          justifyContent: "space-between",
-                          py: 1.5,
-                        }}
-                        selected={
-                          repertoire?.id === actualRepertoire ??
-                          repertoires[0]?.id
-                        }
-                        key={repertoire?.id}
-                        onClick={() => selectedRepertoire(repertoire?.id)}
-                      >
-                        <Typography
-                          variant="body2"
-                          color="primary"
-                          sx={{
-                            overflow: "hidden",
-                            whiteSpace: "nowrap",
-                            textOverflow: "ellipsis",
-                            textTransform: "initial",
-                            fontWeight: "bold",
+                      <FormControl fullWidth>
+                        <TextField
+                          inputRef={textFieldEditRef}
+                          name="libelle"
+                          value={libelle ?? openOption?.selected?.libelle}
+                          onInput={(e) => setLibelle(e.target.value)}
+                          InputProps={{
+                            style: {
+                              width: "100%",
+                              color: "#fff",
+                              paddingRight: 40,
+                            },
                           }}
-                        >
-                          {repertoire.libelle}
-                        </Typography>
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })}
+                          color="secondary"
+                        />
+                      </FormControl>
+                      <IconButton
+                        color="primary"
+                        ref={sendButtonRef}
+                        type="submit"
+                        sx={{ position: "absolute", minWidth: 4, right: 10 }}
+                      >
+                        <Check />
+                      </IconButton>
+                    </form>
+                  </Stack>
+                ) : (
+                  <ListItem
+                    key={repertoire?.id}
+                    sx={{ p: 0 }}
+                    secondaryAction={
+                      <IconButton
+                        onClick={(e) =>
+                          setOpenOption({
+                            open: true,
+                            anchor: e.currentTarget,
+                            selected: repertoire,
+                          })
+                        }
+                      >
+                        <MoreVertical style={{ stroke: "#fff" }} />
+                      </IconButton>
+                    }
+                  >
+                    <ListItemButton
+                      sx={{
+                        ...(index < repertoires.length - 1 && {
+                          borderBottom: "1px solid #fffb",
+                        }),
+                        display: "flex",
+                        justifyContent: "space-between",
+                        py: 1.5,
+                      }}
+                      selected={
+                        repertoire?.id === actualRepertoire ??
+                        repertoires[0]?.id
+                      }
+                      key={repertoire?.id}
+                      onClick={() => selectedRepertoire(repertoire?.id)}
+                    >
+                      <Typography
+                        variant="body2"
+                        color="primary"
+                        sx={{
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          textOverflow: "ellipsis",
+                          textTransform: "initial",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {repertoire.libelle}
+                      </Typography>
+                    </ListItemButton>
+                  </ListItem>
+                );
+              })}
           </List>
           {open && (
             <Stack
