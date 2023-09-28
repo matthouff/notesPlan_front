@@ -1,5 +1,5 @@
 import DefaultBox from "../../components/DefaultBox";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import RepertoireList from "../../components/RepertoireList";
 import useEntityCrud from "../../hooks/useEntityCrud";
 import Groupe from "./components";
@@ -25,7 +25,7 @@ import { ChevronLeft, ChevronRight, MoreVertical, Plus } from "lucide-react";
 import EditDialogRepertoire from "../../components/responsive/EditDialogRepertoire";
 
 function Taches() {
-  const [repertoireSelected, setRepertoireSelected] = useState(null);
+  const [repertoireSelectedId, setRepertoireSelectedId] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [openDrawer, setOpenDrawer] = useState(null);
   const [openOption, setOpenOption] = useState();
@@ -43,6 +43,10 @@ function Taches() {
     }
   );
 
+  const repertoireSelected = repertoireSelectedId
+    ? data?.find((repertoire) => repertoire.id === repertoireSelectedId)?.id
+    : data[0]?.id;
+
   const {
     data: groupe,
     createdData: createGroupe,
@@ -55,11 +59,6 @@ function Taches() {
     enabled: !!repertoireSelected,
   });
 
-  useEffect(() => {
-    if (!isLoading) {
-      setRepertoireSelected(repertoireSelected ?? data[0]?.id ?? null);
-    }
-  }, [data, isLoading, repertoireSelected]);
 
   const { mutate } = useMutation(
     openOption?.selected?.id ? editGroupe : createGroupe,
@@ -75,9 +74,10 @@ function Taches() {
       },
     }
   );
-  const { mutate: mutateDelet } = useMutation(deletedData, {
+  const { mutate: mutateDelete } = useMutation(deletedData, {
     onSuccess: (response) => {
       setResponse({ ...response.data, key: new Date().getTime(), open: true });
+      setRepertoireSelectedId(null)
     },
   });
 
@@ -99,6 +99,25 @@ function Taches() {
     setOpenOption(null);
   };
 
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100%",
+          height: "100%",
+          gap: 2,
+        }}
+      >
+        <Typography color="primary">Loading...</Typography>
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <DefaultBox
       persoStyle={{
@@ -109,158 +128,141 @@ function Taches() {
       }}
       dark
     >
-      {!isLoading ? (
-        <Grid container columnSpacing={5}>
-          <Grid item xs={12} md={3}>
-            {!isTablet ? (
-              <RepertoireList
-                title="Tâches"
-                repertoires={data}
-                actualRepertoire={repertoireSelected}
-                setRepertoireSelected={setRepertoireSelected}
-                createdData={createdData}
-                deletedData={mutateDelet}
-                editData={editData}
-              />
-            ) : (
-              !isLoading &&
-              data?.length > 0 &&
-              openDrawer && (
-                <Drawer
-                  anchor={"left"}
-                  open={openDrawer}
-                  onClose={() => setOpenDrawer(false)}
-                >
-                  <Stack width={280} paddingY={5} paddingX={3}>
-                    <IconButton
-                      onClick={() => setOpenDrawer(false)}
-                      sx={{ position: "absolute", top: 20, right: 15 }}
-                    >
-                      <ChevronLeft />
-                    </IconButton>
-                    <Typography
-                      variant="h1"
-                      fontSize={40}
-                      color="secondary"
-                      mb={2}
-                    >
-                      Tâches
-                    </Typography>
-                    <FormControl
-                      sx={{
-                        maxWidth: 350,
-                        display: "flex",
-                        flexDirection: "row",
-                      }}
-                      variant="outlined"
-                      fullWidth
-                    >
-                      <InputLabel
-                        color="secondary"
-                        variant="standard"
-                        htmlFor="uncontrolled-native"
-                      >
-                        Répertoire
-                      </InputLabel>
-                      <NativeSelect
-                        fullWidth
-                        onInput={(e) => setRepertoireSelected(e.target.value)}
-                        size="small"
-                        color="secondary"
-                        defaultValue={data[0]?.id ?? ""}
-                        inputProps={{
-                          name: "repertoire",
-                          id: "uncontrolled-native",
-                        }}
-                      >
-                        {data?.map((repertoire) => {
-                          return (
-                            <option key={repertoire.id} value={repertoire.id}>
-                              {repertoire.libelle}
-                            </option>
-                          );
-                        })}
-                      </NativeSelect>
-                      <IconButton
-                        onClick={(e) =>
-                          setOpenOption({
-                            open: true,
-                            selected: data.find(
-                              (x) => x.id === repertoireSelected
-                            ),
-                            anchor: e.currentTarget,
-                            isRepertoire: true,
-                          })
-                        }
-                        size="small"
-                      >
-                        <MoreVertical color="#000" width={30} height={30} />
-                      </IconButton>
-                    </FormControl>
-                  </Stack>
-                </Drawer>
-              )
-            )}
-          </Grid>
-
-          <Grid
-            item
-            xs={12}
-            md={9}
-            gridTemplateRows="auto"
-            height="100%"
-            position="relative"
-          >
-            {isTablet && (
-              <IconButton
-                onClick={() => setOpenDrawer(true)}
-                sx={{
-                  position: "absolute",
-                  left: "8%",
-                  backgroundColor: "#0004",
-                  borderRadius: 2,
-                }}
-                color="primary"
+      <Grid container columnSpacing={5}>
+        <Grid item xs={12} md={3}>
+          {!isTablet ? (
+            <RepertoireList
+              title="Tâches"
+              repertoires={data}
+              actualRepertoire={repertoireSelected}
+              setRepertoireSelected={setRepertoireSelectedId}
+              createdData={createdData}
+              deletedData={mutateDelete}
+              editData={editData}
+            />
+          ) : (
+            !isLoading &&
+            data?.length > 0 &&
+            openDrawer && (
+              <Drawer
+                anchor={"left"}
+                open={openDrawer}
+                onClose={() => setOpenDrawer(false)}
               >
-                <Plus />
-                <ChevronRight />
-              </IconButton>
-            )}
-            {data.length > 0 && (
-              <>
-                <Button
-                  onClick={() => setEditGroupeOpen(true)}
-                  variant="contained"
-                  sx={{ position: "absolute", right: 0 }}
-                >
-                  Ajouter un groupe
-                </Button>
-                <Groupe
-                  setResponse={setResponse}
-                  repertoireSelected={repertoireSelected}
-                  data={groupe}
-                  setOpenOption={setOpenOption}
-                />
-              </>
-            )}
-          </Grid>
+                <Stack width={280} paddingY={5} paddingX={3}>
+                  <IconButton
+                    onClick={() => setOpenDrawer(false)}
+                    sx={{ position: "absolute", top: 20, right: 15 }}
+                  >
+                    <ChevronLeft />
+                  </IconButton>
+                  <Typography
+                    variant="h1"
+                    fontSize={40}
+                    color="secondary"
+                    mb={2}
+                  >
+                    Tâches
+                  </Typography>
+                  <FormControl
+                    sx={{
+                      maxWidth: 350,
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                    variant="outlined"
+                    fullWidth
+                  >
+                    <InputLabel
+                      color="secondary"
+                      variant="standard"
+                      htmlFor="uncontrolled-native"
+                    >
+                      Répertoire
+                    </InputLabel>
+                    <NativeSelect
+                      fullWidth
+                      onInput={(e) => setRepertoireSelectedId(e.target.value)}
+                      size="small"
+                      color="secondary"
+                      defaultValue={data[0]?.id ?? ""}
+                      inputProps={{
+                        name: "repertoire",
+                        id: "uncontrolled-native",
+                      }}
+                    >
+                      {data?.map((repertoire) => {
+                        return (
+                          <option key={repertoire.id} value={repertoire.id}>
+                            {repertoire.libelle}
+                          </option>
+                        );
+                      })}
+                    </NativeSelect>
+                    <IconButton
+                      onClick={(e) =>
+                        setOpenOption({
+                          open: true,
+                          selected: data.find(
+                            (x) => x.id === repertoireSelected
+                          ),
+                          anchor: e.currentTarget,
+                          isRepertoire: true,
+                        })
+                      }
+                      size="small"
+                    >
+                      <MoreVertical color="#000" width={30} height={30} />
+                    </IconButton>
+                  </FormControl>
+                </Stack>
+              </Drawer>
+            )
+          )}
         </Grid>
-      ) : (
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-            height: "100%",
-            gap: 2,
-          }}
+
+        <Grid
+          item
+          xs={12}
+          md={9}
+          gridTemplateRows="auto"
+          height="100%"
+          position="relative"
         >
-          <Typography color="primary">Loading...</Typography>
-          <CircularProgress />
-        </Box>
-      )}
+          {isTablet && (
+            <IconButton
+              onClick={() => setOpenDrawer(true)}
+              sx={{
+                position: "absolute",
+                left: "8%",
+                backgroundColor: "#0004",
+                borderRadius: 2,
+              }}
+              color="primary"
+            >
+              <Plus />
+              <ChevronRight />
+            </IconButton>
+          )}
+          {data.length > 0 && (
+            <>
+              <Button
+                onClick={() => setEditGroupeOpen(true)}
+                variant="contained"
+                sx={{ position: "absolute", right: 0 }}
+              >
+                Ajouter un groupe
+              </Button>
+              <Groupe
+                setResponse={setResponse}
+                repertoireSelected={repertoireSelected}
+                data={groupe}
+                setOpenOption={setOpenOption}
+              />
+            </>
+          )}
+        </Grid>
+      </Grid>
 
       {editGroupeOpen && (
         <EditGroupe

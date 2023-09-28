@@ -93,10 +93,15 @@ function GroupeNotes({ repertoireSelected }) {
     setOpen(false); // Fermer le mode édition
   };
 
-  const deleteNote = (x) => {
-    deletedData(x);
-    setNoteSelected(null);
-  };
+  const onDelete = (noteId) => {
+    if (noteId) {
+      return deletedData(noteId)
+    } else {
+      deletedData(notes[0]?.id)
+    }
+
+    setNoteSelected(notes[0])
+  }
 
   return (
     repertoireSelected && (
@@ -120,7 +125,7 @@ function GroupeNotes({ repertoireSelected }) {
               titleRef={textFielTitledRef}
               reactQuillRef={reactQuillRef}
               newNote={newNote}
-              deletedData={deleteNote}
+              deletedData={onDelete}
             />
           )}
         </Grid>

@@ -113,14 +113,16 @@ function Note({
     if (
       (!isInitializing &&
         content?.libelle !== newValue?.libelle &&
-        note?.message !== verifContent) ||
+        content?.libelle !== "" &&
+        note?.message !== verifContent &&
+        verifContent !== undefined) ||
       editOpen
     ) {
       clearTimeout(timeoutId);
       setContent({ ...content, ...newValue });
 
       const newTimeoutId =
-        (!!newValue.libelle || !!newValue.message) &&
+        !!verifContent &&
         setTimeout(() => {
           newNote({ ...content, ...newValue, id: note?.id }, editOpen);
         }, 1000);
@@ -146,13 +148,17 @@ function Note({
           onInput={(e) => handleChange({ libelle: e.target.value })}
           placeholder="Title"
         />
-        <IconButton
-          sx={{ mx: !isTablet && 2 }}
-          onClick={setOpenModal}
-          color="error"
-        >
-          <Trash width={30} height={30} />
-        </IconButton>
+        {
+          !editOpen && (
+            <IconButton
+              sx={{ mx: !isTablet && 2 }}
+              onClick={setOpenModal}
+              color="error"
+            >
+              <Trash width={30} height={30} />
+            </IconButton>
+          )
+        }
       </Box>
       <Box ref={reactQuillRef} height="100%" overflow="auto">
         <Divider />

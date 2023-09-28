@@ -7,18 +7,27 @@ import SnackBarPerso from "../../components/SnackbarPerso";
 import MobileNote from "./responsive";
 import useResponsive from "../../hooks/useResponsive";
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
+import { useMutation } from "react-query";
 
 function Notes() {
   const [repertoireSelectedId, setRepertoireSelectedId] = useState(null);
   const isTablet = useResponsive("down", "lg");
+  const [responseInfo, setResponse] = useState(null);
 
-  const { data, isLoading, createdData, deletedData, editData, error } =
+  const { data, isLoading, createdData, deletedData, editData } =
     useEntityCrud({
       entity: "repertoires_notes",
       queryOption: {
         cacheTime: 0,
       },
     });
+
+  const { mutate: mutateDelete } = useMutation(deletedData, {
+    onSuccess: (response) => {
+      setResponse({ ...response.data, key: new Date().getTime(), open: true });
+      setRepertoireSelectedId(null)
+    },
+  });
 
   const repertoireSelected = repertoireSelectedId
     ? data?.find((repertoire) => repertoire.id === repertoireSelectedId)?.id
@@ -62,7 +71,7 @@ function Notes() {
               actualRepertoire={repertoireSelected ?? data[0]?.id}
               setRepertoireSelected={setRepertoireSelectedId}
               createdData={createdData}
-              deletedData={deletedData}
+              deletedData={mutateDelete}
               editData={editData}
             />
           </Grid>
@@ -79,7 +88,7 @@ function Notes() {
           editRep={editData}
         />
       )}
-      {!!error && <SnackBarPerso error={error} />}
+      {responseInfo?.open && <SnackBarPerso response={responseInfo} />}
     </DefaultBox>
   );
 }
