@@ -44,11 +44,9 @@ function GroupeNotes({ repertoireSelected }) {
     },
   });
 
-  // fermer l'édition et sélectionner notes[0] lors du changement de répertoire
-  useEffect(() => {
-    setNoteSelected(notes[0]);
-    setOpen(false);
-  }, [repertoireSelected]);
+  const actualNote = noteSelected
+    ? notes?.find((note) => note?.id === noteSelected.id)
+    : notes[0];
 
   // Faire un focus sur le champ libelle de la note lors d'un ajout
   useEffect(() => {
@@ -86,10 +84,10 @@ function GroupeNotes({ repertoireSelected }) {
     } else {
       mutate({
         ...note,
-        id: noteSelected?.id ? noteSelected?.id : notes[0]?.id,
+        id: actualNote?.id ? actualNote?.id : notes[0]?.id,
       });
     }
-    setNoteSelected({ ...noteSelected, ...note });
+    setNoteSelected({ ...actualNote, ...note });
     setOpen(false); // Fermer le mode édition
   };
 
@@ -99,8 +97,7 @@ function GroupeNotes({ repertoireSelected }) {
     } else {
       deletedData(notes[0]?.id)
     }
-
-    setNoteSelected(notes[0])
+    setNoteSelected(null)
   }
 
   return (
@@ -109,7 +106,7 @@ function GroupeNotes({ repertoireSelected }) {
         <Grid item xs={3}>
           <ListNote
             data={notes}
-            actualNote={noteSelected}
+            actualNote={actualNote}
             noteSelected={setNoteSelected}
             open={open}
             newNote={setOpen}
@@ -120,7 +117,7 @@ function GroupeNotes({ repertoireSelected }) {
         <Grid item xs={6}>
           {(notes[0] || open) && (
             <Note
-              note={open ? null : noteSelected ?? notes[0]}
+              note={open ? null : actualNote ?? notes[0]}
               editOpen={open}
               titleRef={textFielTitledRef}
               reactQuillRef={reactQuillRef}
